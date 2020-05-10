@@ -1,8 +1,10 @@
 ---
 home: true
-heroImage: http://wx.qlogo.cn/mmopen/4K4oWQStIpFZgsNhspicuR2b62TaWEgFp9iaUDwKGOiaxNDQwKkWJ7RgqNjx2Ctib3g1oz69dUdhc1Ilf8vIs6JzJ0Ve9oFZWyiaic/64
+lang: zh-CN
+heroText: Dovis的前端技术博客
+heroImage: /navlogo.jpg
 actionText: 开始前端学习之路 →
-actionLink: /blog/
+actionLink: /basis/
 features:
 - title: 前端基础
   details: HTML,CSS,JavaScript前端三大基础知识。
