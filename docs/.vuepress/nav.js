@@ -29,6 +29,6 @@ module.exports = [
             {text: '字符串', link: '/algorithm/string'}
         ]
     },
-    { text: '零碎知识', link: '/anthoer/' },
+    { text: '零碎知识', link: '/another/' },
     { text: 'Github', link: 'https://github.com/Eddie-Fannie' }
 ]
