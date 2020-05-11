@@ -3,10 +3,8 @@
 # 确保脚本抛出遇到的错误
 set -e
 
-echo $1
-
 # 生成静态文件
-npm run build $1
+npm run build
 
 # 进入生成的文件夹
 cd docs/.vuepress/dist
@@ -16,7 +14,7 @@ cd docs/.vuepress/dist
 
 git init
 git add -A
-git commit -m $1
+git commit -m 'deploy'
 
 # 如果发布到 https://<USERNAME>.github.io
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
@@ -28,6 +26,6 @@ cd -
 
 git add .
 
-git commit -m $1
+git commit -m '提交至master分支'
 
 git push origin master:master # 推到github上
