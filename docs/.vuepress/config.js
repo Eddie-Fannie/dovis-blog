@@ -21,6 +21,8 @@ module.exports = {
         logo: '/logo.jpeg',
         nav: nav,
         sidebar: sidebar,
-        sidebarDepth: 2, // 侧边栏显示2级
+        sidebarDepth: 0, // 侧边栏显示2级,显示h2和h3标题，0则不显示
+        displayAllHeaders: true, // 显示所有页面的标题链接
+        collapsable: false
     }
 };
