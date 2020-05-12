@@ -18,23 +18,9 @@ module.exports = {
         lineNumbers: true // 代码块显示行号
     },
     themeConfig: {
-        logo: 'http://wx.qlogo.cn/mmopen/4K4oWQStIpFZgsNhspicuR2b62TaWEgFp9iaUDwKGOiaxNDQwKkWJ7RgqNjx2Ctib3g1oz69dUdhc1Ilf8vIs6JzJ0Ve9oFZWyiaic/64',
+        logo: '/logo.jpeg',
         nav: nav,
         sidebar: sidebar,
         sidebarDepth: 2, // 侧边栏显示2级
     }
 };
-
-function getSidebar(barName) {
-    const sidebar = {
-        frame: [
-            '/frame/',
-            '/frame/Vue/',
-            '/frame/React/',
-        ],
-        basis: [
-
-        ]
-    }
-    return sidebar[barName]
-}

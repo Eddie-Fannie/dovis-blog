@@ -1,6 +1,5 @@
 module.exports = {
-    '/basis/': [
-        '/basis/',
+    '/basis/JavaScript/': [
         {
             title: 'JavaScript',
             children: [
@@ -9,3 +8,6 @@ module.exports = {
         }
     ]
 }
+// module.exports = [
+//     '/basis/JavaScript'
+// ]
