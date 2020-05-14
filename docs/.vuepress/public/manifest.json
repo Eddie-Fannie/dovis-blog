@@ -1,0 +1,25 @@
+{
+    "name": "Dovis",
+    "short_name": "Dovis",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#2196f3",
+    "description": "Dovis的技术博客",
+    "theme_color": "blue",
+    "icons": [
+      {
+        "src": "./logo.jpeg",
+        "sizes": "144x144",
+        "type": "image/jpeg"
+      }
+    ],
+    "related_applications": [
+      {
+        "platform": "web"
+      },
+      {
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      }
+    ]
+  }

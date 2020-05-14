@@ -58,11 +58,11 @@ git-flow version
 
    
 
-   ![img](https://mmbiz.qpic.cn/mmbiz_png/09OicMgzsTbGYSCMwzRC1sXKtbSQedAHmsRrW2HQN51oAOI6n677v1yM9ak6gQmicMjv1kJ710TvoneD0tKF9f1g/0?wx_fmt=png)
+   ![img](/git/gitflow-init@2x.png)
 
 2. 自动基于开发分支下新建特性分支，执行`git flow feature start test`,test为特性分支名字，创建成功会出现下面这些信息。
 
-   ![img](https://mmbiz.qpic.cn/mmbiz_png/09OicMgzsTbGYSCMwzRC1sXKtbSQedAHmKSku4bD0Y8ibibSkQg4k47mPAdwm3RoLUd8pqsq8znl5VaoKiaGGWBoTA/0?wx_fmt=png)
+   ![img](/git/create-feature@2x.png)
 
 3. 完成特性分支功能开发之后需要`git add` `git commit -m ''` 然后再`git flow feature finish test`结束特性分支。
 
@@ -70,7 +70,7 @@ git-flow version
    >
    > 使用`git flow feature publish test` ，记得代码要合并到开发分支dev。
 
-   ![img](https://mmbiz.qpic.cn/mmbiz_png/09OicMgzsTbGYSCMwzRC1sXKtbSQedAHm5jVoaJ7McWHBBaNS8QgAat2Rd8JibkjVAlicfAsrtPAzQbqAfcCmS01g/0?wx_fmt=png)
+   ![img](/git/publish-feature@2x.png)
 
 4. 创建release分支来管理分布的版本
 
