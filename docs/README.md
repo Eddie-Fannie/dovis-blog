@@ -2,9 +2,21 @@
 home: true
 lang: zh-CN
 heroText: Dovis的前端技术博客
+heroAlt: Dovis
 heroImage: /navlogo.jpg
+heroBannerImage: /banner.jpg
 actionText: 开始前端学习之路 →
 actionLink: /basis/JavaScript/
+recommendPost:
+- title: 正则表达式基础知识
+  banner: /1.jpg
+  link: /basis/JavaScript/正则RegExp
+- title: vue的精髓--组件
+  banner: /2.jpg
+  link: /frame/Vue/Vue的精髓--组件
+- title: git-flow的使用
+  banner: /3.jpg
+  link: /another/Git/如何使用gitflow
 features:
 - title: 前端基础
   details: HTML,CSS,JavaScript前端三大基础知识。
