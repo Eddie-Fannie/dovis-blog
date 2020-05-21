@@ -5,7 +5,7 @@ module.exports = {
     description: '前端学习,天道酬勤',
     head: [ // 注入到当前页面的 HTML <head> 中的标签
         ['link', { rel: 'icon', href: '/logo.jpeg' }], // 增加一个自定义的 favicon(网页标签的图标)
-        ['link', { rel: 'manifest', href: '/logo.jpeg' }],
+        ['link', { rel: 'manifest', href: '/manifest.json' }],
         ['link', { rel: 'apple-touch-icon', href: '/logo.jpeg' }],
         ['link', { rel: 'mask-icon', href: '/logo.jpeg', color: '#3eaf7c' }],
         ['meta', { 'http-quiv': 'pragma', cotent: 'no-cache' }],
