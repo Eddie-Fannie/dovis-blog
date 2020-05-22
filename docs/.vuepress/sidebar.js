@@ -22,12 +22,8 @@
 // 不同页面不同侧边栏
 module.exports = {
     '/basis/CSS/': [
-        // '', /* /JavaScript/ */
-        // '正则RegExp',
-        // '细谈this问题'
         {
-            title: 'CSS命名规范',
-            // path: '/basis/JavaScript/',
+            title: 'CSS知识点',
             collapsable: false,
             children: [
                 '/basis/CSS/css命名规范'
