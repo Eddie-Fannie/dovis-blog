@@ -64,5 +64,14 @@ module.exports = {
                 '/another/Git/如何使用gitflow'
             ]
         }
+    ],
+    '/fulllink/Modularity/': [
+        {
+            title: 'CommonJs规范',
+            collapsable: false,
+            children: [
+                '/fulllink/Modularity/CommonJs基础知识'
+            ]
+        }
     ]
 }

@@ -16,11 +16,16 @@ module.exports = [
         ]
     },
     {
-        text: '前端进阶', items: [
-            {text: 'Webpack', link: '/advanced/Webpack/'},
-            {text: 'TypeScript',link: '/advanced/TypeScript/'},
-            {text: '小程序',link: '/advanced/Miniprogram/'},
-            {text: 'Electron', link: '/advanced/Electron/'}
+        text: '进阶分支', items: [
+            {text: '前端性能', link: '/advanced/Performance/'},
+            {text: '安全', link: '/advanced/Safety/'}
+        ]
+    },
+    {
+        text: '全链路分支', items: [
+            {text: '模块化', link: '/fulllink/Modularity/'},
+            {text: '构建工具', link: '/fulllink/BuildingTools/'},
+            {text: '语言增强',link: '/fulllink/LangAdvanced/'}
         ]
     },
     {
@@ -29,9 +34,23 @@ module.exports = [
             {text: '字符串', link: '/algorithm/String/'}
         ]
     },
+    {
+        text: '前端领域分支', items: [
+            {text: '移动端', link: '/area/Mobile/'},
+            {text: '可视化', link: '/area/Visualization/'},
+            {text: 'SSR', link: '/area/SSR/'}
+        ]
+    },
+    {
+        text: '服务端分支', items: [
+            {text: 'Nodejs', link: '/service/Node/'},
+            {text: 'web服务器', link: '/service/Server/'}
+        ]
+    },
     { 
         text: '其他知识', items: [
-            {text: 'Git版本工具', link: '/another/Git/'}
+            {text: 'Git版本工具', link: '/another/Git/'},
+            {text: '计算机网络', link: '/another/Net/'}
         ] 
     },
     { text: 'Github', link: 'https://github.com/Eddie-Fannie' }
