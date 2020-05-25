@@ -73,5 +73,14 @@ module.exports = {
                 '/fulllink/Modularity/CommonJs基础知识'
             ]
         }
+    ],
+    '/reading/': [
+        {
+            title: '前端书籍阅后笔记',
+            collapsable: false,
+            children: [
+                '/reading/编写高质量Javascript的188个建议'
+            ]
+        }
     ]
 }

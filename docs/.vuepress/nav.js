@@ -53,5 +53,10 @@ module.exports = [
             {text: '计算机网络', link: '/another/Net/'}
         ] 
     },
-    { text: 'Github', link: 'https://github.com/Eddie-Fannie' }
+    { 
+        text: '趣识', items: [
+            {text: 'Github', link: 'https://github.com/Eddie-Fannie'},
+            {text: '阅享', link: '/reading/'}
+        ]
+    }
 ]
