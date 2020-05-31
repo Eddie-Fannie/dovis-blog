@@ -21,6 +21,15 @@
 
 // 不同页面不同侧边栏
 module.exports = {
+    '/basis/HTML/': [
+        {
+            title: 'HTML初级知识点',
+            collapsable: false,
+            children: [
+                '/basis/HTML/html陌生知识点'
+            ]
+        }
+    ],
     '/basis/CSS/': [
         {
             title: 'CSS知识点',
