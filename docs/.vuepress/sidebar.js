@@ -49,7 +49,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/basis/JavaScript/正则RegExp',
-                '/basis/JavaScript/细谈this问题'
+                '/basis/JavaScript/细谈this问题',
+                '/basis/JavaScript/类和构造函数'
             ]
         }
     ],
