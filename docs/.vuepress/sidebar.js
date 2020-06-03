@@ -98,7 +98,13 @@ module.exports = {
             title: 'HTML模块',
             collapsable: false,
             children: [
-                '/interview/HTML面试考点',
+                '/interview/HTML面试考点'
+            ]
+        },
+        {
+            title: '项目模块',
+            collapsable: false,
+            children: [
                 '/interview/项目考点'
             ]
         }
