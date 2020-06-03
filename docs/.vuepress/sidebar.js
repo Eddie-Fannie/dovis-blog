@@ -98,7 +98,17 @@ module.exports = {
             title: 'HTML模块',
             collapsable: false,
             children: [
-                '/interview/HTML面试考点'
+                '/interview/HTML面试考点',
+                '/interview/项目考点'
+            ]
+        }
+    ],
+    '/algorithm/': [
+        {
+            title: '基础题',
+            collapsable: false,
+            children: [
+                '/algorithm/Array/两数之和'
             ]
         }
     ]
