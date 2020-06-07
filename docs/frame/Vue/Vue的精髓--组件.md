@@ -1,5 +1,5 @@
-## Vue的精髓--组件
-### 组件的分类
+# Vue的精髓--组件
+## 组件的分类
 
 1. 由 vue-router 产生的每个页面，本质上也是组件。这类组件相对是最好写的，因为主要是还原设计稿，完成需求，不需要太多模块和架构设计上的考虑。
 
@@ -7,21 +7,19 @@
 
 3. 业务组件，它与独立组件的区别是，业务组件只在当前项目中会用到，不具有通用性，而且会包含一些业务，比如数据请求；而独立组件不含业务，在任何项目中都可以使用，功能单一，比如一个具有数据校验功能的输入框。
 
-### 组件的构成
+## 组件的构成
 
 > 一个再复杂的组件，都是由三部分组成的：prop、event、slot，它们构成了Vue.js 组件的 API。如果你开发的是一个通用组件，那一定要事先设计好这三部分。
 
-#### 属性prop
+### 属性prop
 
 > 写通用组件时，props 最好用**对象**的写法，这样可以针对每个属性设置类型、默认值或自定义校验属性的值，这点在组件开发中很重要，然而很多人却忽视，直接使用 props 的数组用法，这样的组件往往是不严谨的。
 
+### 插槽slot
 
+### 自定义事件event
 
-#### 插槽slot
-
-#### 自定义事件event
-
-### 组件的通信
+## 组件的通信
 
 Vue.js内置的通信手段一般有两种：
 
@@ -39,39 +37,25 @@ Vue.js内置的通信手段一般有两种：
 //A.vue
 
 export default{
-
 ​    provide: {
-
 ​        name: 'Aresn'
-
 ​    }
-
 }
 
 //B.vue
 
 export default{
-
 ​    inject: ['name'],
-
 ​    mounted () {
-
 ​        console.log(this.name)//Aresn
-
 ​    }
-
 }
 ```
+ - 在 A.vue 里，我们设置了一个 **provide: name** ，值为 Aresn，它的作用就是将 **name** 这个变量提供给它的所有子组件。而在 B.vue 中，通过 `inject` 注入了从 A 组件中提供的 **name** 变量，那么在组件 B 中，就可以直接通过 **this.name** 访问这个变量了，它的值也是 Aresn。这就是 provide / inject API 最核心的用法。
 
+ - provide 和 inject 绑定并**不是可响应**的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的属性还是可响应的。所以，上面 A.vue 的 name 如果改变了，B.vue 的 this.name 是不会改变的，仍然是 Aresn。
 
-
-> - 在 A.vue 里，我们设置了一个 **provide: name** ，值为 Aresn，它的作用就是将 **name** 这个变量提供给它的所有子组件。而在 B.vue 中，通过 `inject` 注入了从 A 组件中提供的 **name** 变量，那么在组件 B 中，就可以直接通过 **this.name** 访问这个变量了，它的值也是 Aresn。这就是 provide / inject API 最核心的用法。
-
-> - provide 和 inject 绑定并**不是可响应**的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的属性还是可响应的。所以，上面 A.vue 的 name 如果改变了，B.vue 的 this.name 是不会改变的，仍然是 Aresn。
-
-
-
-#### 利用provide&inject替代Vuex
+### 利用provide&inject替代Vuex
 
 使用 Vuex，最主要的目的是跨组件通信、全局数据维护、多人协同开发。需求比如有：用户的登录信息维护、通知信息维护等全局的状态和数据。
 
@@ -79,20 +63,13 @@ export default{
 
 ```javascript
 <template>
-
  <div>
-
 ​    <router-view></router-view>
-
  </div>
-
 </template>
 
 <script>
-
   export default {
-
-
   }
 
 </script>    
@@ -102,13 +79,9 @@ export default{
 
 ```javascript
 <template>
-
  <div>
-
 ​    <router-view></router-view>
-
  </div>
-
 </template>
 
 <script>
@@ -118,7 +91,6 @@ export default{
 ​      provide() {
 
 ​          return {
-
 ​              app: this
 
 ​          }
@@ -132,12 +104,8 @@ export default{
 
 > 上面代码中我们把app.vue实例this对外提供，命名为app，使用这个名字后子组件不能再使用它作为局部属性。接下来任何组件（或路由）只要通过 `inject` 注入 app.vue 的 app 的话，都可以直接通过 **this.app.xxx** 来访问 app.vue 的 `data`、`computed`、`methods` 等内容。
 
+## 自行实现父子组件间通信的方法dispatch 和 broadcast
 
-
-### 自行实现父子组件间通信的方法dispatch 和 broadcast
-
-> provide / inject API 主要解决了跨级组件间的通信问题，不过它的使用场景，主要是子组件获取上级组件的状态，跨级组件间建立了一种主动提供与依赖注入的关系。然后有两种场景它不能很好的解决：
-
-> - 父组件向子组件（支持跨级）传递数据；
-
-> - 子组件向父组件（支持跨级）传递数据。
+provide / inject API 主要解决了跨级组件间的通信问题，不过它的使用场景，主要是子组件获取上级组件的状态，跨级组件间建立了一种主动提供与依赖注入的关系。然后有两种场景它不能很好的解决：
+- 父组件向子组件（支持跨级）传递数据；
+- 子组件向父组件（支持跨级）传递数据；

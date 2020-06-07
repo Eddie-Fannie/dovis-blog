@@ -1,6 +1,6 @@
-## RegExp类型
+# 正则表达式RegExp
 
-### 创建正则表达式（以字面量形式）
+## 创建正则表达式（以字面量形式）
 
 ```javascript
 var regexp = / pattern / flags 
@@ -44,9 +44,7 @@ console.log(pattern3.test('catbat')) // false
 > ( { [ \ ^ $ | ? * + . ] } )
 > ```
 
-
-
-### 使用构造函数创建正则表达式
+## 使用构造函数创建正则表达式
 
 **接受两个参数：一个是要匹配的字符串，另一个是可选的标志字符串** 
 
@@ -56,11 +54,12 @@ var pattern4 = new RegExp('/\.at/','gi')
 
 **由于参数为字符串形式的，所以构造函数创建正则表达式时要记得双重转义**
 
-#### 两种方式的差别
+### 两种方式的差别
 
-因为在ES3中正则表达式字面量始终会共享同一个RegExp实例，而构造函数则每次都创建一个新的实例。ES5规定，使用正则表达式字面量必须像直接调用构造函数一样，每次都创建新的实例。
+因为在ES3中正则表达式字面量始终会共享同一个RegExp实例，而构造函数则每次都创建一个新的实例。
+ES5规定，使用正则表达式字面量必须像直接调用构造函数一样，每次都创建新的实例。
 
-### RegExp实例属性
+## RegExp实例属性
 
 ```javascript
 字面量/构造函数形式下面结果都一样
@@ -71,53 +70,48 @@ alert(pattern.multiline); // false
 alert(pattern.lastIndex); // 0
 alert(pattern.source); // \[bc\]at
 ```
-
-### RegExp实例方法
+## RegExp实例方法
 
 1. exec()
 
-### 正则相关符号
+## 正则相关符号
 
 - 方括号[]用法
 
-  > 1. [a-z] 表示从小写字母a到z之间的任意字符
-  >
-  >    > -连字符左边字符的ASCII值一定要小于右边的，不然会报错。
-  >    >
-  >    > ```javascript
-  >    > /[a-Z]/g // 这样的正则会报错，因为Z的ASCII值小于a的。
-  >    > // 正确形式
-  >    > /[a-zA-Z]/g 或者/[a-z]/gi
-  >    > ```
-  >    >
-  >    > 
-  >
-  > 2. +表示至少出现一次
-  >
-  > 3. \n表示换行
-  >
-  > 4. ^[a-z]表示以任意小写字母开头的行
-  >
-  > 5. [^abc] 表示匹配不在方括号内的任意字符
-  >
-  > 6. $与^类似，不过是匹配某字符结尾的字符串
-  >
-  >    ```javascript
-  >    var str = 'abD'
-  >    console.log(str.match(/[a-z]/gi)) // ['a', 'b', 'D']
-  >    
-  >    var str = 'abD efdadD'
-  >    console.log(str.match(/[a-z]+/)) // ['ab']
-  >    
-  >    var str = 'abD\nefdadD'
-  >    console.log(str.match(/[a-z]+/gmi)) // [ 'abD', 'efdadD' ]
-  >    
-  >    var str = 'a5'
-  >    console.log(str.match(/^[a-z]+/)) // ['a']
-  >    
-  >    var str = 'a5'
-  >    console.log(str.match(/[^a-z]+/)) // ['5']
-  >    ```
+1. [a-z] 表示从小写字母a到z之间的任意字符。-连字符左边字符的ASCII值一定要小于右边的，不然会报错。
+    
+   ```javascript
+      /[a-Z]/g // 这样的正则会报错，因为Z的ASCII值小于a的。
+
+      // 正确形式
+      /[a-zA-Z]/g 或者/[a-z]/gi
+   ``` 
+2. +表示至少出现一次
+ 
+3. \n表示换行
+
+4. ^[a-z]表示以任意小写字母开头的行
+
+5. [^abc] 表示匹配不在方括号内的任意字符
+
+6. $与^类似，不过是匹配某字符结尾的字符串
+
+```javascript
+var str = 'abD'
+console.log(str.match(/[a-z]/gi)) // ['a', 'b', 'D']
+
+var str = 'abD efdadD'
+console.log(str.match(/[a-z]+/)) // ['ab']
+
+var str = 'abD\nefdadD'
+console.log(str.match(/[a-z]+/gmi)) // [ 'abD', 'efdadD' ]
+
+var str = 'a5'
+console.log(str.match(/^[a-z]+/)) // ['a']
+
+var str = 'a5'
+console.log(str.match(/[^a-z]+/)) // ['5']
+```
 
 - 特殊字符
 
@@ -176,8 +170,4 @@ alert(pattern.source); // \[bc\]at
      var str = 'aad3b aa12bb'
      console.log(str.match(/a{2,}\d+/g)) //[ 'aa12' ]
      ```
-
-     
-
-
 

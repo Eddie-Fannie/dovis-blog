@@ -1,11 +1,11 @@
-## git-flow的使用
+# git-flow的使用
 > `git flow` 的特点便是不同的分支充当不一样的角色，并且有规定的使用场景和用法。有用于功能开发的`dev` 分支，有用于发布前准备，后期维护修复bug的分支。
 
-### 背景
+## 背景
 
 最近接手了部门的一个项目，用到了`git-flow`进行分支管理开发，所以就抽空学习了一下git-flow，提高自己团队协作开发的效率，也丰富了自己的技术知识栈。
 
-### 安装
+## 安装
 
 部门开发用MacOs，所以就可以直接使用`homebrew`	进行下载安装
 
@@ -46,17 +46,13 @@ git-flow version
    > - release分支将内容合并到dev分支
    > - release分支被删除
 
-   
-
 4. 当我们项目发布后，日后的维护工作我们需要开一个独立的分支`Hotfix` 这是唯一一种可以以`master`为父分支的分支。当维护工作做好后就要把代码合并到master和dev分支，并给master分支打上新版本标签。
 
-### 具体开发实例
+## 具体开发实例
 
 1. 执行`git-flow init`初始化一下项目
 
    > 利用一个反馈模块项目来初始化项目结构，可以看到如下内容，均按回车进行下一步。这个时候项目的分支默认到开发分支下，可以输入`git branch`查看当前分支
-
-   
 
    ![img](/git/gitflow-init@2x.png)
 
@@ -87,7 +83,7 @@ git-flow version
    - Start committing last-minute fixes in preparing your release
    - When done, run:
    
-        git flow release finish 'v1.0'
+   git flow release finish 'v1.0'
    ```
 
    > release使用版本号来命名分支，这样当我们完成release分支时，git-flow会自动提交一些标记。
@@ -105,6 +101,3 @@ git-flow version
    git flow hotfix start v.1.0 // 创建
    git flow hotfix finish v.1.0 //完成（结束）
    ```
-
-   
-
