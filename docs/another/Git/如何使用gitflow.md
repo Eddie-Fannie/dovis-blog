@@ -54,11 +54,11 @@ git-flow version
 
    > 利用一个反馈模块项目来初始化项目结构，可以看到如下内容，均按回车进行下一步。这个时候项目的分支默认到开发分支下，可以输入`git branch`查看当前分支
 
-   ![img](/git/gitflow-init@2x.png)
+   ![img](/dovis-blog/git/gitflow-init@2x.png)
 
 2. 自动基于开发分支下新建特性分支，执行`git flow feature start test`,test为特性分支名字，创建成功会出现下面这些信息。
 
-   ![img](/git/create-feature@2x.png)
+   ![img](/dovis-blog/git/create-feature@2x.png)
 
 3. 完成特性分支功能开发之后需要`git add` `git commit -m ''` 然后再`git flow feature finish test`结束特性分支。
 
@@ -66,7 +66,7 @@ git-flow version
    >
    > 使用`git flow feature publish test` ，记得代码要合并到开发分支dev。
 
-   ![img](/git/publish-feature@2x.png)
+   ![img](/dovis-blog/git/publish-feature@2x.png)
 
 4. 创建release分支来管理分布的版本
 

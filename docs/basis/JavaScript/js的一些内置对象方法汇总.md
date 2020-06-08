@@ -32,7 +32,7 @@ console.log(d)
 ```
 **结果如下：**
 
-![img](/js/getOwnPropertyDescriptor.png)
+![img](/dovis-blog/js/getOwnPropertyDescriptor.png)
 - `value`: 该属性的值
 - `writable`： 当属性的值可以被改变时就为true，意味可写
 - `configurable`: 当且仅当指定对象的属性描述可以被改变或者属性可以被删除时为true
@@ -49,7 +49,7 @@ o = {get foo() {return 17;}}
 b = Object.getOwnPropertyDescriptor(o, 'foo')
 console.log(b)
 ```
-![img](/js/get2.png)
+![img](/dovis-blog/js/get2.png)
 
 **注意**
 > 在 ES5 中，如果该方法的第一个参数不是对象（而是原始类型），那么就会产生出现 TypeError。而在 ES2015，第一个的参数不是对象的话就会被强制转换为对象。
@@ -60,7 +60,7 @@ d = Object.getOwnPropertyDescriptor(Person, 'name')
 
 console.log(d)
 ```
-![img](/js/3.png)
+![img](/dovis-blog/js/3.png)
 
 ### `Object.keys()`
 >要取得对象上所有可枚举的实例属性，可以使用该方法。这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
