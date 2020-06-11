@@ -57,7 +57,8 @@ module.exports = [
         text: '趣识', items: [
             {text: 'Github', link: 'https://github.com/Eddie-Fannie'},
             {text: '阅享', link: '/reading/'},
-            {text: '前端面试', link: '/interview/'}
+            {text: '前端面试', link: '/interview/'},
+            {text: '前端面试题汇总库', link: 'https://github.com/Eddie-Fannie/qd-interview-question/issues'}
         ]
     }
 ]
