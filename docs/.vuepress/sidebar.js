@@ -56,6 +56,15 @@ module.exports = {
             ]
         }
     ],
+    '/basis/ES6/': [
+        {
+            title: 'ES6初级知识点',
+            collapsable: false,
+            children: [
+                '/basis/ES6/let和const'
+            ]
+        }
+    ],
     '/frame/Vue/': [
         // '',
         // 'Vue的精髓--组件'
