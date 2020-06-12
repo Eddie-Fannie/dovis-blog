@@ -136,3 +136,26 @@ Object.defineProperty(o, "a", {
   enumerable: true
 });
 ```
+
+旧方法里要创建访问器属性，一般都使用两`__defineGetter__()`和`__defineSetter__()`。
+```js
+var book = {
+  _year: 2004,
+  edition: 1
+}
+book.__defineGetter__('year', function() {
+  return this._year;
+})
+book.__defineSetter__('year', function(newValue) {
+  if(newValue > 2004) {
+    this._year = newValue;
+    this.edition += newValue - 2004;
+  }
+})
+book.year = 2005;
+console.log(book.edition) // 2
+```
+
+### `Object.defineProperties()`
+通过描述符一次定义多个属性。两个参数：第一个对象是要添加和修改其属性的对象；第二个对象的属性与第一个对象中要添加修改的属性一一对应。
+
