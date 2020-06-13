@@ -159,3 +159,18 @@ console.log(book.edition) // 2
 ### `Object.defineProperties()`
 通过描述符一次定义多个属性。两个参数：第一个对象是要添加和修改其属性的对象；第二个对象的属性与第一个对象中要添加修改的属性一一对应。
 
+### `Object.assign()`
+`Object.assign()` 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+```js
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+
+const returnedTarget = Object.assign(target, source); // 单纯的复制一个对象，这是浅拷贝
+
+console.log(target);
+// expected output: Object { a: 1, b: 4, c: 5 }
+
+console.log(returnedTarget);
+// expected output: Object { a: 1, b: 4, c: 5 }
+```
+> `Object.assign` 方法只会拷贝源对象自身的并且可枚举的属性到目标对象。该方法使用源对象的`[[Get]]`和目标对象的`[[Set]]`，所以它会调用相关 `getter` 和 `setter`。因此，它分配属性，而不仅仅是复制或定义新的属性。

@@ -61,7 +61,8 @@ module.exports = {
             title: 'ES6初级知识点',
             collapsable: false,
             children: [
-                '/basis/ES6/let和const'
+                '/basis/ES6/let和const',
+                '/basis/ES6/类'
             ]
         }
     ],
@@ -110,6 +111,13 @@ module.exports = {
             collapsable: false,
             children: [
                 '/interview/HTML面试考点'
+            ]
+        },
+        {
+            title: 'JS模块',
+            collapsable: false,
+            children: [
+                '/interview/对象深浅拷贝'
             ]
         },
         {
