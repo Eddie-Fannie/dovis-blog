@@ -174,3 +174,32 @@ console.log(returnedTarget);
 // expected output: Object { a: 1, b: 4, c: 5 }
 ```
 > `Object.assign` 方法只会拷贝源对象自身的并且可枚举的属性到目标对象。该方法使用源对象的`[[Get]]`和目标对象的`[[Set]]`，所以它会调用相关 `getter` 和 `setter`。因此，它分配属性，而不仅仅是复制或定义新的属性。
+
+1. 继承属性和不可枚举属性是不能拷贝
+```js
+const obj = Object.create({foo: 1}, { // foo 是个继承属性。
+    bar: {
+        value: 2  // bar 是个不可枚举属性。
+    },
+    baz: {
+        value: 3,
+        enumerable: true  // baz 是个自身可枚举属性。
+    }
+});
+
+const copy = Object.assign({}, obj);
+console.log(copy); // { baz: 3 }
+```
+2. 原始类型会被包装为对象
+```js
+const v1 = "abc";
+const v2 = true;
+const v3 = 10;
+const v4 = Symbol("foo")
+
+const obj = Object.assign({}, v1, null, v2, undefined, v3, v4); 
+// 原始类型会被包装，null 和 undefined 会被忽略。
+// 注意，只有字符串的包装对象才可能有自身可枚举属性。
+console.log(obj); // { "0": "a", "1": "b", "2": "c" }
+```
+3. 拷贝异常会打断后面的拷贝任务
