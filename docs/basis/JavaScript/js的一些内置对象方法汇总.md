@@ -173,7 +173,7 @@ console.log(target);
 console.log(returnedTarget);
 // expected output: Object { a: 1, b: 4, c: 5 }
 ```
-> `Object.assign` 方法只会拷贝源对象自身的并且可枚举的属性到目标对象。该方法使用源对象的`[[Get]]`和目标对象的`[[Set]]`，所以它会调用相关 `getter` 和 `setter`。因此，它分配属性，而不仅仅是复制或定义新的属性。
+> `Object.assign` 方法只会拷贝源对象自身的并且可枚举的属性到目标对象。该方法使用源对象的`[[Get]]`和目标对象的`[[Set]]`，所以它会调用相关 `getter` 和 `setter`。因此，它分配属性，而不仅仅是复制或定义新的属性。**属性描述符会丢失。**
 
 1. 继承属性和不可枚举属性是不能拷贝
 ```js

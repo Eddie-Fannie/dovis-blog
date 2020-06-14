@@ -61,10 +61,17 @@ module.exports = {
             title: 'ES6初级知识点',
             collapsable: false,
             children: [
-                '/basis/ES6/let和const',
+                '/basis/ES6/let和const'
+            ]
+        },
+        {
+            title: 'ES6中级知识点',
+            collapsable: false,
+            children: [
                 '/basis/ES6/类'
             ]
         }
+        
     ],
     '/frame/Vue/': [
         // '',
