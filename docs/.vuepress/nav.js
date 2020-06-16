@@ -50,7 +50,8 @@ module.exports = [
     { 
         text: '其他知识', items: [
             {text: 'Git版本工具', link: '/another/Git/'},
-            {text: '计算机网络', link: '/another/Net/'}
+            {text: '计算机网络', link: '/another/Net/'},
+            {text: '工作遇到的知识', link: '/another/Working/'}
         ] 
     },
     { 
