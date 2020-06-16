@@ -68,7 +68,8 @@ module.exports = {
             title: 'ES6中级知识点',
             collapsable: false,
             children: [
-                '/basis/ES6/类'
+                '/basis/ES6/类',
+                '/basis/ES6/ES6的继承'
             ]
         }
         
