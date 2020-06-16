@@ -1,7 +1,6 @@
 # JavaScript的一些内置对象方法汇总
 
-## Object
-### `Object.getOwnPropertyDescriptor()`
+## `Object.getOwnPropertyDescriptor()`
 >`Object.getOwnPropertyDescriptor()`方法返回指定对象上一个自有属性对应的属性描述符。自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性。--来源MDN<br/>
 >该方法只能用于实例属性，要取得原型属性的描述符，必须直接在原型对象上调用该方法。 
 
@@ -62,7 +61,7 @@ console.log(d)
 ```
 ![img](/dovis-blog/js/3.png)
 
-### `Object.keys()`
+## `Object.keys()`
 >要取得对象上所有可枚举的实例属性，可以使用该方法。这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
 ```javascript
 function Person() {
@@ -87,7 +86,7 @@ console.log(Object.getOwnPropertyNames(Person.prototype)) // ["constructor", "na
 ```
 **这两个方法都可以用来代替`for-in`循环**
 
-### `Object.defineProperty()`
+## `Object.defineProperty()`
 >`Object.defineProperty()`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象。
 ```javascript
 const object1 = {};
@@ -156,7 +155,7 @@ book.year = 2005;
 console.log(book.edition) // 2
 ```
 
-### `Object.defineProperties()`
+## `Object.defineProperties()`
 通过描述符一次定义多个属性。两个参数：第一个对象是要添加和修改其属性的对象；第二个对象的属性与第一个对象中要添加修改的属性一一对应。
 
 ### `Object.assign()`
@@ -203,3 +202,11 @@ const obj = Object.assign({}, v1, null, v2, undefined, v3, v4);
 console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 ```
 3. 拷贝异常会打断后面的拷贝任务
+
+## `Object.getPrototypeOf()`
+> 返回指定对象的原型（内部`[[Prototype]]`属性的值）
+```js
+var proto = {};
+var obj = Object.create(proto);
+Object.getPrototypeOf(obj) === proto; // true
+```
