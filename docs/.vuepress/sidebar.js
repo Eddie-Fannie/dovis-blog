@@ -54,6 +54,14 @@ module.exports = {
                 '/basis/JavaScript/js的一些内置对象方法汇总',
                 '/basis/JavaScript/继承'
             ]
+        },
+        {
+            title: 'JavaScript高级知识点',
+            // path: '/basis/JavaScript/',
+            collapsable: false,
+            children: [
+                '/basis/JavaScript/Event-Loop'
+            ]
         }
     ],
     '/basis/ES6/': [
