@@ -50,9 +50,7 @@ module.exports = {
             children: [
                 '/basis/JavaScript/正则RegExp',
                 '/basis/JavaScript/细谈this问题',
-                '/basis/JavaScript/类和构造函数',
                 '/basis/JavaScript/js的一些内置对象方法汇总',
-                '/basis/JavaScript/继承'
             ]
         },
         {
