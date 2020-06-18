@@ -45,7 +45,6 @@ Child.myMethod(1) // staticc 1
 var child = new Child();
 child.myMethod(2); // instance 2
 ```
-> 
 7. 由于super作为对象使用时指向父类的原型对象，所以定义在父类实例上的方法或属性是无法通过super调用的，即构造方法内的。**如果定义在父类的原型对象上，就可以取到**
 
 ```js
