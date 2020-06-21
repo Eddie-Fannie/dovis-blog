@@ -89,14 +89,19 @@ module.exports = {
         
     ],
     '/frame/Vue/': [
-        // '',
-        // 'Vue的精髓--组件'
         {
             title: 'Vue初级知识点',
             // path: '/frame/Vue/',
             collapsable: false,
             children: [
                 '/frame/Vue/Vue的精髓--组件'
+            ]
+        },
+        {
+            title: 'Vue高级知识点',
+            collapsable: false,
+            children: [
+                '/frame/Vue/虚拟dom'
             ]
         }
     ],
