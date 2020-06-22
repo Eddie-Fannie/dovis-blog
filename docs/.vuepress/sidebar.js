@@ -137,7 +137,8 @@ module.exports = {
             title: '前端书籍阅后笔记',
             collapsable: false,
             children: [
-                '/reading/编写高质量Javascript的188个建议'
+                '/reading/编写高质量Javascript的188个建议',
+                '/reading/你不知道的js上卷'
             ]
         }
     ],
