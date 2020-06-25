@@ -66,6 +66,46 @@ export const createEmptyVNode = (text: string = '') => {
     isComment: true
 }
 ```
+### 文本节点
+```js
+export function createTextVNode (val: string | number) {
+  return new VNode(undefined, undefined, undefined, String(val))
+}
+```
+**可以看出文本节点只有`text`属性**
+
+### 克隆节点
+> 克隆节点是将现有节点的属性复制到新节点，让新创建的节点和被克隆节点的属性保持一致，从而实现克隆效果。它的作用是优化静态节点和插槽节点。
+```js
+export function cloneVNode (vnode: VNode): VNode {
+  const cloned = new VNode(
+    vnode.tag,
+    vnode.data,
+    // #7975
+    // clone children array to avoid mutating original in case of cloning
+    // a child.
+    vnode.children && vnode.children.slice(),
+    vnode.text,
+    vnode.elm,
+    vnode.context,
+    vnode.componentOptions,
+    vnode.asyncFactory
+  )
+  cloned.ns = vnode.ns
+  cloned.isStatic = vnode.isStatic
+  cloned.key = vnode.key
+  cloned.isComment = vnode.isComment
+  cloned.fnContext = vnode.fnContext
+  cloned.fnOptions = vnode.fnOptions
+  cloned.fnScopeId = vnode.fnScopeId
+  cloned.asyncMeta = vnode.asyncMeta
+  cloned.isCloned = true
+  return cloned
+}
+```
+> 以静态节点为例子，当组件内的某个状态发生改变后，当前组件会通过虚拟DOM重新渲染视图，静态节点因为内容没有改变所以就没必要执行渲染函数重新生成vnode。因此这个时候就可以使用克隆节点将vnode克隆一份，使用克隆节点进行渲染。**这样就不用重新执行渲染函数生成新的静态节点vnode，从而提升一定性能**
+
+**克隆节点和被克隆节点唯一区别就是`isCloned`属性，前者为`true`，后者为`false`**
 
 ## 为什么使用虚拟DOM
 之所以需要使用状态生成VNode，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实DOM节点，从而避免不必要的DOM操作，节省一定的性能开销。
