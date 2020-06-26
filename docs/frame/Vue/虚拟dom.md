@@ -104,6 +104,8 @@ function normalizeArrayChildren (children: any, nestedIndex?: string): Array<VNo
   return res
 }
 ```
+> `normalizeArrayChildren`接收2个参数，`children`表⽰要规范的⼦节点，`nestedIndex`表⽰嵌套的索引，因为单个`child`可能是⼀个数组类型。 `normalizeArrayChildren`主要的逻辑就是遍历`children`，获得单个节点c，然后对c的类型判断，如果是⼀个数组类型，则递归调⽤`normalizeArrayChildren`; 如果是基础类型，则通过`createTextVNode`⽅法转换成`VNode`类型； 否则就已经是`VNode`类型了，如果`children`是⼀个列表并且列表还存在嵌套的情况，则根据 `nestedIndex`去更新它的`key`。这⾥需要注意⼀点，在遍历的过程中，对这3种情况都做了如下处理：如果存在两个连续的`text`节点，会把它们合并成⼀个`text`节点。经过对`children`的规范化，`children`变成了⼀个类型为`VNode`的`Array`。
+
 ## 什么是VNode
 > 在Vue.js中存在一个VNode类，使用它可以实例化不同类型的vnode实例，而不同类型的vnode实例各自表示不同类型的DOM元素。
 
