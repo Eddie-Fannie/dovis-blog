@@ -101,7 +101,8 @@ module.exports = {
             title: 'Vue高级知识点',
             collapsable: false,
             children: [
-                '/frame/Vue/虚拟dom'
+                '/frame/Vue/虚拟dom',
+                '/frame/Vue/生成真实dom'
             ]
         }
     ],

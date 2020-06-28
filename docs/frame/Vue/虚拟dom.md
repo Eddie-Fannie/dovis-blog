@@ -202,5 +202,42 @@ export function cloneVNode (vnode: VNode): VNode {
 ### 函数式组件
 函数式组件和组件节点类似，它有两个独有的属性`functionalContext`和`functionalOptions`
 
+## 创建VNode
+回到`createElement`函数，规范化`children`之后，接下来就会创建一个VNode实例
+```js
+if (typeof tag === 'string') {
+  let Ctor
+  ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
+  if (config.isReservedTag(tag)) {
+    // platform built-in elements
+    if (process.env.NODE_ENV !== 'production' && isDef(data) && isDef(data.nativeOn)) {
+      warn(
+        `The .native modifier for v-on is only valid on components but it was used on <${tag}>.`,
+        context
+      )
+    }
+    vnode = new VNode(
+      config.parsePlatformTagName(tag), data, children,
+      undefined, undefined, context
+    )
+  } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+    // component
+    vnode = createComponent(Ctor, data, context, children, tag)
+  } else {
+    // unknown or unlisted namespaced elements
+    // check at runtime because it may get assigned a namespace when its
+    // parent normalizes children
+    vnode = new VNode(
+      tag, data, children,
+      undefined, undefined, context
+    )
+  }
+} else {
+  // direct component options / constructor
+  vnode = createComponent(tag, data, context, children)
+}
+```
+> 这⾥先对`tag`做判断，如果是`string`类型，则接着判断如果是内置的⼀些节点，则直接创建⼀个普通`VNode`，如果是为已注册的组件名，则通过`createComponent`创建⼀个组件类型的`VNode`，否则创建⼀个未知的标签的`VNode`。如果是`tag`⼀个`Component`类型，则直接调⽤`createComponent`创建⼀个组件类型的`VNode`节点。
+
 ## 为什么使用虚拟DOM
 之所以需要使用状态生成VNode，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实DOM节点，从而避免不必要的DOM操作，节省一定的性能开销。
