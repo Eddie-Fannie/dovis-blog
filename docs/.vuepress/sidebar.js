@@ -51,6 +51,7 @@ module.exports = {
                 '/basis/JavaScript/正则RegExp',
                 '/basis/JavaScript/细谈this问题',
                 '/basis/JavaScript/作用域',
+                '/basis/JavaScript/js的数组方法汇总'
             ]
         },
         {
