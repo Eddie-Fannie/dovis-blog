@@ -152,7 +152,7 @@ var obj = {
 obj.func();// obj
 ```
 
-> 箭头函数中的this的值取决于该函数外部非箭头函数的this的值，否则this的值会被设置为全局对象Window,且不能通过call(),apply()和bind()方法来改变this的值。--《深入理解ES6》
+> 箭头函数中的this的值取决于该函数外部非箭头函数的this的值，否则this的值会被设置为全局对象Window,且不能通过`call()`,`apply()`和`bind()`方法来改变this的值。--《深入理解ES6》
 
 ## 赋值给另外一个变量进行调用
 

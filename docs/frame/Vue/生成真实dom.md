@@ -97,8 +97,14 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 
 ### 更新策略
 1. 创建子节点
+
 对于新增节点，我们需要执行创建节点的操作，并将新创建的节点插入到`oldChildren`中所有未处理节点的前面。
 
 2. 更新子节点
 3. 移动子节点
-移动节点通常发生在`newChildren`中的某个节点和`oldChildren`中的某个节点是同一个节点，但是位置不同，所以在真实的DOM中需要将这个节点的位置以新虚拟节点的位置为基准进行移动。通过`Node.insertBefore()`方法移动节点。
+
+移动节点通常发生在`newChildren`中的某个节点和`oldChildren`中的某个节点是同一个节点，但是位置不同，所以在真实的DOM中需要将这个节点的位置以新虚拟节点的位置为基准进行移动。通过`Node.insertBefore()`方法移动节点，移动的节点移动到所有未处理节点的最前面。
+
+4. 删除子节点
+
+当`newChildren`中的所有节点都循环了一遍后，也就是循环结束后，如果`oldChildren`中还有剩余的没有被处理的节点，那么这些节点就是被废弃，需要删除的节点。

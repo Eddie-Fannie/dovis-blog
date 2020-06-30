@@ -94,3 +94,106 @@ for(var i =1;i<=5;i++) {
 这个模式在JS中被称为模块。
 1. `CoolModule()`只是一个函数，必须要通过调用它来创建一个模块实例。如果不执行外部函数，内部作用域和闭包都无法被创建。
 2. 封闭函数必须返回至少一个内部函数，这样内部函数才能在私有作用域中形成闭包，并且可以访问或者修改私有的状态。**(当通过返回一个含有属性引用的对象的方式来将函数传递到词法作用域外部时，我们已经创造了可以观察和实践闭包的条件。)**
+
+**第二部分 this和对象原型**
+上例子 ：
+```js
+function identify() {
+    return this.name.toUpperCase();
+}
+function speak() {
+    var greeting = 'hello I am' + identify.call(this);
+    console.log(greeting)
+}
+var me = {
+    name: 'Kyle'
+};
+var you = {
+    name: 'Reader'
+};
+identify.call(me) // KYLE
+identify.call(you) // READER
+speak.call(me) // hello I amKYLE
+```
+## 什么是`this`
+> 当一个函数被调用时，会创建一个活动记录（有时候也称为执行上下文）。这个记录会包含函数在哪里被调用（调用栈）、函数的调用方式、传入的参数等信息。this就是这个记录的一个属性，会在函数执行的过程中用到。**this实际上是在函数被调用时发生的绑定，它指向什么完全取决于函数在哪里被调用**，所以this类似动态作用域
+
+## 隐式绑定
+> 一个最常见的this绑定问题就是被隐式绑定的函数会丢失绑定对象
+```js
+function foo() {
+    console.log(this.a);
+}
+var obj = {
+    a: 2,
+    foo: foo
+}
+var bar = obj.foo; // 函数别名
+var a = 'lll' // a是全局对象的属性
+bar(); // lll
+```
+
+## 显式绑定
+1. call()
+```js
+function foo() {
+    console.log(this.a);
+}
+var obj = {
+    a: 2
+}
+foo.call(obj); // 2
+```
+### 显式绑定变种解决丢失绑定问题
+1. 硬绑定
+```js
+function foo() {
+    console.log(this.a);
+}
+var obj = {
+    a: 2
+};
+var bar = function() {
+    foo.call(obj);
+};
+bar(); // 2
+setTimeout(bar, 100); // 2
+// 硬绑定的bar不可能再修改它的this
+bar.call(window) // 2
+```
+
+### 硬绑定使用场景
+- 创建一个包裹函数，负责接受参数并返回值：
+```js
+function foo(something) {
+    console.log(this.a, something);
+    return this.a + something;
+}                             
+var obj = {
+    a: 2
+}       
+var bar = function() {
+    return foo.apply(obj, arguments)
+}                                  
+var b = bar(3); // 2 3
+console.log(b); // 5                         
+```
+
+- 创建一个可以重复使用的辅助函数：
+```js
+function foo(something) {
+    console.log(this.a, something);
+    return this.a + something;
+}                             
+function bind(fn, obj) {
+    return function() {
+        return fn.apply(obj, arguments)
+    }
+}
+var obj = {
+    a: 2
+}                                                                                                                                                                                                                          
+var bar = bind(foo, obj);
+var b = bar(3) // 2 3
+console.log(b) // 5
+```
