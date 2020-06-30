@@ -172,7 +172,9 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
-                '/algorithm/Array/两数之和'
+                '/algorithm/Array/两数之和',
+                '/algorithm/Array/电话号码的字母组合',
+                '/algorithm/Array/卡牌组合'
             ]
         }
     ]
