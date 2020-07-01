@@ -58,6 +58,7 @@ module.exports = {
             title: 'JavaScript中级知识点',
             collapsable: false,
             children: [
+                '/basis/JavaScript/对象深浅拷贝',
                 '/basis/JavaScript/js的一些内置对象方法汇总',
                 '/basis/JavaScript/类和构造函数',
                 '/basis/JavaScript/继承'
@@ -156,7 +157,7 @@ module.exports = {
             title: 'JS模块',
             collapsable: false,
             children: [
-                '/interview/对象深浅拷贝'
+                '/interview/js问题'
             ]
         },
         {
