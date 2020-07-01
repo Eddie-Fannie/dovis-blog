@@ -167,14 +167,25 @@ module.exports = {
             ]
         }
     ],
-    '/algorithm/': [
+    '/algorithm/Array/': [
         {
             title: '基础题',
             collapsable: false,
             children: [
                 '/algorithm/Array/两数之和',
                 '/algorithm/Array/电话号码的字母组合',
+                '/algorithm/Array/格雷编码',
+                '/algorithm/Array/种花问题',
                 '/algorithm/Array/卡牌组合'
+            ]
+        }
+    ],
+    '/algorithm/String/': [
+        {
+            title: '基础题',
+            collapsable: false,
+            children: [
+                '/algorithm/String/重复的子字符串'
             ]
         }
     ]
