@@ -57,3 +57,103 @@ array.reduce(function(prev,current,currentIndex,arr), initialValue)
     { current: 'o' } ]
     */
     ```
+
+## `forEach`
+> `forEach()`方法用于调用数组的每个元素，并将元素传递给回调函数。**对于空数组是不会执行回调函数的**
+
+> 没有返回值，所以不支持链式调用
+
+```js
+array.forEach(function(currentValue, index, arr), thisValue)
+```
+| 参数 | 描述 | 
+| ---- | ----|
+| function(currentValue, index, arr) | 必需 （`currentValue`当前元素；`index`可选，当前元素的索引值；`arr`可选，当前元素所属的数组对象。|
+| thisValue | 可选，传递给函数的值一般用`this`值，如果这个值为空，则`undefined`或`null`会传递给`this`的值 |
+
+例子1:
+```js
+function foo(el,index) {
+    console.log(el, this.id, index);
+}
+var obj = {
+    id: 'awesome'
+}
+var arr = [1,2,3]
+arr.forEach(foo,obj); 
+// 1 'awesome' 0
+// 2 'awesome' 1
+// 3 'awesome' 2
+```
+例子2:
+> 如果使用箭头函数来传入函数参数，`thisValue`会被忽略：
+```js
+function a(el) { 
+    console.log(this.id + el) // 5 6 7
+}
+let arr = [1, 2, 3]
+let obj = {
+    id: 4
+}
+arr.forEach((el) => {
+    console.log(this.id + el) // NaN NaN NaN
+}, obj)
+arr.forEach(a, obj)
+```
+
+例子3: 对象复制器函数
+```js
+function copy(obj) {
+  const copy = Object.create(Object.getPrototypeOf(obj));
+  const propNames = Object.getOwnPropertyNames(obj);
+
+  propNames.forEach(function(name) {
+    const desc = Object.getOwnPropertyDescriptor(obj, name);
+    Object.defineProperty(copy, name, desc);
+  });
+
+  return copy;
+}
+
+const obj1 = { a: 1, b: 2 };
+const obj2 = copy(obj1); // 现在 obj2 看起来和 obj1 一模一样了
+```
+
+例子4: 如果数组在迭代时被修改了，则其他元素会被跳过
+```js
+var words = ['one', 'two', 'three', 'four'];
+words.forEach(function(word) {
+  console.log(word);
+  if (word === 'two') {
+    words.shift();
+  }
+});
+// one
+// two
+// four
+```
+
+例子5: 扁平化数组（也可以利用`Array.prototype.flat()`方法）
+```js
+/**
+ * Flattens passed array in one dimensional array
+ *
+ * @params {array} arr
+ * @returns {array}
+ */
+function flatten(arr) {
+  const result = [];
+  arr.forEach((i) => {
+    if (Array.isArray(i))
+      result.push(...flatten(i));
+    else
+      result.push(i);
+  })
+  return result;
+}
+// Usage
+const problem = [1, 2, 3, [4, 5, [6, 7], 8, 9]];
+flatten(problem); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+例子6: 验证
