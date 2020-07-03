@@ -48,6 +48,7 @@ module.exports = {
             // path: '/basis/JavaScript/',
             collapsable: false,
             children: [
+                '/basis/JavaScript/js基础知识',
                 '/basis/JavaScript/正则RegExp',
                 '/basis/JavaScript/细谈this问题',
                 '/basis/JavaScript/作用域',
