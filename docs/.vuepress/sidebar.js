@@ -35,6 +35,7 @@ module.exports = {
             title: 'CSS知识点',
             collapsable: false,
             children: [
+                '/basis/CSS/css基础知识点',
                 '/basis/CSS/css命名规范'
             ]
         }
@@ -88,8 +89,14 @@ module.exports = {
                 '/basis/ES6/类',
                 '/basis/ES6/ES6的继承'
             ]
+        },
+        {
+            title: 'ES6高级知识点',
+            collapsable: false,
+            children: [
+                '/basis/ES6/Proxy'
+            ]
         }
-        
     ],
     '/frame/Vue/': [
         {
