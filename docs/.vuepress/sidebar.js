@@ -63,7 +63,8 @@ module.exports = {
                 '/basis/JavaScript/对象深浅拷贝',
                 '/basis/JavaScript/js的一些内置对象方法汇总',
                 '/basis/JavaScript/类和构造函数',
-                '/basis/JavaScript/继承'
+                '/basis/JavaScript/继承',
+                '/basis/JavaScript/Js节流防抖'
             ]
         },
         {
@@ -182,9 +183,15 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/Array/两数之和',
-                '/algorithm/Array/电话号码的字母组合',
-                '/algorithm/Array/格雷编码',
                 '/algorithm/Array/种花问题',
+                '/algorithm/Array/卡牌组合'
+            ]
+        },
+        {
+            title: '中等题',
+            collapsable: false,
+            children: [
+                '/algorithm/Array/格雷编码',
                 '/algorithm/Array/卡牌组合'
             ]
         }
@@ -195,6 +202,14 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/String/重复的子字符串'
+            ]
+        },
+        {
+            title: '中等题',
+            collapsable: false,
+            children: [
+                '/algorithm/String/重复的子字符串',
+                '/algorithm/String/电话号码的字母组合'
             ]
         }
     ]
