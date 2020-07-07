@@ -2,6 +2,53 @@
 ## 定时器
 > 调用环境总是`window`
 
+## 防抖
+> 在事件被触发n秒后再执行回调，如果在这n秒内又被触发，则重新计时。
+
+```js
+function debounce(func, wait) {
+    var timeout;
+    return function () {
+        clearTimeout(timeout)
+        timeout = setTimeout(func, wait);
+    }
+}
+```
+
+**例子1：**
+```js
+var count = 1;
+var container = document.getElementsByClassName('container')[0]
+// container.addEventListener('mousemove', debounce(() => {
+//     container.innerHTML = count++
+// }, 3000))
+container.addEventListener('mousemove', (e) => {
+    console.log(e)
+    container.innerHTML = count++
+})
+```
+::: tip
+没有防抖之前鼠标移入dom会使数字一直递增；防抖之后，鼠标移入隔了3秒数字递增至2，然后频繁滑动鼠标不会使数字继续递增，只有停止鼠标触发事件之后的第三秒数字才继续递增。**鼠标移出dom容器外数字会递增最后一次。**
+:::
+
+### 防抖代码升级
+> 因为触发事件加入防抖函数后，`this`会指向`Window`对象。所以就会利用`apply`改变`this`指向；没有使用防抖函数下，触发鼠标事件会打印出`event`对象，加入防抖函数后，打印为`undefined`，所以就要传入参数类数组`args`。**升级后的防抖代码：**
+
+```js
+function debounce(func, wait) {
+    var timeout;
+
+    return function () {
+        var context = this;
+        var args = arguments;
+
+        clearTimeout(timeout)
+        timeout = setTimeout(function(){
+            func.apply(context, args)
+        }, wait);
+    }
+}
+```
 ## 节流
 > 函数节流的基本思想是指：**如果你持续触发事件，每隔一段时间只执行一次事件**
 
@@ -92,22 +139,6 @@ function throttle(fun, delay) {
 ```
 
 > 只要代码是周期性执行的，都使用节流。**规定在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。**
-
-## 防抖
-> 在事件被触发n秒后再执行回调，如果在这n秒内又被触发，则重新计时。
-
-```js
-function debounce(fun, delay) {
-    return function (args) {
-        let that = this
-        let _args = args
-        clearTimeout(fun.id)
-        fun.id = setTimeout(function () {
-            fun.call(that, _args)
-        }, delay)
-    }
-}
-```
 
 ## 节流防抖总结
 - 函数防抖是某一段时间内执行一次；函数节流是间隔时间执行。
