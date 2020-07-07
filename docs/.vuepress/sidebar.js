@@ -191,8 +191,7 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/Array/格雷编码',
-                '/algorithm/Array/卡牌组合'
+                '/algorithm/Array/格雷编码'
             ]
         }
     ],

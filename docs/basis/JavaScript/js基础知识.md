@@ -18,10 +18,11 @@ const b = []
 > 函数传递对象参数其实是相当于传递对象指针的副本，所以函数内修改参数对象属性的时候，并不会影响传递进去的对象本身，例如工厂模式生成对象的情况。
 
 ## 判断数据类型
-- `typeof`：null,函数，数组都可以判断为对象，所以不能准确判断变量到底是什么类型
+- `typeof`：null,函数，数组都可以判断为对象`object`，所以不能准确判断变量到底是什么类型
 ```js
 var str1 = 123
 console.log(typeof str1 === 'number') // true
+console.log(typeof Array) // 'function'
 ```
 - `instanceof`：判断的原理是根据原型链
 ```js

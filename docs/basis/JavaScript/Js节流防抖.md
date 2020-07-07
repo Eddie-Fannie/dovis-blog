@@ -1,11 +1,72 @@
 # 节流防抖
 ## 定时器
 > 调用环境总是`window`
+
 ## 节流
-> 函数节流的基本思想是指：某些代码不可以在没有间断的情况下连续重复执行。**第一次调用函数，创建一个定时器，在指定的时间间隔之后运行代码。当第二次调用函数时，会清除前一次的定时器并设置另一个**
+> 函数节流的基本思想是指：**如果你持续触发事件，每隔一段时间只执行一次事件**
 
 ### 实现方案
 - 第一种是用时间戳来判断是否已到执行时间，记录上次执行的时间戳，然后每次触发事件执行回调，回调中判断当前时间戳距离上次执行时间戳的间隔是否已经达到时间差（Xms） ，如果是则执行，并更新上次执行的时间戳，如此循环。
+```js
+function throttle(func, wait) {
+    var context, args;
+    var previous = 0;
+
+    return function() {
+        var now = +new Date();
+        context = this;
+        args = arguments;
+        if (now - previous > wait) {
+            func.apply(context, args);
+            previous = now;
+        }
+    }
+}
+```
+**例子1:**
+```js
+var container = document.getElementById('main')
+container.addEventListener('mousemove',throttle(() => {
+    console.log('hhhhh')
+},1000))
+```
+> 结果就是频繁触发`mousemove`，也只是每隔一秒输出一句`console.log('hhhhh')`
+
+- 第二种方法是使用定时器，比如当`scroll`事件刚触发时，打印一个`hello world`，然后设置个`1000ms`的定时器，此后每次触发`scroll`事件触发回调，如果已经存在定时器，则回调不执行方法，直到定时器触发，`handler`被清除，然后重新设置定时器。
+```js
+function throttle(func, wait) {
+    var timeout;
+    return function() {
+        context = this;
+        args = arguments;
+        if (!timeout) {
+            timeout = setTimeout(function(){
+                timeout = null;
+                func.apply(context, args)
+            }, wait)
+        }
+
+    }
+}
+```
+
+**例子2:**
+```js
+var container = document.getElementById('main')
+container.addEventListener('mousemove',throttle(() => {
+    console.log('hhhhh')
+},3000))
+```
+> 当鼠标移入的时候，事件不会立刻执行，晃了`3s`后终于执行了一次，此后每`3s`执行一次，当数字显示为`3`的时候，立刻移出鼠标，相当于大约`9.2s`的时候停止触发，但是依然会在第`12s`的时候执行一次事件。
+
+::: tip
+前面两种方法比较：
+1. 第一种事件会立即执行，第二种事件会在n秒后第一次执行。
+2. 第一种事件停止触发后没有办法再次执行事件，第二种停止触发后依然再执行一次。
+:::
+
+**第一二种方案结合--双剑合璧**
+> 触发就立即执行，停止触发还能再执行一次。
 
 ```js
 function throttle(fun, delay) {
@@ -29,7 +90,6 @@ function throttle(fun, delay) {
     }
 }
 ```
-- 第二种方法是使用定时器，比如当 scroll 事件刚触发时，打印一个 hello world，然后设置个 1000ms 的定时器，此后每次触发 scroll 事件触发回调，如果已经存在定时器，则回调不执行方法，直到定时器触发，handler 被清除，然后重新设置定时器。
 
 > 只要代码是周期性执行的，都使用节流。**规定在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。**
 
@@ -59,3 +119,5 @@ function debounce(fun, delay) {
 + 节流`throttle`
     - 鼠标不断点击触发
     - 监听滚动事件
+
+## 学习函数工具库`lodash`的防抖节流源码

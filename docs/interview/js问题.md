@@ -45,6 +45,16 @@ function judgeFloat(n, m) {
   }
   judgeFloat(0.1,0.2)
 ```
+
+3. **下列输出原因：**
+```js
+console.log(Object instanceof Function) // true
+console.log(Function instanceof Object) // true
+```
+> 构造函数本身又是方法(`Function`)的实例 --> `Function`是通过自己创建出来的,`Function`的`__proto__`指向的`Function.prototype`。`Object`实际上也是通过`Function`创建出来的。所以那么`Object`的`__proto__`指向的是`Function.prototype`--> **验证第一小题正确**；因为`JS`中所有的东西都是对象，那么`Function.prototype`也是对象，既然是对象，那么`Function.prototype`肯定是通过`Object`创建出来的。--> **验证第二小题正确**
+
+综上所述，Function和Object的原型以及原型链的关系可以归纳为下图:
+![img](/dovis-blog/js/function.jpg)
 ## 中级题
 
 ## 高级题
