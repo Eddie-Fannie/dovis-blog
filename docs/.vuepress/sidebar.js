@@ -207,7 +207,7 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/String/重复的子字符串',
+                '/algorithm/String/复原IP地址',
                 '/algorithm/String/电话号码的字母组合'
             ]
         }
