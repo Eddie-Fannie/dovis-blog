@@ -30,6 +30,7 @@ module.exports = [
     },
     {
         text: '算法&数据结构', items: [
+            {text: '栈与队列', link: '/algorithm/Queue/'},
             {text: '数组', link: '/algorithm/Array/'},
             {text: '字符串', link: '/algorithm/String/'}
         ]

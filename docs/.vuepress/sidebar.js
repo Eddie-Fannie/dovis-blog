@@ -177,6 +177,12 @@ module.exports = {
             ]
         }
     ],
+    '/algorithm/Queue/': [
+        {
+            title: '基础题',
+            collapsable: false
+        }
+    ],
     '/algorithm/Array/': [
         {
             title: '基础题',
