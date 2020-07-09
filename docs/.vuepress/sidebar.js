@@ -36,7 +36,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/basis/CSS/css基础知识点',
-                '/basis/CSS/css命名规范'
+                '/basis/CSS/css命名规范',
+                '/basis/CSS/布局基础'
             ]
         }
     ],
