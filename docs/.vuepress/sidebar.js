@@ -118,6 +118,15 @@ module.exports = {
             ]
         }
     ],
+    '/advanced/Browser/': [
+        {
+            title: '浏览器相关知识',
+            collapsable: false,
+            children: [
+                '/advanced/Browser/浏览器缓存'
+            ]
+        }
+    ],
     '/another/Git/': [
         {
             title: 'Git版本工具使用',

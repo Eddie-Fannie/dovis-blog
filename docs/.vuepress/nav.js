@@ -18,7 +18,8 @@ module.exports = [
     {
         text: '进阶分支', items: [
             {text: '前端性能', link: '/advanced/Performance/'},
-            {text: '安全', link: '/advanced/Safety/'}
+            {text: '安全', link: '/advanced/Safety/'},
+            {text: '浏览器', link: '/advanced/Browser/'}
         ]
     },
     {
