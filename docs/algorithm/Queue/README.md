@@ -91,3 +91,81 @@ class Deque{
 
 ## 循环队列
 > 可以使用固定大小的数组和两个指针来指示起始和结束位置。目的是重用浪费的存储。
+
+```js
+class MyCircularQueue {
+    constructor(k) {
+        this.list = Array(k) // 创建一个长度为k的空数组
+        this.front = 0  // 保存头部指针位置
+        this.real = 0   // 保存尾部指针位置
+        this.max = k    // 保存该数组最大长度，也就是k 
+    }
+    Front() {
+        if (this.isEmpty()) {
+            return -1
+        }
+        return this.list[this.front]
+    }
+    Rear() {
+        if (this.isEmpty()) {
+            return -1
+        }
+        let val = this.real - 1 >= 0 ? this.real - 1 : this.max - 1  
+        return this.list[val]
+    }
+    enQueue(value) {
+        if (!this.isFull()) {
+            this.list[this.real] = value
+            this.real = (this.real + 1) % this.max
+            return true
+        } else {
+            return false
+        }
+    }
+    deQueue() {
+        if (!this.isEmpty()) {
+            this.list[this.front] = ''
+            this.front = (this.front + 1) % this.max
+            return true
+        } else {
+            return false
+        }
+    }
+    isEmpty() {
+        if (this.real === this.front && !this.list[this.front]) {
+            return true
+        } else {
+            return false
+        }
+    }
+    isFull() {
+        if (this.real === this.front && !!this.list[this.front]) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+```
+
+击鼓传花游戏模拟循环队列
+```js
+function hotPotato(elementList, num) {
+    const queue = new Queue();
+    const elimitatedList = [] // 淘汰名单
+
+    for(let i =0;i<elementList.length;i++) {
+        queue.enqueue(elementsList[i])
+    }
+    while(queue.size() >1) {
+        for(let i=0;i<num;i++) {
+            queue.enqueue(queue.dequeue())
+        }
+        elimitatedList.push(queue.dequeue()) 
+    }
+    return {
+        eliminated: elimitatedList,
+        winner: queue.dequeue()
+    }
+}
+```
