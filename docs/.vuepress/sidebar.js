@@ -42,12 +42,8 @@ module.exports = {
         }
     ],
     '/basis/JavaScript/': [
-        // '', /* /JavaScript/ */
-        // '正则RegExp',
-        // '细谈this问题'
         {
             title: 'JavaScript初级知识点',
-            // path: '/basis/JavaScript/',
             collapsable: false,
             children: [
                 '/basis/JavaScript/js基础知识',
@@ -123,7 +119,8 @@ module.exports = {
             title: '浏览器相关知识',
             collapsable: false,
             children: [
-                '/advanced/Browser/浏览器缓存'
+                '/advanced/Browser/浏览器缓存',
+                '/advanced/Browser/浏览器渲染'
             ]
         }
     ],
@@ -177,6 +174,13 @@ module.exports = {
             collapsable: false,
             children: [
                 '/interview/js问题'
+            ]
+        },
+        {
+            title: '其他模块',
+            collapsable: false,
+            children: [
+                '/interview/其他问题'
             ]
         },
         {
