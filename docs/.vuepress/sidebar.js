@@ -187,7 +187,7 @@ module.exports = {
             ]
         }
     ],
-    '/algorithm/Queue/': [
+    '/algorithm/Stack-Queue/': [
         {
             title: '基础题',
             collapsable: false
