@@ -31,9 +31,13 @@ module.exports = [
     },
     {
         text: '算法&数据结构', items: [
-            {text: '栈与队列', link: '/algorithm/Stack-Queue/'},
-            {text: '数组', link: '/algorithm/Array/'},
-            {text: '字符串', link: '/algorithm/String/'}
+            {text: '数据结构', items: [
+                {text: '数组', link: '/algorithm/DataStructure/Array/'},
+                {text: '栈与队列', link: '/algorithm/DataStructure/Stack-Queue/'},
+                {text: '字符串', link: '/algorithm/DataStructure/String/'}
+            ]},
+            {text: '基础算法', link: '/algorithm/BasicAlgorithm/'},
+            {text: '算法思维', link: '/algorithm/AlgorithmicThinking/'}
         ]
     },
     {

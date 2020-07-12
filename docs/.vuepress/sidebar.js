@@ -193,38 +193,91 @@ module.exports = {
             collapsable: false
         }
     ],
-    '/algorithm/Array/': [
+    '/algorithm/AlgorithmicThinking/': [
         {
-            title: '基础题',
+            title: '滑动窗口思想',
             collapsable: false,
             children: [
-                '/algorithm/Array/两数之和',
-                '/algorithm/Array/种花问题',
-                '/algorithm/Array/卡牌组合'
+                '/algorithm/AlgorithmicThinking/SlidingWindow/滑动窗口最大值'
             ]
         },
         {
-            title: '中等题',
+            title: '递归思想',
             collapsable: false,
             children: [
-                '/algorithm/Array/格雷编码'
+                '/algorithm/AlgorithmicThinking/Recursion/格雷编码',
+                '/algorithm/AlgorithmicThinking/Recursion/复原IP地址'
+            ]
+        },
+        {
+            title: '回溯思想',
+            collapsable: false,
+            children: [
+                '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合'
             ]
         }
     ],
-    '/algorithm/String/': [
+    '/algorithm/BasicAlgorithm/': [
+        {
+            title: '二分查找',
+            collapsable: false,
+            children: [
+                '/algorithm/BasicAlgorithm/BinarySearch/卡牌组合'
+            ]
+        },
+        {
+            title: '散列查找（哈希表）',
+            collapsable: false,
+            children: [
+                '/algorithm/BasicAlgorithm/HashTable/两数之和'
+            ]
+        }
+    ],
+    '/algorithm/DataStructure/Array/': [
         {
             title: '基础题',
             collapsable: false,
             children: [
-                '/algorithm/String/重复的子字符串'
+                '/algorithm/DataStructure/Array/种花问题'
             ]
         },
         {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/String/复原IP地址',
-                '/algorithm/String/电话号码的字母组合'
+               
+            ]
+        }
+    ],
+    '/algorithm/DataStructure/Stack-Queue/': [
+        {
+            title: '基础题',
+            collapsable: false,
+            children: [
+               
+            ]
+        },
+        {
+            title: '中等题',
+            collapsable: false,
+            children: [
+               
+            ]
+        }
+    ],
+    '/algorithm/DataStructure/String/': [
+        {
+            title: '基础题',
+            collapsable: false,
+            children: [
+                '/algorithm/DataStructure/String/重复的子字符串'
+            ]
+        },
+        {
+            title: '中等题',
+            collapsable: false,
+            children: [
+              
             ]
         }
     ]
