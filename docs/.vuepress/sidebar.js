@@ -133,6 +133,15 @@ module.exports = {
             ]
         }
     ],
+    '/another/Net/': [
+        {
+            title: '计算机网络知识汇总',
+            collapsable: false,
+            children: [
+                '/another/Net/DNS初识'
+            ]
+        }
+    ],
     '/another/Working/': [
         {
             title: '工作项目遇到的问题',
