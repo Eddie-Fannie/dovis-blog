@@ -61,7 +61,8 @@ module.exports = {
                 '/basis/JavaScript/js的一些内置对象方法汇总',
                 '/basis/JavaScript/类和构造函数',
                 '/basis/JavaScript/继承',
-                '/basis/JavaScript/Js节流防抖'
+                '/basis/JavaScript/Js节流防抖',
+                '/basis/JavaScript/事件机制'
             ]
         },
         {
@@ -148,7 +149,8 @@ module.exports = {
             title: '工作项目遇到的问题',
             collapsable: false,
             children: [
-                '/another/Working/工作遇到'
+                '/another/Working/工作遇到',
+                '/another/Working/vue'
             ]
         }
     ],
