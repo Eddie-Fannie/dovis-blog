@@ -125,6 +125,15 @@ module.exports = {
             ]
         }
     ],
+    '/service/Server/': [
+        {
+            title: 'nginx相关知识',
+            collapsable: false,
+            children: [
+                '/service/Server/nginx'
+            ]
+        }
+    ],
     '/another/Git/': [
         {
             title: 'Git版本工具使用',
