@@ -111,7 +111,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/frame/Vue/虚拟dom',
-                '/frame/Vue/生成真实dom'
+                '/frame/Vue/生成真实dom',
+                '/frame/Vue/vue生命周期'
             ]
         }
     ],
