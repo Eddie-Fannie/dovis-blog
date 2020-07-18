@@ -192,6 +192,13 @@ module.exports = {
             ]
         },
         {
+            title: 'CSS模块',
+            collapsable: false,
+            children: [
+                '/interview/css常问面试题'
+            ]
+        },
+        {
             title: 'JS模块',
             collapsable: false,
             children: [
