@@ -103,7 +103,8 @@ module.exports = {
             // path: '/frame/Vue/',
             collapsable: false,
             children: [
-                '/frame/Vue/Vue的精髓--组件'
+                '/frame/Vue/Vue的精髓--组件',
+                '/frame/Vue/vue中的通信'
             ]
         },
         {
