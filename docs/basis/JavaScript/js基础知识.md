@@ -71,6 +71,8 @@ function checkType(payload) {
         break;
         case '[object Object]': console.log('Object')
         break;
+        case '[object Number]': console.log('NaN')
+        break;
         // 还有其他类型Map Symbol等不一一列举
     }
 }

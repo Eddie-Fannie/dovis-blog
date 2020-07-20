@@ -188,3 +188,16 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     - `justify-items`设置单元格内容的水平位置。（`start end center stretch`)
     - `align-items`则设置单元格内容垂直位置。（`start end center stretch`)
     - `place-items` 前面两个属性的简写：`align-items justify-items`(省略第二个值，浏览器认为与第一个值相等)
+
+## 网页中使用偶数字体
+>使用偶数字体。偶数字号相对更容易和 `web` 设计的其他部分构成比例关系。`Windows` 自带的点阵宋体（中易宋体）从 `Vista` 开始只提供 `12、14、16 px` 这三个大小的点阵，而 `13、15、17 px`时用的是小一号的点。（即每个字占的空间大了` 1 px`，但点阵没变），于是略显稀疏。
+
+## 行高
+> 行高是指一行文字的高度，具体说是两行文字间基线的距离。`CSS`中起高度作用的是`height`和`line-height`，没有定义`height`属性，最终其表现作用一定是`line-height`。单行文本垂直居中：把`line-height`值设置为`height`一样大小的值可以实现单行文字的垂直居中，其实也可以把`height`删除。
+
+## `li`之间空白间隔
+> 行框的排列会受到中间空白（回车空格）等的影响，因为空格也属于字符,这些空白也会被应用样式，占据空间，所以会有间隔，把字符大小设为`0`，就没有空格了。
++ 解决方案：
+    - 将`li`标签写在一排
+    - 浮动
+    - 在`ul`中使用`font-size: 0;` `letter-space: -3px;`

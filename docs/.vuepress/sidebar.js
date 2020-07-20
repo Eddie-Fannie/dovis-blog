@@ -123,7 +123,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/advanced/Browser/浏览器缓存',
-                '/advanced/Browser/浏览器渲染'
+                '/advanced/Browser/浏览器渲染',
+                '/advanced/Browser/浏览器跨域'
             ]
         }
     ],
