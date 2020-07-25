@@ -126,7 +126,8 @@ module.exports = {
                 '/advanced/Browser/浏览器渲染',
                 '/advanced/Browser/浏览器跨域',
                 '/advanced/Browser/浏览器存储',
-                '/advanced/Browser/浏览器安全'
+                '/advanced/Browser/浏览器安全',
+                '/advanced/Browser/前端路由'
             ]
         }
     ],
