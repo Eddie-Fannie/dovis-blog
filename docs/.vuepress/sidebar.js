@@ -86,7 +86,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/basis/ES6/类',
-                '/basis/ES6/ES6的继承'
+                '/basis/ES6/ES6的继承',
+                '/basis/ES6/Symbol'
             ]
         },
         {
