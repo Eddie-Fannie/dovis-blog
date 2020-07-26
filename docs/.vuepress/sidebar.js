@@ -50,7 +50,9 @@ module.exports = {
                 '/basis/JavaScript/正则RegExp',
                 '/basis/JavaScript/细谈this问题',
                 '/basis/JavaScript/作用域',
-                '/basis/JavaScript/js的数组方法汇总'
+                '/basis/JavaScript/js数组的一些常规问题',
+                '/basis/JavaScript/js的数组方法汇总',
+                '/basis/JavaScript/ajax原生'
             ]
         },
         {
@@ -87,7 +89,8 @@ module.exports = {
             children: [
                 '/basis/ES6/类',
                 '/basis/ES6/ES6的继承',
-                '/basis/ES6/Symbol'
+                '/basis/ES6/Symbol',
+                '/basis/ES6/Map数据结构'
             ]
         },
         {
