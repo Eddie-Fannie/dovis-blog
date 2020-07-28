@@ -159,7 +159,9 @@ module.exports = {
             collapsable: false,
             children: [
                 '/another/Net/DNS初识',
-                '/another/Net/TCP三次握手'
+                '/another/Net/TCP三次握手',
+                '/another/Net/HTTP',
+                '/another/Net/WebSocket'
             ]
         }
     ],
