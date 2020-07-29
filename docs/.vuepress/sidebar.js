@@ -149,7 +149,8 @@ module.exports = {
             title: 'Git版本工具使用',
             collapsable: false,
             children: [
-                '/another/Git/如何使用gitflow'
+                '/another/Git/如何使用gitflow',
+                '/another/Git/工作中使用git'
             ]
         }
     ],

@@ -118,8 +118,23 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     - 父级`div`定义`height`
     - 最后一个浮动元素后加一个空`div`标签，并添加样式`clear:both;`
     > `clear`属性表示设置元素的左右边界不允许出现浮动元素
+    - 父级元素触发`BFC`
     - 包含浮动元素的父标签添加样式`overflow:hidden/auto;`
     - 父级`div`定义为在`zoom`
+    - 建立伪类选择器
+    ```html
+    //添加:after伪元素
+        .parent:after{
+            content: ''; /* 设置添加子元素的内容是空 */  
+            display: block; /* 设置添加子元素为块级元素 */       
+            height: 0; /* 设置添加的子元素的高度0 */     
+            visibility: hidden; /* 设置添加子元素看不见 */     
+            clear: both; /* 设置clear：both */
+        }
+        <div class="parent">
+            <div class="f"></div>
+        </div>
+    ```
 
 ## 使用百分比设定单位
 > 如果使用百分数设定内边距，外边距都是相对于元素父级元素的宽度来设置的，而不是高度。
@@ -226,6 +241,9 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 - 伪元素在一个选择器里只能出现一次，并且只能出现在末尾。
 - 伪类则是像真正的类一样发挥着类的作用，没有数量上的限制，只要不是相互排斥的伪类，也可以同时使用在相同的元素上。
 - 伪类用一个冒号表示 `:first-child`，伪元素则使用两个冒号表示 `::first-line`(为了向下兼容，现在的浏览器中伪元素选择器用单冒号和双冒号都可以)。
+
+**常用伪元素和伪类：**
+![img](/dovis-blog/other/19.png)
 
 ## `border:none`和`border: 0`的区别？
 - `{border：0;}`: 把`border`设置为`0`像素，虽然在页面上看不到，但是按`border`默认值理解，浏览器依然对`border-width/border-color`进行了渲染，即已经占用内存值；
