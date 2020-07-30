@@ -149,7 +149,8 @@ module.exports = {
             title: 'Git版本工具使用',
             collapsable: false,
             children: [
-                '/another/Git/如何使用gitflow'
+                '/another/Git/如何使用gitflow',
+                '/another/Git/工作中使用git'
             ]
         }
     ],
@@ -273,7 +274,9 @@ module.exports = {
             title: '散列查找（哈希表）',
             collapsable: false,
             children: [
-                '/algorithm/BasicAlgorithm/HashTable/两数之和'
+                '/algorithm/BasicAlgorithm/HashTable/两数之和',
+                '/algorithm/BasicAlgorithm/HashTable/第一个只出现一次的字符',
+                '/algorithm/BasicAlgorithm/HashTable/两个数组的交集'
             ]
         }
     ],
