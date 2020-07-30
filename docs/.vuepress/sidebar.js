@@ -90,7 +90,9 @@ module.exports = {
                 '/basis/ES6/类',
                 '/basis/ES6/ES6的继承',
                 '/basis/ES6/Symbol',
-                '/basis/ES6/Map数据结构'
+                '/basis/ES6/Map数据结构',
+                '/basis/ES6/Set数据结构'
+                
             ]
         },
         {
