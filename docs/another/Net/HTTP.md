@@ -10,8 +10,10 @@
 ## HTTP历史
 - `HTTP/0.9`
 > 只有一个请求行，没有`HTTP`请求头和请求体。同样，服务器也没有响应头信息，只是返回了数据。因为都是`HTML`格式的文件，决定了返回的文件内容通过`ASCII`字符流进行传输。
+
 - `HTTP/1.0`
 > 引入请求头/响应头，引入状态码，为了减轻服务器压力提供了`Cache`机制。服务器需要统计客户端的基础信息(Windows 和 macOS)，加入了用户代理字段。
+
 - `HTTP/1.1`
 ::: tip
 1. 改进持久连接
@@ -71,3 +73,15 @@
     + `502 Bad Gateway`：代理服务器无法获取到合法响应
     + `503 Service Unavailable`：服务器资源尚未准备好处理当前请求
     + `505 HTTP Version Not Supported`：请求使用的 `HTTP` 协议版本不支持
+
+## HTTP几种方法
+- `GET`：发送一个请求来获取服务器上的某一些资源
+- `POST`：向URL指定的资源提交数据或附加新的数据
+[GET和POST的区别](/basis/JavaScript/ajax原生.html/#http头部信息)
+- `PUT`：跟`POST`方法一样，可以向服务器提交数据，但是它们之间也所有不同，`PUT`指定了资源在服务器的位置，而`POST`没有哦。
+- `HEAD`：指请求页面的首部。
+- `DELETE`：删除服务器上的某资源
+- `OPTIONS`：它用于获取当前`URL`所支持的方法，如果请求成功，在`Allow`的头包含类似`GET,POST`等的信息。
+[复杂请求的理解](/advanced/Browser/浏览器跨域.html#cors)
+- `TRACE`：用于激发一个远程的，应用层的请求消息回路。
+- `CONNECT`：把请求连接转换到`TCP/TP`通道。
