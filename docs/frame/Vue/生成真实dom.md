@@ -108,3 +108,4 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 4. 删除子节点
 
 当`newChildren`中的所有节点都循环了一遍后，也就是循环结束后，如果`oldChildren`中还有剩余的没有被处理的节点，那么这些节点就是被废弃，需要删除的节点。
+

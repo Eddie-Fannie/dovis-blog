@@ -119,7 +119,8 @@ module.exports = {
             children: [
                 '/frame/Vue/虚拟dom',
                 '/frame/Vue/生成真实dom',
-                '/frame/Vue/vue生命周期'
+                '/frame/Vue/vue生命周期',
+                '/frame/Vue/初始化状态'
             ]
         }
     ],
@@ -217,6 +218,13 @@ module.exports = {
             collapsable: false,
             children: [
                 '/interview/js问题'
+            ]
+        },
+        {
+            title: 'Vue模块',
+            collapsable: false,
+            children: [
+                '/interview/vue相关问题'
             ]
         },
         {

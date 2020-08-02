@@ -23,7 +23,7 @@
 - 替换：向指定位置插入任意数量的项，同时删除任意数量的项。起始位置，要删除的项数和要插入的项数。
 
 ::: tip
-该方法会影响原来的数组，并且返回一个数组，返回的数组中包含原来数组中删除的项，如果没有删除的项则返回一个空数组。
+**该方法会影响原来的数组**，并且返回一个数组，返回的数组中包含原来数组中删除的项，如果没有删除的项则返回一个空数组。
 :::
 
 ## 位置方法
@@ -102,6 +102,39 @@ function unique(arr) {
         }
     }
     return array;
+}
+```
+
+利用冒泡来排序
+```js
+Array.prototype.bubbleSort = function() {
+    let arr = this,
+        len = arr.length;
+    for(let outer = len; outer >= 2; outer--) {
+        for(let inner = 0; inner<= outer -1; inner++) {
+            if(arr[inner] > arr[inner +1]) {
+                // 升序
+                [arr[inner], arr[inner +1]] = [arr[inner +1], arr[inner]];
+            }
+        }
+    }
+    return arr;
+}
+```
+
+利用选择排序
+```js
+Array.prototype.selectSort = function() {
+    let arr = this;
+        len = arr.length;
+    for(let i = 0, len= this.arr.length;i<len;i++) {
+        for(let j=i, len= this.arr.length; j<len;j++) {
+            if(this.arr[i] > this.arr[j]) {
+                [this.arr[i], this.arr[j]] = [this.arr[j], this.arr[i]]
+            }
+        }
+    }
+    return arr;
 }
 ```
 
@@ -327,3 +360,30 @@ console.log(entries.next().value) // [2, 'c']
     - `join() toString()`会将空位视为`undefined`，而`undefined/null`会转为空字符串
 
 ES6则明确表示空位转为`undefined`
+
+## ES10新增的数组方法
+1. `flat()` 数组扁平化
+```js
+[1,[2,3]].flat(2) // [1,2,3]
+[1,[2,3,[4,5]]].flat(3) // [1,2,3,4,5]
+[1,[2,3,[4,5,[...]]]].flat(Infinity) // [1,2,3,4,5...n]
+```
+
+利用递归和数组合并方法来实现扁平
+```js
+function flatten(arr) {
+    while(arr.some(item => Array.isArray(item))) {
+        arr = [].concat(...arr)
+    }
+    return arr;
+}
+```
+
+## 如何更好使用数组
+1. 使用`Array.includes`代替`Array.indexOf`
+> 如果我们仅需要知道数组中是否包含给定元素呢？这意味着只是是与否的区别，这是一个布尔问题（`boolean question`）。针对这种情况，我建议使用直接返回布尔值的 `Array.includes`。
+
+2. 使用`Array.find`替代`Array.filter`
+> 如果知道经回调函数过滤后，只会剩余唯一的一项，那么我不建议使用 `Array.filter`。比如：使用等于某个唯一 `ID` 为过滤条件去过滤一个数组。在这个例子中，`Array.filter` 返回一个仅有一项的新数组。然而，我们仅仅是为了获取 `ID` 为特定 `ID` 的那一项，这个新数组显得毫无用处。让我们讨论一下性能。为了获取所有符合回调函数过滤条件的项，`Array.filter` 必须遍历整个数组。如果原数组中有成千上万项，回调函数需要执行的次数是相当多的。为避免这些情况，我建议使用 `Array.find`。它与 `Array.filter` 一样需要一个回调函数，（但只是返回）符合条件的第一项。当找到符合回调函数过滤条件的第一个元素时，它会立即停止往下的搜寻。不再遍历整个数组。
+
+3. 使用`Array.reduce`替代`Array.filter`和`Array.map`的结合
