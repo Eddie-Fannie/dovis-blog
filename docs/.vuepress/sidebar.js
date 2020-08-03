@@ -110,13 +110,15 @@ module.exports = {
             collapsable: false,
             children: [
                 '/frame/Vue/Vue的精髓--组件',
-                '/frame/Vue/vue中的通信'
+                '/frame/Vue/vue中的通信',
+                '/frame/Vue/vue中注意的点'
             ]
         },
         {
             title: 'Vue高级知识点',
             collapsable: false,
             children: [
+                '/frame/Vue/响应式原理',
                 '/frame/Vue/虚拟dom',
                 '/frame/Vue/生成真实dom',
                 '/frame/Vue/vue生命周期',
@@ -135,6 +137,15 @@ module.exports = {
                 '/advanced/Browser/浏览器存储',
                 '/advanced/Browser/浏览器安全',
                 '/advanced/Browser/前端路由'
+            ]
+        }
+    ],
+    '/advanced/Performance/': [
+        {
+            title: '前端性能关知识',
+            collapsable: false,
+            children: [
+                '/advanced/Performance/前端优化'
             ]
         }
     ],
