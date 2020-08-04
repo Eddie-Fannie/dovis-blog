@@ -21,3 +21,34 @@
 ::: tip
 `mixin`中的生命周期与引入该组件的生命周期是紧紧关联的，且`mixin`的生命周期优先执行
 :::
+
+## watch
+1. `immediate`的作用：当值第一次进行绑定的时候并不会触发`watch`监听，使用`immediate`则可以在最初绑定的时候执行。
+2. `watch` 的 `deep` 属性,深度监听,也就是监听复杂数据类型
+```js
+watch:{
+  inpValObj:{
+    handler(oldVal,newVal){
+      console.log(oldVal)
+      console.log(newVal)
+    },
+    deep:true
+  }
+}
+```
+::: tip
+此时发现`oldVal`和 `newVal` 值一样;
+因为它们索引同一个对象/数组,`Vue` 不会保留修改之前值的副本;
+所以深度监听虽然可以监听到对象的变化,但是无法监听到具体对象里面那个属性的变化
+:::
+
+## 其他
+1. `v-cloak`
+> 在网速慢的情况下,在使用`vue`绑定数据的时候，渲染页面时会出现变量闪烁。用法:这个指令保持在元素上直到关联实例结束编译。
+
+2. `router-view`的`key`
+> 由于 `Vue` 会复用相同组件, 即 `/page/1 => /page/2` 或者 `/page?id=1 => /page?id=2` 这类链接跳转时, 将不再执行`created, mounted`之类的钩子
+
+```js
+<router-view :key="$route.fullpath"></router-view> // 这样组件的 created 和 mounted 就都会执行
+```
