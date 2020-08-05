@@ -323,7 +323,7 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
-               
+               '/algorithm/DataStructure/Stack-Queue/翻转字符串'
             ]
         },
         {
