@@ -145,7 +145,8 @@ module.exports = {
             title: '前端性能关知识',
             collapsable: false,
             children: [
-                '/advanced/Performance/前端优化'
+                '/advanced/Performance/前端优化',
+                '/advanced/Performance/高性能优化十万条数据'
             ]
         }
     ],
