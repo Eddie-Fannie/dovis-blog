@@ -4,6 +4,8 @@
 
 ::: tip
 需要使用 `key` 来给每个节点做一个唯一标识， `Diff` 算法就可以正确的识别此节点。作用主要是为了高效的更新虚拟 `DOM`。
+
+如果不使用 `key`，`Vue`会使用一种最大限度减少动态元素并且尽可能的尝试修复/再利用相同类型元素的算法。使用`key`，它会基于`key`的变化重新排列元素顺序，并且会移除 `key` 不存在的元素。
 :::
 
 ## 对`MVVM`的理解
@@ -20,11 +22,13 @@
 - `destroyed`（销毁后）： 在实例销毁之后调用。调用后，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
 
 ## Vue实现数据双向绑定的原理
-> `vue`实现数据双向绑定主要是：采用数据劫持结合发布者-订阅者模式的方式，通过`Object.defineProperty（）`来劫持各个属性的`setter，getter`，在数据变动时发布消息给订阅者，触发相应监听回调。
+> `vue`实现数据双向绑定主要是：采用**数据劫持结合发布者-订阅者模式**的方式，通过`Object.defineProperty（）`来劫持各个属性的`setter，getter`，在数据变动时发布消息给订阅者，触发相应监听回调。
 
 > 当把一个普通 `Javascript` 对象传给 `Vue` 实例来作为它的 `data` 选项时，`Vue` 将遍历它的属性，用 `Object.defineProperty` 将它们转为 `getter/setter`。用户看不到 `getter/setter`，但是在内部它们让 `Vue` 追踪依赖，在属性被访问和修改时通知变化。
 
 > `vue`的数据双向绑定 将`MVVM`作为数据绑定的入口，整合`Observer`，`Compile`和`Watcher`三者，通过`Observer`来监听自己的`model`的数据变化，通过`Compile`来解析编译模板指令（`vue`中是用来解析 `{{}}`），最终利用`watcher`搭起`observer`和`Compile`之间的通信桥梁，达到数据变化 —>视图更新；视图交互变化（`input`）—>数据`model`变更双向绑定效果。
+
+![img](/dovis-blog/other/21.png)
 
 **实现简单的双向绑定**
 ```html
@@ -64,6 +68,27 @@ document.addEventListener('keyup', (e) => {
 
 ## `delete`和`Vue.delete`删除数组的区别
 > `delete`只是被删除的元素变成了 `empty/undefined` 其他的元素的键值还是不变。`Vue.delete`直接删除数组，改变了数组的键值。
+
+## Vue的`template`编译
+> 简而言之，就是先转化成`AST`树，再得到的`render`函数返回`VNode`（`Vue`的虚拟`DOM`节点），详细步骤如下：
+
+::: tip
+1. 首先，通过`compile`编译器把`template`编译成`AST`语法树（`abstract syntax tree` 即 源代码的抽象语法结构的树状表现形式），`compile`是`createCompiler`的返回值，`createCompiler`是用以创建编译器的。另外`compile`还负责合并`option`。
+
+2. 然后，`AST`会经过`generate`（将`AST`语法树转化成`render funtion`字符串的过程）得到`render`函数，`render`的返回值是`VNode`，`VNode`是`Vue`的虚拟`DOM`节点，里面有（标签名、子节点、文本等等）
+:::
+
+## `sync`修饰符
+> 作为一个编译时的语法糖存在。它会被扩展为一个自动更新父组件属性的 `v-on` 监听器。
+```js
+<comp :foo.sync="bar"></comp>
+
+// 扩展为：
+<comp :foo="bar" @update:foo="val => bar = val"></comp>
+
+// 当子组件需要更新 foo 的值时，它需要显式地触发一个更新事件：
+this.$emit('update:foo', newValue)
+```
 
 ## 如何优化单页应用首屏加载速度慢的问题？
 - 将公用的`JS`库通过`script`标签外部引入，减小 `app.bundel` 的大小，让浏览器并行下载资源文件，提高下载速度；
