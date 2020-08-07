@@ -56,6 +56,18 @@ console.log(Function instanceof Object) // true
 综上所述，Function和Object的原型以及原型链的关系可以归纳为下图:
 ![img](/dovis-blog/js/function.jpg)
 
+4. **不要在js中使用连等赋值操作**
+```js
+let a = { n:1 }
+let b = a;
+a.x = a = { n:2 }
+console.log(a)
+console.log(b)
+```
+![img](/dovis-blog/other/23.png)
+
+[解析](https://www.cnblogs.com/xxcanghai/p/4998076.html)
+
 ## 中级题
 1. **在JavaScript文件开头包含`use strict`意义**
 + 严格模式的好处：
