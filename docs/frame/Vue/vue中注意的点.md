@@ -46,6 +46,7 @@ watch:{
 
 ## vue-router
 传参数：`name/params`或者`path/query`，后者刷新不会丢参数。
+
 ## 其他
 1. `v-cloak`
 > 在网速慢的情况下,在使用`vue`绑定数据的时候，渲染页面时会出现变量闪烁。用法:这个指令保持在元素上直到关联实例结束编译。
@@ -55,4 +56,13 @@ watch:{
 
 ```js
 <router-view :key="$route.fullpath"></router-view> // 这样组件的 created 和 mounted 就都会执行
+```
+
+3. 场景:在`Vue`开发过程中, 经常会遇到`template`模板渲染时`JavaScript`变量出错的问题, 此时也许你会通过`console.log`来进行调试。这时可以在开发环境挂载一个 `log` 函数
+```js
+// main.js
+Vue.prototype.$log = window.console.log;
+
+// 组件内部
+<div>{{$log(info)}}</div>
 ```

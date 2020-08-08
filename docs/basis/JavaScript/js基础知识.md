@@ -78,10 +78,11 @@ function checkType(payload) {
 }
 checkType({a:2}) // Object
 ```
-- `constructor`：原型prototype的一个属性，null和undefined没有这个属性所以无法判断类型。
+- `constructor`：原型`prototype`的一个属性，`null`和`undefined`没有这个属性所以无法判断类型。
 ```js
 var o = ''
 console.log(o.constructor === String) // true
+console.log(o.constructor.name) // String
 ```
 
 ## 类型转换
@@ -117,13 +118,14 @@ console.log(079) // 79
         - 字符串包含有效的十六进制则转为相对应的十进制数值
         - 空字符串则转为0
         - 其他情况则转为NaN
-    - 对象: 调用对象的`valueOf()`（返回对象的原始值），然后依照规则转换返回的值。如果转换的结果是NaN，则调用对象的`toString()`方法，然后再次依照前面的规则转换返回的字符串值。
+    - 对象: 调用对象的`valueOf()`（返回对象的原始值），然后依照规则转换返回的值。如果转换的结果是`NaN`，则调用对象的`toString()`方法，然后再次依照前面的规则转换返回的字符串值。
 + 2. `parseInt()`函数，解析字符串，并返回一个整数
-    - 忽略字符串前面的空格，直到找到第一个非空格字符。如果第一个字符非数值或者负号，就会返回NaN。**也就是说空字符串转为NaN，而不是0**
+    - 忽略字符串前面的空格，直到找到第一个非空格字符。如果第一个字符非数值或者负号，就会返回`NaN`。**也就是说空字符串转为NaN，而不是0**
     - 如果第一个字符为数值，则继续解析后面的字符，直到遇到非数值字符。
     ```js
     parseInt('123blue') // 123
     parseInt('1231.11') // 1231 小数点为非数值字符
+    parseInt('abc123') // NaN
     ```
     - 能够有效识别前导，`0x`识别为十六进制然后转为十进制。八进制的时候则忽略前面的0
     ```js
@@ -258,3 +260,34 @@ changeValue(obj);
 console.log(obj.name); // linjiaheng
 ```
 > 所以记住：**函数参数传递的并不是变量的引用，而是变量拷贝的副本，当变量是原始类型时，这个副本就是值本身，当变量是引用类型时，这个副本是指向堆内存的地址。**
+
+## 基本包装类型
+> 实际上每当读取一个基本类型值的时候，后台就会创建一个对应的基本包装类型的对象，从而让我们能够调用一些方法来操作这些数据。
+
+```js
+var s1 = 'some text'
+var s2 = s1.substring(2)
+```
+::: tip
+引用类型与基本包装类型主要区别是对象生存期。使用`new`操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中。而自动创建的基本包装类型的对象，则只存在于一代代码的执行瞬间，然后立即销毁。这意味着我们不能在运行时为基本类型值添加属性和方法。
+:::
+
+1. 对基本包装类型的实例调用`typeof`会返回`object`，而且所有基本包装类型的对象在转换布尔值类型都为`true`
+2. `Object`构造函数会像工厂函数一样，创造基本包装类型的实例。也可以使用`new`调用基本包装类型（不过不推荐这种方法）。
+```js
+var obj = new Object('test')
+console.log(obj instanceof String) // true
+
+var value = '25'
+var obj2 = new Number(value)
+console.log(typeof obj2) // object
+```
+
+### `String`类型
+- 基于子字符串创建新字符串的方法：第一个参数指定子字符串开始位置；第二个参数表示哪里截至（可选）。`substr()`方法第二个参数表示返回字符串字符的个数。
+    + `slice`
+    + `substring`
+    + `substr`
+传递负值参数时。`slice`会将负值和长度相加，`substr`会将第一个负值和长度相加，第二个转为0；`substring`会将所有负值参数都转为0
+
+- `trim()`：删除前后空格符，返回一个字符串副本。`trimLeft/trimRight`

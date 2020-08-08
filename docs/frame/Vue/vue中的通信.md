@@ -8,8 +8,9 @@
 ## `vuex`
 
 ## `$attrs`和`$listeners`
+> 默认情况下父作用域的不被认作 `props` 的 `attribute` 绑定 (`attribute bindings`) 将会“回退”且作为普通的 `HTML attribute` 应用在子组件的根元素上。当撰写包裹一个目标元素或另一个组件的组件时，这可能不会总是符合预期行为。通过设置 `inheritAttrs` 到 `false`，这些默认行为将会被去掉。
 1. `$attrs`
-如果父传子很多值，那么需要定义多个`props`。这个时候可以利用`$attrs`获取父传子且未在`props`中定义的值。
+如果父传子很多值，那么需要定义多个`props`。这个时候可以利用`$attrs`获取父传子且未在`props`中定义的值。(`class`和`style`除外)
 2. `$listeners`
 子组件需要调用父组件的方法。
 > 父组件的方法可以通过 `v-on="$listeners"` 传入内部组件——在创建更高层次的组件时非常有用

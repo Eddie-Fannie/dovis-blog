@@ -289,7 +289,7 @@ const normalizeEvent = cached((name: string): {
 ### 初始化`inject`
 > 源码中`inject`在`data/props`之前初始化，而`provide`在`data/props`之后初始化。这样做的目的是让用户在`data/props`中使用`inject`所注入的内容。
 
-### 初始化状态
+### [初始化状态](/frame/Vue/初始化状态)
 初始化`initState`的代码如下：
 ```js
 export function initState (vm: Component) {
@@ -309,6 +309,8 @@ export function initState (vm: Component) {
 }
 ```
 > `vm._watchers`用来保存当前组件中所有的`watcher`实例。无论是使用`vm.$watch`注册的`watcher`实例还是使用`watch`选项添加的`watcher`实例，都会添加到`vm._watchers`中。先初始化`props`，后初始化`data`，这样就可以在`data`中使用`props`中的数据，在`watch`中既可以观察`props`，也可以观察`data`，因为它是最后被初始化的。
+
+### 初始化`provide`
 
 ## 模板编译阶段
 在`created`和`beforeMount`之间的阶段是模板编译阶段。目标是将模板编译为渲染函数。构建版本的不存在这个阶段。

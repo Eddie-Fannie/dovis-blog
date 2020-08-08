@@ -200,6 +200,15 @@ module.exports = {
             ]
         }
     ],
+    '/coding/' : [
+        {
+            title: "JavaScript模块",
+            collapsable: false,
+            children: [
+                '/coding/JavaScript/手写bind等'
+            ]
+        }
+    ],
     '/reading/': [
         {
             title: '前端书籍阅后笔记',
@@ -299,6 +308,7 @@ module.exports = {
             children: [
                 '/algorithm/BasicAlgorithm/HashTable/两数之和',
                 '/algorithm/BasicAlgorithm/HashTable/第一个只出现一次的字符',
+                '/algorithm/BasicAlgorithm/HashTable/有效的字母异位词',
                 '/algorithm/BasicAlgorithm/HashTable/两个数组的交集'
             ]
         }
