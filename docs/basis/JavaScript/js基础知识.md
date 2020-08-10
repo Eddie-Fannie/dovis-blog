@@ -288,6 +288,6 @@ console.log(typeof obj2) // object
     + `slice`
     + `substring`
     + `substr`
-传递负值参数时。`slice`会将负值和长度相加，`substr`会将第一个负值和长度相加，第二个转为0；`substring`会将所有负值参数都转为0
+传递负值参数时。`slice`会将负值和长度相加，`substr`会将第一个负值和长度相加，第二个转为`0`；`substring`会将所有负值参数都转为`0`
 
 - `trim()`：删除前后空格符，返回一个字符串副本。`trimLeft/trimRight`

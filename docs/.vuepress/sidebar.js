@@ -350,6 +350,7 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
+                '/algorithm/DataStructure/String/最长公共前缀',
                 '/algorithm/DataStructure/String/重复的子字符串'
             ]
         },
