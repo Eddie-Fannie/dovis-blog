@@ -51,7 +51,7 @@ console.log(b)
 ![img](/dovis-blog/js/get2.png)
 
 **注意**
-> 在 ES5 中，如果该方法的第一个参数不是对象（而是原始类型），那么就会产生出现 TypeError。而在 ES2015，第一个的参数不是对象的话就会被强制转换为对象。
+> 在 ES5 中，如果该方法的第一个参数不是对象（而是原始类型），那么就会产生出现 `TypeError`。而在 ES2015，第一个的参数不是对象的话就会被强制转换为对象。
 
 如上述例子中修改成：
 ```javascript
@@ -104,23 +104,23 @@ console.log(object1.property1);
 ```
 >第三个参数是要定义或修改的属性描述符<br/>
 
->默认情况下，使用 Object.defineProperty() 添加的属性值是不可修改（immutable）的。<br/>
+>默认情况下，使用 `Object.defineProperty()` 添加的属性值是不可修改（`immutable`）的。<br/>
 
 >对象里目前存在的属性描述符有两种主要形式：数据描述符和存取描述符。数据描述符是一个具有值的属性，该值可以是可写的，也可以是不可写的。存取描述符是由 getter 函数和 setter 函数所描述的属性。一个描述符只能是这两者其中之一；不能同时是两者。
 
->这两种描述符都是对象。它们共享以下可选键值（默认值是指在使用 Object.defineProperty() 定义属性时的默认值）：
-`configurable`: 默认false。表示对象的属性是否可以被删除，以及除 value 和 writable 特性外的其他特性是否可以被修改。
-`enumerable`：默认false
+>这两种描述符都是对象。它们共享以下可选键值（默认值是指在使用 `Object.defineProperty()` 定义属性时的默认值）：
+`configurable`: 默认`false`。表示对象的属性是否可以被删除，以及除 `value` 和 `writable` 特性外的其他特性是否可以被修改。
+`enumerable`：默认`false`
 
 数据描述符：
-`value`:默认undefined<br/>
-`writable`：默认为false，当为true时，value值才可以被赋值运算符修改。<br/>
+`value`:默认`undefined`<br/>
+`writable`：默认为`false`，当为`true`时，`value`值才可以被赋值运算符修改。<br/>
 
 存取描述符：
-`get` 默认undefined<br/>
-`set` 默认undefined
+`get` 默认`undefined`<br/>
+`set` 默认`undefined`
 
->如果一个描述符不具有 value、writable、get 和 set 中的任意一个键，那么它将被认为是一个数据描述符。
+>如果一个描述符不具有 `value、writable、get` 和 `set` 中的任意一个键，那么它将被认为是一个数据描述符。
 
 **如果使用直接赋值的方式创建对象的属性，数据描述符中的属性默认值是不同的**
 ```javascript
@@ -226,9 +226,9 @@ var obj = Object.create(proto);
 Object.getPrototypeOf(obj) === proto; // true
 ```
 ## `Object.create()`
-> Object.create(proto[,propertiesObject])。第一个参数用于指定新创建对象的原型；第二个参数是新创建对象的属性名和属性描述符组成的对象。
+> `Object.create(proto[,propertiesObject])`。第一个参数用于指定新创建对象的原型；第二个参数是新创建对象的属性名和属性描述符组成的对象。
 
-> `proto`可以指定为null，意味着新对象原型是null，它不会继承Object的方法。
+> `proto`可以指定为`null`，意味着新对象原型是`null`，它不会继承`Object`的方法。
 
 ```js
 var o;

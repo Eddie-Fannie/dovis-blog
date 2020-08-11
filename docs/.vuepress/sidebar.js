@@ -362,5 +362,21 @@ module.exports = {
               
             ]
         }
+    ],
+    '/algorithm/DataStructure/LinkedList/': [
+        {
+            title: '基础题',
+            collapsable: false,
+            children: [
+                
+            ]
+        },
+        {
+            title: '中等题',
+            collapsable: false,
+            children: [
+              
+            ]
+        }
     ]
 }
