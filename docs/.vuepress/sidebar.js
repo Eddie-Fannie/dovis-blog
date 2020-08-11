@@ -205,7 +205,8 @@ module.exports = {
             title: "JavaScript模块",
             collapsable: false,
             children: [
-                '/coding/JavaScript/手写bind等'
+                '/coding/JavaScript/手写bind等',
+                '/coding/JavaScript/手写new'
             ]
         }
     ],

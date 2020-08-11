@@ -140,4 +140,22 @@ Function.prototype.bind = function (context) {
 - 至于为什么使用一个空对象 `fNOP` 作为中介，把 `fBound.prototype` 赋值为空对象的实例（原型式继承），这是因为直接 `fBound.prototype = this.prototype` 有一个缺点，修改 `fBound.prototype` 的时候，也会直接修改 `this.prototype` ；其实也可以直接使用ES5的 `Object.create()` 方法生成一个新对象，但 `bind` 和 `Object.create()` 都是ES5方法，部分IE浏览器（IE < 9）并不支
 :::
 
+## 柯里化
+```js
+var add = function(x) {
+  return function(y) {
+    return x + y;
+  };
+};
 
+var increment = add(1);
+var addTen = add(10);
+
+increment(2);
+// 3
+addTen(2);
+// 12
+add(1)(2);
+// 3
+```
+> 这里定义了一个 `add` 函数，它接受一个参数并返回一个新的函数。调用 `add` 之后，返回的函数就通过闭包的方式记住了 `add` 的第一个参数。所以说 `bind` 本身也是闭包的一种使用场景。
