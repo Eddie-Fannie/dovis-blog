@@ -141,6 +141,7 @@ Function.prototype.bind = function (context) {
 :::
 
 ## 柯里化
+> 柯里化是把接受多个参数的函数变换成接受一个单一参数(最初函数的第一个参数)的函数，并且返回接受余下的参数且返回结果的新函数的技术。
 ```js
 var add = function(x) {
   return function(y) {
@@ -159,3 +160,25 @@ add(1)(2);
 // 3
 ```
 > 这里定义了一个 `add` 函数，它接受一个参数并返回一个新的函数。调用 `add` 之后，返回的函数就通过闭包的方式记住了 `add` 的第一个参数。所以说 `bind` 本身也是闭包的一种使用场景。
+
+那肯定不能连续多次`return`函数的，所以可以这么实现柯里化函数：
+```js
+function curryIt(fn) {
+    var args = [];
+    var result = function(arg){
+        args.push(arg);
+        if(args.length < fn.length){
+            return result;
+        } else {
+            return fn.apply(this,args);
+        }
+    }
+    return result;
+} 
+
+var fn = function(a,b,c) {
+    console.log(a+b+c) // 6
+    return a+b+c;
+}
+curryIt(fn)(1)(2)(3)
+```

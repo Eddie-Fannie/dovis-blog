@@ -44,3 +44,8 @@ function create(Con, ...args){
     return result instanceof Object ? result : obj;
 }
 ```
+::: tip
+构造函数执行，不写 `return`，浏览器会默认返回创建的实例，但是如果我们自己写了`return`。
+- 基本值:`return`是一个基本值，返回的结果依然是类的实例，没有收到影响。 
+- 引用值:如果返回的是一个对象，则将默认的返回的实例覆盖，接收的结果就不再是当前类的实例。
+:::
