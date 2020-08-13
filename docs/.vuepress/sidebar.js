@@ -206,7 +206,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/coding/JavaScript/手写bind等',
-                '/coding/JavaScript/手写new'
+                '/coding/JavaScript/手写new',
+                '/coding/JavaScript/牛客网评测'
             ]
         }
     ],
