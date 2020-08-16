@@ -210,7 +210,8 @@ module.exports = {
                 '/coding/JavaScript/手写bind等',
                 '/coding/JavaScript/手写new',
                 '/coding/JavaScript/牛客网评测',
-                '/coding/JavaScript/手动实现一个深拷贝'
+                '/coding/JavaScript/手动实现一个深拷贝',
+                '/coding/JavaScript/实现一个Promise'
             ]
         }
     ],
