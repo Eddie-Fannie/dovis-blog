@@ -71,7 +71,8 @@ module.exports = {
             title: 'JavaScript高级知识点',
             collapsable: false,
             children: [
-                '/basis/JavaScript/Event-Loop'
+                '/basis/JavaScript/Event-Loop',
+                '/basis/JavaScript/设计模式'
             ]
         }
     ],
@@ -99,7 +100,8 @@ module.exports = {
             title: 'ES6高级知识点',
             collapsable: false,
             children: [
-                '/basis/ES6/Proxy'
+                '/basis/ES6/Proxy',
+                '/basis/ES6/Promise对象'
             ]
         }
     ],
@@ -207,7 +209,8 @@ module.exports = {
             children: [
                 '/coding/JavaScript/手写bind等',
                 '/coding/JavaScript/手写new',
-                '/coding/JavaScript/牛客网评测'
+                '/coding/JavaScript/牛客网评测',
+                '/coding/JavaScript/手动实现一个深拷贝'
             ]
         }
     ],

@@ -1,11 +1,11 @@
 # Class的继承
 
 ## 简介
-> 不同于ES5利用原型实现继承的方式，ES6利用`extends`关键字实现继承
+> 不同于ES5利用原型实现继承的方式，ES6利用`extends`关键字实现继承。其实是寄生组合继承的语法糖
 ```js
-class ColorPoint extends Point {
+class ColorPoint extends Point { // extends 相当于Son.prototype = Object.create(Father.prototype)
     constructor(x, y, color) {
-        super(x, y); // 调用父类的constructor(x, y)
+        super(x, y); // 调用父类的constructor(x, y)  相当于Father.call(this)
         this.color = color;
     }
 
@@ -15,6 +15,10 @@ class ColorPoint extends Point {
 }
 ```
 这个例子就是`ColorPoint`类继承`Point`类。
+
+::: tip
+- 子类只要继承父类，可以不写`constructor`，一旦写了第一句就是`super`
+:::
 
 ## `super关键字`
 1. 在上面的例子中`super`关键字表示父类的构造函数，新建父类的this对象。相当于`Point.prototype.constructor.call(this)`
