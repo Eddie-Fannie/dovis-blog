@@ -255,6 +255,9 @@ let arrayLike = {
 // ES5写法
 var arr1 = [].slice.call(arrayLike); // ['a','b','c']
 
+[].concat.apply([], arguments)
+Array.prototype.slice.call(arguments) // apply也可以
+
 // ES6
 var arr2 = Array.from(arrayLike)
 ```
@@ -264,7 +267,7 @@ var arr2 = Array.from(arrayLike)
 - 函数内部的`arguments`对象
 :::
 
-只要是部署了`Iterator`接口的数据结构，都可以转为真正的数组。**扩展运算符也可以将某些数据结构转为数组**。任何有`length`属性的对象都可以通过`Array.from()`转为数组，但是扩展运算符在这种情况下就没办法转换。
+只要是部署了`Iterator`接口的数据结构，都可以转为真正的数组。**扩展运算符也可以将某些数据结构转为数组**。任何有`length`属性的对象都可以通过`Array.from()`转为数组，但是扩展运算符在这种情况下就没办法转换。**仅考虑0和正整数的索引，`slice`会产生稀疏数组，内容是`empty`而不是`undefined`。类数组`push`操作的是索引值为`length`的位置**
 ```js
 Array.from({length: 3}) // [undefined, undefined, undefined]
 ```

@@ -41,5 +41,15 @@ console.log(window.b) // undefined
 const c = 4
 console.log(window.c) // undefined
 ```
+因为`const/let`会生成块级作用域，可以理解为
+```js
+let a = 10;
+const b = 20;
+相当于：
+(function(){
+    var a = 10;
+    var b = 20;
+})()
+```
 
 2. `var`存在变量提升，`let/const`没有。

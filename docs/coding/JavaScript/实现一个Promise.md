@@ -1,4 +1,5 @@
 # 实现一个Promise
+## 代码1
 ```js
 // 三种状态
 const PENDING = 'pending'
@@ -64,3 +65,5 @@ new myPromise((resolve, reject) => {
     console.log(value)
 })
 ```
+
+## 代码2
