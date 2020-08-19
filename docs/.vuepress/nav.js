@@ -38,7 +38,8 @@ module.exports = [
                 {text: '字符串', link: '/algorithm/DataStructure/String/'}
             ]},
             {text: '基础算法', link: '/algorithm/BasicAlgorithm/'},
-            {text: '算法思维', link: '/algorithm/AlgorithmicThinking/'}
+            {text: '算法思维', link: '/algorithm/AlgorithmicThinking/'},
+            {text: '其他算法知识点', link: '/algorithm/Other/'}
         ]
     },
     {
