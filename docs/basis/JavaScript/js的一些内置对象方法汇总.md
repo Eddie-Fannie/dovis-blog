@@ -77,6 +77,7 @@ var person1 = new Person()
 person1.name = 'john'
 
 console.log(Object.keys(Person.prototype)) // ["name", "age", "job", "sayName"]
+console.log(Object.keys(person1)) // []
 console.log(Object.keys(person1)) // ["name]
 
 ```

@@ -2,6 +2,7 @@
 
 ## Webpack易遗忘点
 1. 工程上线进行依赖安装，可以通过`npm install--production`过滤掉`devDependencies`中的冗余模块，从而加快安装和发布的速度。
+2. `webpack`设置本地`ip`代替`localhost`访问地址:修改`package.json`文件的`scripts`中的`dev`的值，在最后面添加`--host <本机ip>`
 
 ## require.context
 **在使用`electron-vue` 开发跨端字体测试工具时，项目目录store/modules/index.js中有这段代码：** 

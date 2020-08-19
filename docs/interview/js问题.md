@@ -90,6 +90,16 @@ console.log(b)
 
 // 如果要换成数字，把parseInt换成Number
 ```
+3. **在 JavaScript 中如何检查对象为空**
+```js
+const empty = {};
+
+Object.keys(empty).length === 0 && empty.constructor === object;
+// 额外的构造函数检查，是为了避免Date，或者包装对象其他对象干扰
+
+Object.prototype.toString.call(value) === '[object Object]' && JSON.stringify(value) === '{}' 
+// 可以避免undefined/null
+```
 
 ## 高级题
 1. **回调地狱为什么不能捕获异常**
