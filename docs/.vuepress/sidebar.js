@@ -385,7 +385,9 @@ module.exports = {
             children: [
                 '/algorithm/DataStructure/LinkedList/从尾到头打印链表',
                 '/algorithm/DataStructure/LinkedList/两个链表第一个公共节点',
-                '/algorithm/DataStructure/LinkedList/移交链表元素'
+                '/algorithm/DataStructure/LinkedList/移交链表元素',
+                '/algorithm/DataStructure/LinkedList/反转链表',
+                '/algorithm/DataStructure/LinkedList/删除链表的结点'
             ]
         },
         {
