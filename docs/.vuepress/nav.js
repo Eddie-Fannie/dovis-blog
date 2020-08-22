@@ -35,7 +35,8 @@ module.exports = [
                 {text: '链表', link: '/algorithm/DataStructure/LinkedList/'},
                 {text: '数组', link: '/algorithm/DataStructure/Array/'},
                 {text: '栈与队列', link: '/algorithm/DataStructure/Stack-Queue/'},
-                {text: '字符串', link: '/algorithm/DataStructure/String/'}
+                {text: '字符串', link: '/algorithm/DataStructure/String/'},
+                {text: '树', link: '/algorithm/DataStructure/Tree/'}
             ]},
             {text: '基础算法', link: '/algorithm/BasicAlgorithm/'},
             {text: '算法思维', link: '/algorithm/AlgorithmicThinking/'},
