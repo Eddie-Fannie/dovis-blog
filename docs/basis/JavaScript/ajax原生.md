@@ -150,3 +150,4 @@ $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?tags=cat&tagmo
 var data = new FormData()
 data.append('name','Nicholas')
 ```
+使用`FormData`的方便之处体现在不必明确地在`XHR`对象上设置请求头部。`XHR`对象能够识别传入的数据类型是`FormData`的实例，并配置合适的头部信息。

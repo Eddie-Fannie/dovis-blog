@@ -72,7 +72,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/basis/JavaScript/Event-Loop',
-                '/basis/JavaScript/设计模式'
+                '/basis/JavaScript/设计模式',
+                '/basis/JavaScript/前端二进制'
             ]
         }
     ],
