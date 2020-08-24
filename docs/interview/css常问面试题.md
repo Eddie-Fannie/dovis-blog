@@ -186,7 +186,7 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     - `flex-basis`
     > 默认值为`auto`
     - `flex`
-    > 2-3属性的缩写：` flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]`。后两个属性可选
+    > 2-4属性的缩写：` flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]`。后两个属性可选
     - `align-self`： `auto | flex-start | flex-end | center | baseline | stretch;`
     > 允许单个项目有与其他项目不一样的对齐方式。可以覆盖`align-items`属性。默认值为`auto`，表示继承父元素的`align-items`属性，没有父元素则取`stretch`
 

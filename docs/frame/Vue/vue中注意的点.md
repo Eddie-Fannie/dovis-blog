@@ -45,7 +45,17 @@ watch:{
 :::
 
 ## vue-router
-传参数：`name/params`或者`path/query`，后者刷新不会丢参数。
+传参数：`name/params`或者`path/query`，后者刷新不会丢参数且路径能显示。
+```js
+// 带查询参数，变成 /register?plan=private
+router.push({ path: 'register', query: { plan: 'private' }}) // 路径没有/
+
+const userId = '123'
+router.push({ name: 'user', params: { userId }}) // -> /user/123
+router.push({ path: `/user/${userId}` }) // -> /user/123
+// 这里的 params 不生效
+router.push({ path: '/user', params: { userId }}) // -> /user
+```
 
 ## 其他
 1. `v-cloak`

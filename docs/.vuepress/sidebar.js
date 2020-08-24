@@ -193,6 +193,13 @@ module.exports = {
                 '/another/Working/工作遇到',
                 '/another/Working/vue'
             ]
+        },
+        {
+            title: '做过的项目',
+            collapsable: false,
+            children: [
+                '/another/Working/发布一个npm包'
+            ]
         }
     ],
     '/fulllink/Modularity/': [
