@@ -55,6 +55,12 @@ document.addEventListener('keyup', (e) => {
 })
 ```
 
+::: tip
+- `Oberver（数据监听器/发布者）`：负责对数据对象对所有属性进行监听（数据劫持），监听到数据发生变化后通知订阅者。
+- `Compiler`指令解析器：扫描模版，并对指令进行解析，然后绑定指定事件。
+- `Watcher`订阅者：关联前两个，能够订阅并收到属性变动通知，执行指令绑定的相应操作，更新视图。`Update()`自身一个方法，用于执行`Compiler`中绑定的回调，更新视图。
+:::
+
 ## `$route和$router`区别
 > `$route`是“路由信息对象”，包括`path，params，hash，query，fullPath，matched，name`等路由信息参数。而`$router`是“路由实例”对象包括了路由的跳转方法，钩子函数等。
 
