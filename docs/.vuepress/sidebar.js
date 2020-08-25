@@ -322,7 +322,9 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/AlgorithmicThinking/Recursion/格雷编码',
-                '/algorithm/AlgorithmicThinking/Recursion/复原IP地址'
+                '/algorithm/AlgorithmicThinking/Recursion/复原IP地址',
+                '/algorithm/AlgorithmicThinking/Recursion/斐波那契数列',
+                '/algorithm/AlgorithmicThinking/Recursion/青蛙跳台阶'
             ]
         },
         {

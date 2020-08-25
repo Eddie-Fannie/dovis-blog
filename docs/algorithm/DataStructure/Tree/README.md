@@ -8,3 +8,39 @@
 ## 二叉树
 1. 二叉树中的节点最多只能有两个子节点：一个是左侧子节点，另一个是右侧子节点。
 2. 二叉搜索树（`BST`）是二叉树的一种，但是只允许你在左侧节点存储（比父节点）小的值，在右侧节点存储（比父节点）大的值。
+3. 二叉树具有五种基本形态：
+- 空二叉树
+- 只有一个根结点
+- 根结点只有左子树
+- 根结点只有右子树
+- 根结点既有左子树也有右子树。
+
+## 树的遍历
+前序遍历：前序遍历首先访问根节点，然后遍历左子树，最后遍历右子树。
+中序遍历：先遍历左子树，然后访问根节点，然后遍历右子树。
+后序遍历：先遍历左子树，然后遍历右子树，最后访问树的根节点。(当你删除一个节点时，你将首先删除它的左节点和它的右边的节点，然后再删除节点本身。**后序遍历的应用**)
+
+前序遍历：
+> 给定一个二叉树，返回它的前序遍历
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var preorderTraversal = function(root, arr=[]) {
+    if(root) {
+        arr.push(root.val)
+        preorderTraversal(root.left,arr)
+        preorderTraversal(root.right, arr)
+    }
+    return arr
+};
+```
