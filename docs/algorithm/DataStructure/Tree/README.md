@@ -20,6 +20,8 @@
 中序遍历：先遍历左子树，然后访问根节点，然后遍历右子树。
 后序遍历：先遍历左子树，然后遍历右子树，最后访问树的根节点。(当你删除一个节点时，你将首先删除它的左节点和它的右边的节点，然后再删除节点本身。**后序遍历的应用**)
 
+三种遍历都可以用递归实现：
+
 前序遍历：
 > 给定一个二叉树，返回它的前序遍历
 
@@ -35,12 +37,49 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
-var preorderTraversal = function(root, arr=[]) {
-    if(root) {
-        arr.push(root.val)
-        preorderTraversal(root.left,arr)
-        preorderTraversal(root.right, arr)
+var preorderTraversal = function(root) {
+    const res = []
+    function traversal(root) {
+        if(root.val !== null) {
+            res.push(root.val) // 先访问根结点的值
+            traversal(root.left) // 再递归遍历左子树
+            traversal(root.right) // 最后递归遍历右子树
+        }
     }
-    return arr
+    traversal(root)
+    return res
+};
+```
+
+**中序遍历**
+```js
+var preorderTraversal = function(root) {
+    const res = []
+    function traversal(root) {
+        if(root.val !== null) {
+            traversal(root.left) // 先递归遍历左子树
+            res.push(root.val) // 再访问根结点的值
+            traversal(root.right) // 最后递归遍历右子树
+        }
+    }
+    traversal(root)
+    return res
+};
+```
+
+**后序遍历**
+```js
+var preorderTraversal = function(root) {
+    const res = []
+    function traversal(root) {
+        if(root.val !== null) {
+            traversal(root.left) // 先递归遍历左子树
+            traversal(root.right) // 再递归遍历右子树
+            res.push(root.val) // 最后访问根结点的值
+            
+        }
+    }
+    traversal(root)
+    return res
 };
 ```
