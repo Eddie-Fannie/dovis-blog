@@ -1,5 +1,8 @@
 # HTTP
 > `HTTP`是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范。
+
+> 超文本传输协议，是互联网上应用最为广泛的一种网络协议，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。
+
 ## 报文
 `HTTP`报文分为两种：`HTTP`请求报文（请求行-`HTTP`头（通用信息头，请求头，实体头）-请求报文主体（只有`POST`才有报文主体）。响应报文则相对应的为状态行，响应报文主体。
 > 通用信息头指的是请求和响应报文都支持的头域，分别为`Cache-Control`、`Connection`、`Date`、`Pragma`、`Transfer-Encoding`、`Upgrade`、`Via`；实体头则是实体信息的实体头域，分别为`Allow`、`Content-Base`、`Content-Encoding`、`Content-Language`、`Content-Length`、`Content-Location`、`Content-MD5`、`Content-Range`、`Content-Type`、`Etag`、`Expires`、`Last-Modified`、`extension-header`。
@@ -62,6 +65,7 @@
 
 - `4xx`：客户端出现错误
     + `400 Bad Request`：服务器认为客户端出现了错误，但不明确，一般是 `HTTP` 请求格式错误
+    > 产生原因；前端提交数据的字段名称和字段类型与后台的实体没有保持一致；前端提交到后台的数据应该是`json`字符串类型，但是前端没有将对象`JSON.stringfy`转换为字符串
     + `401 Unauthorized`：用户认证信息确实或者不正确
     + `403 Forbidden`：服务器理解请求的含义，但没有权限执行
     + `407 Proxy Authentication Required`：对需要经由代理的请求，认证信息未通过代理服务器的验证
@@ -85,3 +89,6 @@
 [复杂请求的理解](/advanced/Browser/浏览器跨域.html#cors)
 - `TRACE`：用于激发一个远程的，应用层的请求消息回路。
 - `CONNECT`：把请求连接转换到`TCP/TP`通道。
+
+## http和https的区别
+> `https`：是以安全为目标的`HTTP`通道，简单讲是`HTTP`的安全版，即`HTTP`下加入`SSL`层，`HTTPS`的安全基础是`SSL`，因此加密的详细内容就需要`SSL`。`https`协议的主要作用是：建立一个信息安全通道，来确保数据的传输，确保网站的真实性。

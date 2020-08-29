@@ -135,6 +135,16 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
             <div class="f"></div>
         </div>
     ```
+::: tip
+清除浮动——一个父元素的所有子元素如果都是浮动的，那么这个父元素是没有高度的。
+
+（1）如果这个父元素的相邻元素是行内元素，那么这个行内元素将会在这个父元素的区域内见缝插针，找到一块放得下它的地方。
+（2）如果相邻的元素是一个块级元素，那么设置这个块级元素的`margin-top`将会以这个父元素的起始位置作为起点。
+
++ 浮动两个特性：
+    - 浮动的元素不像`absolute`定位那样，它并没有脱离正常的文档流，仍然占据正常文档流的空间。而这个空间正是正常文档流的`background`的`border`，反过来说，其它元素将会围绕着浮动的元素排列，浮动的元素就会占据着它们的背景和`border`
+    - 浮动的元素虽然还在父容器的区域内排列，但它不会撑起父容器的高度，父容器的高度跟没有子元素一样都是`0px`。
+:::
 
 ## 使用百分比设定单位
 > 如果使用百分数设定内边距，外边距都是相对于元素父级元素的宽度来设置的，而不是高度。
@@ -263,3 +273,43 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 - `gif`是一种位图文件格式，以8位色重现真色彩的图像。可以实现动画效果。
 - `bmp`的优点：高质量图片；缺点：体积太大；适用场景：windows桌面壁纸；
 - `webp`格式是谷歌在2010年推出的图片格式，压缩率只有`jpg`的`2/3`，大小比`png`小了`45%`。缺点是压缩的时间更久了，兼容性不好，目前谷歌和opera支持。
+
+## `vertical-align`
+> 其实`vertical-align`是用来设置行内元素对齐方式的。说白了就是`display`属性值为`inline、inline-block、inline-table`另加一个`table-cell`的元素。
+
+**基线:**
+![img](/dovis-blog/other/16.jpg)
+
+- 在文本之类内联元素中，基线是字符`x`的下边缘位置
+- 在像`img`元素中基线就是下边缘。
+- 在`inline-block`元素中，也分两种情况
+    + 如果该元素中有内联元素，基线就是最后一行内联元素的基线。
+    + 如果该元素内没有内联元素或者`overflow`不是`visible`，其基线就是`margin`的地边缘。
+
+```html
+<div id="container" style="background: yellow;">
+    x
+    <img src='http://api.kingdee.com/kdrive/user/file/public?client_id=200547&file_id=143368796&scode=VVltV1dZMmFYVC9wNVI1Qy83OFE4&sign=ff4e93995c2f35211e45037cf3819dc9eb7a3af8'>
+    <span style="display: inline-block;">vertical</span>
+    <span style="display: inline-block;overflow: hidden;height: 80px;">linjiaheng</span>
+</div>
+```
+
+![img](/dovis-blog/other/40.png)
+::: tip
+`x`字符的下边缘，`img`元素的底边，有内容的`inline-block`元素都是对齐的，`overflow`不是`visible`的`inline-block`元素的基线是`margin`的底边缘。细心的会发现，那么为什么最下面有个空隙呢，那是因为第三个元素基线虽然对齐，但是基线并不是元素的底边。所以下面被默认的行高撑开了。
+:::
+
+第三个元素向上移动，第四个元素取值`middle`:
+
+![img](/dovis-blog/other/41.png)
+
+**`vertical-align`取值**
+- 正值基线就向上移动，如果是负值基线向下移动。
+- 百分比值：正负情况和长度值一样，需要知道的值是相对于行高`（line-height）`的百分比。
+- `top`：内联元素的顶边和行内最高元素的顶边对齐
+> 1、是和最高元素的顶边而不是和行的顶边对齐。因为设置了行的`padding-top`之后元素并没有顶在最上面；2、最高元素的顶边包括`margin`，别忘了内联元素有行高
+- `bottom`：元素底边和行的底边对齐
+- `middle`：元素上下边的中心点和行基线向上`1/2x`的高度位置对齐。
+- `text-top`：元素顶边和父级的内容区域顶边对齐
+- `text-bottom`：元素底部和父级的内容区域底部对齐

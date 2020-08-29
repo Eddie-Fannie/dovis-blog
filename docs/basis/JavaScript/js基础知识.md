@@ -96,6 +96,7 @@ console.log(o.constructor.name) // String
 
 ```js
 Boolean([]) // true
+Boolean({}) // true
 ```
 
 2. Number类型
@@ -119,6 +120,23 @@ console.log(079) // 79
         - 空字符串则转为`0`
         - 其他情况则转为`NaN`
     - 对象: 调用对象的`valueOf()`（返回对象的原始值），然后依照规则转换返回的值。如果转换的结果是`NaN`，则调用对象的`toString()`方法，然后再次依照前面的规则转换返回的字符串值。
+    ```js
+    let obj={
+        value:'你好啊',
+        num:2,
+        toString:function(){
+            return this.value
+        },
+        valueOf:function(){
+            return this.num
+        },   
+    }
+    console.log(obj+'明天')  //2明天
+    console.log(obj+1)    // 3
+    console.log(String(obj))   // 你好啊
+    ```
+    > 当对象进行类型转换时：1.首先调用`valueOf`，如果执行结果是原始值，返回，如果不是下一步。2.其次调用`toString`,如果执行结果是原始值,返回，如果不是，报错。特殊情况:当使用显示类型转换成`String`时，执行顺序则是先调用`toString`,其次调用`valueOf`
+
 
     ::: tip
     `toFixed(num)`:`toFixed()` 方法可把 `Number` 四舍五入为指定小数位数的数字; 参数`num`: 代表小数位数
@@ -212,6 +230,7 @@ console.log(age) // 21
 
 ```js
 4+[1,2,3] // 41,2,3
+4+{} // 4[object Object]
 ```
 - 还得注意这种情况：
 
@@ -222,7 +241,7 @@ console.log(age) // 21
 3. **除了加法运算符，其他运算符只要其中一方为数字，另外一方则转为数字。**
 4. 乘性运算符：乘法，除法，求模。
 > 参与乘性计算的某个操作符不是数值，则后台利用`Number()`转型函数转换为数值。
-> 0被0除结果为NaN
+> `0`被`0`除结果为`NaN`
 >求模中被除数为0，则结果为0
 
 5. 比较运算符
@@ -233,7 +252,7 @@ console.log(age) // 21
 - `null` == `undefined`。这两个基本类型数据不能转换为其他值
 - 两个操作数都为对象，就要看两个对象是否同一个。（地址是否指向同一个）
 ```js
-[] == ![] // true 都转为0
+[] == ![] // true 都转为0。后者![]是先布尔类型转换，转换为false，然后数值转换为0
 '' == !'' // false 前者转为0后者为1
 ```
 7. 逗号操作符

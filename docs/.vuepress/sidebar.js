@@ -82,7 +82,8 @@ module.exports = {
             title: 'ES6初级知识点',
             collapsable: false,
             children: [
-                '/basis/ES6/let和const'
+                '/basis/ES6/let和const',
+                '/basis/ES6/ES6数据类型新增的属性和方法'
             ]
         },
         {
