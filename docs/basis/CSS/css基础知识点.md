@@ -47,3 +47,49 @@
 > `translate` 接受两个参数，分别对应元素沿 `X` 轴的移动量和沿 `Y` 轴的移动量。这里我们两个都填了 `50%`，意思就是元素需要横向/纵向分别移动自身宽度/高度的 `50%`。
 
 4. `table`布局
+
+## 不常用的伪类/伪元素
+1. `:focus-within` 伪类选择器，它表示一个元素获得焦点，或该元素的后代元素获得焦点。划重点，它或它的后代获得焦点。
+
+## `vertical-align`
+> 其实`vertical-align`是用来设置行内元素对齐方式的。说白了就是`display`属性值为`inline、inline-block、inline-table`另加一个`table-cell`的元素。
+
+**基线:**
+![img](/dovis-blog/other/16.jpg)
+
+- 在文本之类内联元素中，基线是字符`x`的下边缘位置
+- 在像`img`元素中基线就是下边缘。
+- 在`inline-block`元素中，也分两种情况
+    + 如果该元素中有内联元素，基线就是最后一行内联元素的基线。
+    + 如果该元素内没有内联元素或者`overflow`不是`visible`，其基线就是`margin`的地边缘。
+
+```html
+<div id="container" style="background: yellow;">
+    x
+    <img src='http://api.kingdee.com/kdrive/user/file/public?client_id=200547&file_id=143368796&scode=VVltV1dZMmFYVC9wNVI1Qy83OFE4&sign=ff4e93995c2f35211e45037cf3819dc9eb7a3af8'>
+    <span style="display: inline-block;">vertical</span>
+    <span style="display: inline-block;overflow: hidden;height: 80px;">linjiaheng</span>
+</div>
+```
+
+![img](/dovis-blog/other/40.png)
+::: tip
+`x`字符的下边缘，`img`元素的底边，有内容的`inline-block`元素都是对齐的，`overflow`不是`visible`的`inline-block`元素的基线是`margin`的底边缘。细心的会发现，那么为什么最下面有个空隙呢，那是因为第三个元素基线虽然对齐，但是基线并不是元素的底边。所以下面被默认的行高撑开了。
+:::
+
+第三个元素向上移动，第四个元素取值`middle`:
+
+![img](/dovis-blog/other/41.png)
+
+**`vertical-align`取值**
+- 正值基线就向上移动，如果是负值基线向下移动。**元素基线相对于行盒子基线向上或向下移动指定的距离。**
+- 百分比值：正负情况和长度值一样，需要知道的值是相对于行高`（line-height）`的百分比。
+- `top`：内联元素的顶边和行内最高元素的顶边对齐
+> 1、是和最高元素的顶边而不是和行的顶边对齐。因为设置了行的`padding-top`之后元素并没有顶在最上面；2、最高元素的顶边包括`margin`，别忘了内联元素有行高
+- `bottom`：元素底边和行的底边对齐
+- `middle`：元素上下边的中心点和行基线向上`1/2x`的高度位置对齐。
+- `text-top`：元素顶边和父级的内容区域顶边对齐
+- `text-bottom`：元素底部和父级的内容区域底部对齐
+- `baseline`：元素基线与行盒子基线重合
+- `sub`：元素基线移动至行盒子基线下方
+- `super`；元素基线移动至行盒子基线上方

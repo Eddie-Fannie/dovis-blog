@@ -151,7 +151,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/advanced/Performance/前端优化',
-                '/advanced/Performance/高性能优化十万条数据'
+                '/advanced/Performance/高性能优化十万条数据',
+                '/advanced/Performance/vue实现一个图片懒加载指令'
             ]
         }
     ],

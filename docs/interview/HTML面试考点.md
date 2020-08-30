@@ -12,3 +12,23 @@
 ```html
 <!DOCTYPE html>
 ```
+
+> 3. `HTML`标签相关的操作判断题目
+- 统计HTML标签中以b开头的标签数量
+- 统计HTML标签中出现次数最多的标签
+- 判断`DOM`标签的合法性
+    + 标签的闭合
+    + `span`标签不能有`div`
+    + 其他符合HTML标签合法性的规则
+::: tip
+> 在`DOM`中根据标签去获取元素的原生`api`是 `getElementsByTagName()`，它返回的是一个包含所有给定标签名称的元素 `HTML`集合`HTMLCollection[1]`, 整个文件结构都会被搜索，包括根节点。我们可以通过`document.getElementsByTagName('*')`来获取当前文档中的所有标签。
+
+第一个小问题：
+```js
+const tags = document.getElementsByTagName('*');
+// 要使用数组的方法必须将类数组转为真正的数组
+const value = [...tags].filter((item) => item.tagName.startsWith('B'))
+```
+
+第二个问题就可以利用`map`数据结构来判断，这里也可以利用对象来存储。
+:::

@@ -274,42 +274,47 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 - `bmp`的优点：高质量图片；缺点：体积太大；适用场景：windows桌面壁纸；
 - `webp`格式是谷歌在2010年推出的图片格式，压缩率只有`jpg`的`2/3`，大小比`png`小了`45%`。缺点是压缩的时间更久了，兼容性不好，目前谷歌和opera支持。
 
-## `vertical-align`
-> 其实`vertical-align`是用来设置行内元素对齐方式的。说白了就是`display`属性值为`inline、inline-block、inline-table`另加一个`table-cell`的元素。
+## 实现左边竖条的方法
+1. `border`
+2. 伪元素
+3. 内/外`box-shadow`
+```css
+/*内*/
+div{
+    box-shadow:inset 5px 0px 0 0 deeppink;
+}
 
-**基线:**
-![img](/dovis-blog/other/16.jpg)
-
-- 在文本之类内联元素中，基线是字符`x`的下边缘位置
-- 在像`img`元素中基线就是下边缘。
-- 在`inline-block`元素中，也分两种情况
-    + 如果该元素中有内联元素，基线就是最后一行内联元素的基线。
-    + 如果该元素内没有内联元素或者`overflow`不是`visible`，其基线就是`margin`的地边缘。
-
-```html
-<div id="container" style="background: yellow;">
-    x
-    <img src='http://api.kingdee.com/kdrive/user/file/public?client_id=200547&file_id=143368796&scode=VVltV1dZMmFYVC9wNVI1Qy83OFE4&sign=ff4e93995c2f35211e45037cf3819dc9eb7a3af8'>
-    <span style="display: inline-block;">vertical</span>
-    <span style="display: inline-block;overflow: hidden;height: 80px;">linjiaheng</span>
-</div>
+/*外*/
+div{
+    box-shadow:-5px 0px 0 0 deeppink;
+}
 ```
-
-![img](/dovis-blog/other/40.png)
-::: tip
-`x`字符的下边缘，`img`元素的底边，有内容的`inline-block`元素都是对齐的，`overflow`不是`visible`的`inline-block`元素的基线是`margin`的底边缘。细心的会发现，那么为什么最下面有个空隙呢，那是因为第三个元素基线虽然对齐，但是基线并不是元素的底边。所以下面被默认的行高撑开了。
-:::
-
-第三个元素向上移动，第四个元素取值`middle`:
-
-![img](/dovis-blog/other/41.png)
-
-**`vertical-align`取值**
-- 正值基线就向上移动，如果是负值基线向下移动。
-- 百分比值：正负情况和长度值一样，需要知道的值是相对于行高`（line-height）`的百分比。
-- `top`：内联元素的顶边和行内最高元素的顶边对齐
-> 1、是和最高元素的顶边而不是和行的顶边对齐。因为设置了行的`padding-top`之后元素并没有顶在最上面；2、最高元素的顶边包括`margin`，别忘了内联元素有行高
-- `bottom`：元素底边和行的底边对齐
-- `middle`：元素上下边的中心点和行基线向上`1/2x`的高度位置对齐。
-- `text-top`：元素顶边和父级的内容区域顶边对齐
-- `text-bottom`：元素底部和父级的内容区域底部对齐
+4. 滤镜`drop-shadow`
+```css
+div{
+    filter:drop-shadow(-5px 0 0 deeppink);
+}
+```
+5. 渐变
+```css
+div{
+    background-image:linear-gradient(90deg, deeppink 0px, deeppink 5px, transparent 5px);
+}
+```
+6. 轮廓`outline`
+> `outline` （轮廓）是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
+```css
+div{
+    height:50px;
+    outline:5px solid deeppink;
+}
+div{
+    position:absolute;
+    content:"";
+    top:-5px;
+    bottom:-5px;
+    right:-5px;
+    left:0;
+    background:#ddd;
+}
+```

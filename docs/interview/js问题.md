@@ -76,9 +76,50 @@ console.log(b)
 ~~'1.23' // 1
 ~~'23' // 23
 ~~'Hello world' // 0
+~~-1.23 // -1
 ```
+> 所以可以用双重非位运算来代替`Math.floor()`，优势在于运行快。
 - `Number()`
 - 一元操作符：一元操作会在处理非数字时，抛出一个 `NaN` 值。
+
+6. **(a ==1 && a== 2 && a==3) 有可能是 true 吗？**
+- 利用松散相等运算符 == 的工作原理，你可以简单地创建一个带有自定义`toString`( 或者 `valueOf`)函数的对象，在每一次使用它时候改变它所的返回值，使其满足所有三个条件。
+```js
+const a = {
+  i: 1,
+  valueOf: function () {
+    return a.i++;
+  }
+}
+if(a == 1 && a == 2 && a == 3) {
+  console.log('Hello World!');
+}
+// Hello World!
+```
+> 由于表达式中使用了松散相等的运算符 ==。使用松散相等时，如果其中一个操作数与另一个类型不同，则 JS 引擎将尝试将一个操作转换为另一个类型。在左边对象、右边的数字的情况下，它会尝试将对象转换为一个数，首先通过调用 `valueOf` 如果是可调用的。否则，它会调用`toString`方法。
+
+- 使用一个`get`，让 `a` 的返回值为三个不同的值。然而这并不意味着我们应该在真正的代码中使用。。。
+```js
+var val = 0;
+Object.defineProperty(window, 'a', {
+  get: function() {
+    return ++val;
+  }
+});
+if (a == 1 && a == 2 && a == 3) {
+  console.log('yay');
+}
+```
+7. `href="#"`与`href='javascript：void（0）'`的区别
+`href="#"`方法其实也是空连接的意思，但是点击之后会自动跳转到页面的最上面，因为用了这个方法就相当于点击了一个锚记，但是这个锚记又没写`ID`，所以就默认跳转到页面顶部。但是不整体刷新页面的情况下，可以使用`void(0)`。
+```bash
+javascript:void (expression) # 用法
+
+<a href="javascript:void(0)">单此处什么也不会发生</a>  #单此处什么也不会发生
+
+<a href="javascript:void(document.form.submit())"> 单此处提交表单</a> #单此处提交表单
+```
+> 链接（`href`）直接使用`javascript:void(0)`在IE中可能会引起一些问题，比如：造成gif动画停止播放等，所以，最安全的办法还是使用`“####”`。`href`上加`js`是为了防止链接跳转，以前用`#`但是在部分浏览器下回跳转到页面顶部。这样就不好了，于是有人想到了添加`onclick=“return false”`
 
 ## 中级题
 1. **在JavaScript文件开头包含`use strict`意义**

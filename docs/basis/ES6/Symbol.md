@@ -24,6 +24,7 @@ s1 === s2   // true
 ```
 
 ## 内置`Symbol`值
+> ES6内置的`Symbol`值，指向语言内部使用的方法。
 1. `Symbol.hasInstance`
 > 指向一个内部方法，对象使用`instanceof`运算符时会调用这个方法，判断该对象是否为某个构造函数的实例。
 ```js
@@ -68,5 +69,45 @@ class MyMatcher {
 6. `Symbol.split`
 7. `Symbol.iterator`
 8. `Symbol.toPrimitive`
+>对象的`Symbol.toPrimitive`属性指向一个方法，对象被转为原始类型的值会调用这个方法，返回该对象对应的原始类型的值。被调用时接收一个字符串参数，表示当前运算的模式。一共有3种模式。**优先级要高于`valueOf`、`toString`。对于`==`操作符，`hint`传递的值是`default`。**
+- `Number`：该场合需要转成数值
+- `String`：该场合需要转成字符串
+- `Default`：该场合可以转成数值，也可以转成字符串。
+
+```js
+let obj = {
+    [Symbol.toPrimitive](hint) {
+        switch(hint) {
+            case 'number':
+                return 123;
+            case 'string':
+                return 'str';
+            case 'default':
+                return 'default';
+            default:
+                throw new Error()
+        }
+    }
+}
+2*obj // 246
+3+obj //3default
+obj == 'default' // true
+String(obj) // 'str'
+```
+
+**例子2：**
+```js
+const a = {}
+a[Symbol.toPrimitive] = (hint) => {
+    if (hint == 'number') return 1
+    if (hint == 'string') return 2
+    return 3
+}
+a.valueOf = () => 4
+a.toString = () => 5
+console.log(a == 1, a == 2, a == 3, a == 4, a == 5) // false, false, true, false, false
+```
+
 9. `Symbol.toStringTag`
 10. `Symbol.unscopables`
+11. `Symbol.search`

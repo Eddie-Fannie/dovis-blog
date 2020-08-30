@@ -78,6 +78,7 @@ xhr.send(null)
     - 可能会影响程序中的异常处理机制。
     - 安全问题，对一些网站攻击，如`csrf、xxs、sql`注入等不能很好地防御。
 :::
+
 ## jquery中的Ajax请求
 1. `$.ajax()`返回其创建的 `XMLHttpRequest` 对象。
 ```js
