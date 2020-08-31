@@ -14,3 +14,50 @@
 .....
 </el-form>
 ```
+
+4. vue中使用可选链操作符
+在`template`中使用（目前`Vue`默认是不支持在`template`中使用可选链操作符的，如果我们想要实现可选链操作符类似的效果，需要绕一个弯，具体代码如下）
+```js
+// utils.js
+/**
+ * 解决Vue Template模板中无法使用可选链的问题
+ * @param obj
+ * @param rest
+ * @returns {*}
+ */
+export const optionalChaining = (obj, ...rest) => {
+  let tmp = obj;
+  for (let key in rest) {
+    let name = rest[key];
+    tmp = tmp?.[name];
+  }
+  return tmp || "";
+};
+
+// main.js
+import {optionalChaining} from "./utils/index";
+ 
+Vue.prototype.$$ = optionalChaining;
+
+// .vue
+<template>
+    <div class="container">
+        <div class="username">{{$$(userInfo,"friends",0,"userName")}}</div>
+    </div>
+</template>
+ 
+<script>
+    export default {
+        name: "test",
+        data(){
+            return {
+                userInfo:{}
+            }
+        }
+    }
+</script>
+ 
+<style scoped>
+ 
+</style>
+```
