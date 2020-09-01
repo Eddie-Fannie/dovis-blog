@@ -441,5 +441,14 @@ module.exports = {
               
             ]
         }
+    ],
+    '/algorithm/Company/': [
+        {
+            title: 'leetcode公司题库',
+            collapsable: false,
+            children: [
+               '/algorithm/Company/ByteDance'
+            ]
+        }
     ]
 }

@@ -40,7 +40,8 @@ module.exports = [
             ]},
             {text: '基础算法', link: '/algorithm/BasicAlgorithm/'},
             {text: '算法思维', link: '/algorithm/AlgorithmicThinking/'},
-            {text: '其他算法知识点', link: '/algorithm/Other/'}
+            {text: '其他算法知识点', link: '/algorithm/Other/'},
+            {text: '公司题库', link: '/algorithm/Company/'}
         ]
     },
     {

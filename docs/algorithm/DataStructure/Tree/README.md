@@ -14,6 +14,19 @@
 - 根结点只有左子树
 - 根结点只有右子树
 - 根结点既有左子树也有右子树。
+4. 在一棵二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树。
+
+## 二叉树的性质
+1. 在二叉树的第`i`层上至多有`2^(i-1)`个结点
+2. 深度为`k`的二叉树至多有`2^k-1`个结点
+3. 对任何一棵二叉树`T`，如果其终端结点数为`n0`，度为2的结点为`n2`，则`n0=n2+1`
+4. 具有n个结点的完全二叉树的深度为`[log2(n)]+1`([x]表示不大于x的最大整数)
+5. 如果对一棵有`n`个结点的完全二叉树的结点按层序编号，对任一结点i有：
+- 如果`i=1`，则结点i是二叉树的根，无双亲；如果`i>1`，则其双亲是结点`[i/2]`
+- 如果`2i>n`，则结点i无左孩子(结点i为叶子结点)；否则其左孩子是结点`2i`
+- 如果`2i+1>n`，则结点i无右孩子，否则则其右孩子是结点`2i+1`
+
+二叉树每个结点最多有两个孩子，所以为它设计一个数据域和两个指针域，我们叫做链表为二叉链表。
 
 ## 树的遍历
 前序遍历：前序遍历首先访问根节点，然后遍历左子树，最后遍历右子树。
@@ -40,7 +53,7 @@
 var preorderTraversal = function(root) {
     const res = []
     function traversal(root) {
-        if(rootl) {
+        if(root) {
             res.push(root.val) // 先访问根结点的值
             traversal(root.left) // 再递归遍历左子树
             traversal(root.right) // 最后递归遍历右子树
@@ -58,6 +71,29 @@ var preorderTraversal = function(root, arr=[]) {
     }
     return arr
 };
+
+```
+用非递归的方法实现前序遍历：
+- 取根节点为目标节点，开始遍历；
+- 访问目标节点
+- 左孩子入栈--> 直至左孩子为空的节点
+- 节点出栈，以右孩子为目标节点，再依次执行1，2，3
+```js
+var preorderTraversal = function (root) {
+    const result = [];
+    const stack = [];
+    let current = root;
+    while (current || stack.length > 0) {
+        while (current) {
+            result.push(current.val);
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        current = current.right;
+    }
+    return result;
+};
 ```
 
 **中序遍历**
@@ -73,6 +109,29 @@ var preorderTraversal = function(root) {
     }
     traversal(root)
     return res
+};
+```
+非递归方式实现中序遍历：
+- 取跟节点为目标节点，开始遍历
+- 左孩子入栈 -> 直至左孩子为空的节点
+- 节点出栈 -> 访问该节点
+- 以右孩子为目标节点，再依次执行1、2、3
+
+```js
+var inorderTraversal = function (root) {
+    const result = [];
+    const stack = [];
+    let current = root;
+    while (current || stack.length > 0) {
+        while (current) {
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        result.push(current.val);
+        current = current.right;
+    }
+    return result;
 };
 ```
 
