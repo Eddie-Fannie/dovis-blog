@@ -342,7 +342,8 @@ module.exports = {
             title: '二分查找',
             collapsable: false,
             children: [
-                '/algorithm/BasicAlgorithm/BinarySearch/卡牌组合'
+                '/algorithm/BasicAlgorithm/BinarySearch/卡牌组合',
+                '/algorithm/BasicAlgorithm/BinarySearch/旋转数组的最小数字'
             ]
         },
         {

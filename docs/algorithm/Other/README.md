@@ -20,3 +20,40 @@ while(count < n) {
 # 排序
 ## 冒泡排序
 比较两个相邻数字大小，然后交换位置。这样第一轮比较`n-1`次，第二轮则为`n-2`次逐渐比较完成，时间复杂度为`O(n^2)`
+```js
+let arr = [1,2,4,5,3,9,10,11]
+function bubbleSort(arr) {
+    for(let i=0;i<arr.length;i++) {
+        for(let j=0;j<arr.length - i-1;j++) {
+            if(arr[j] >arr[j+1]) {
+                [arr[j],arr[j+1]] = [arr[j+1], arr[j]]
+            }
+        }
+    }
+    return arr
+}
+```
++ 优化：
+    - 当循环没有冒泡立即停止循环
+```js
+function bubbleSort(array) {
+    for (let j = 0; j < array.length; j++) {
+        let complete = true;
+        for (let i = 0; i < array.length - 1 - j; i++) {
+            // 比较相邻数
+            if (array[i] > array[i + 1]) {
+                [array[i], array[i + 1]] = [array[i + 1], array[i]];
+                complete = false;
+            }
+        }
+        // 没有冒泡结束循环
+        if (complete) {
+            break;
+        }
+    }
+    return array;
+}
+```
+
+## 选择排序
+重复从待排序的数据中寻找最小值，将其与序列最左边的数字进行交换。序列中寻找最小值使用线性查找。时间复杂度和冒泡排序一样。
