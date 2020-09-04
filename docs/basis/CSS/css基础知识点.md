@@ -93,3 +93,27 @@
 - `baseline`：元素基线与行盒子基线重合
 - `sub`：元素基线移动至行盒子基线下方
 - `super`；元素基线移动至行盒子基线上方
+
+**修改滚动条默认样式**
+```css
+@mixin scrollBar {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track{
+        background: #F3F7FF;
+        border-radius:2px;
+        -webkit-border-radius:2px;
+        -moz-border-radius:2px;
+        -ms-border-radius:2px;
+        -o-border-radius:2px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background: #D9D9D9;
+        border-radius:10px;
+    }
+    &::-webkit-scrollbar-thumb:hover{
+        background: #D9D9D9;
+    }
+}
+```
