@@ -335,7 +335,14 @@ module.exports = {
             children: [
                 '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合'
             ]
-        }
+        },
+        // {
+        //     title: '排序',
+        //     collapsable: false,
+        //     children: [
+        //         '/algorithm/AlgorithmicThinking/Sort/'
+        //     ]
+        // }
     ],
     '/algorithm/BasicAlgorithm/': [
         {
@@ -343,7 +350,11 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/BasicAlgorithm/BinarySearch/卡牌组合',
-                '/algorithm/BasicAlgorithm/BinarySearch/旋转数组的最小数字'
+                '/algorithm/BasicAlgorithm/BinarySearch/旋转数组的最小数字',
+                '/algorithm/BasicAlgorithm/BinarySearch/x的平方根',
+                '/algorithm/BasicAlgorithm/BinarySearch/在排序数组中查找数字 I',
+                '/algorithm/BasicAlgorithm/BinarySearch/0~n-1中缺失的数字',
+                '/algorithm/BasicAlgorithm/BinarySearch/有序数组两数之和'
             ]
         },
         {
