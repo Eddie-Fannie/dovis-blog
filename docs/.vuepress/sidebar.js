@@ -336,13 +336,13 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合'
             ]
         },
-        // {
-        //     title: '排序',
-        //     collapsable: false,
-        //     children: [
-        //         '/algorithm/AlgorithmicThinking/Sort/'
-        //     ]
-        // }
+        {
+            title: '排序',
+            collapsable: false,
+            children: [
+                '/algorithm/AlgorithmicThinking/Sort/把数组排成最小的数'
+            ]
+        }
     ],
     '/algorithm/BasicAlgorithm/': [
         {
