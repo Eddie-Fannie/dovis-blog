@@ -325,8 +325,7 @@ module.exports = {
             children: [
                 '/algorithm/AlgorithmicThinking/Recursion/格雷编码',
                 '/algorithm/AlgorithmicThinking/Recursion/复原IP地址',
-                '/algorithm/AlgorithmicThinking/Recursion/斐波那契数列',
-                '/algorithm/AlgorithmicThinking/Recursion/青蛙跳台阶'
+                '/algorithm/AlgorithmicThinking/Recursion/斐波那契数列'
             ]
         },
         {
@@ -337,10 +336,12 @@ module.exports = {
             ]
         },
         {
-            title: '排序',
+            title: '动态规划',
             collapsable: false,
             children: [
-                '/algorithm/AlgorithmicThinking/Sort/把数组排成最小的数'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/最长单词',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/青蛙跳台阶',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/括号生成'
             ]
         }
     ],
@@ -366,7 +367,14 @@ module.exports = {
                 '/algorithm/BasicAlgorithm/HashTable/有效的字母异位词',
                 '/algorithm/BasicAlgorithm/HashTable/两个数组的交集'
             ]
-        }
+        },
+        {
+            title: '排序',
+            collapsable: false,
+            children: [
+                '/algorithm/BasicAlgorithm/Sort/把数组排成最小的数'
+            ]
+        },
     ],
     '/algorithm/DataStructure/Array/': [
         {
