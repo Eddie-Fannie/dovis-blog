@@ -341,7 +341,8 @@ module.exports = {
             children: [
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/最长单词',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/青蛙跳台阶',
-                '/algorithm/AlgorithmicThinking/DynamicProgramming/括号生成'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/括号生成',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/打家劫舍'
             ]
         }
     ],
