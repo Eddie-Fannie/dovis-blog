@@ -193,12 +193,72 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     :::
     - `flex-shrink`
     > 定义项目的缩小比例，默认为1。项目空间不足，则将缩小。
-    - `flex-basis`
+    - `flex-basis`。默认占多少
     > 默认值为`auto`
     - `flex`
     > 2-4属性的缩写：` flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]`。后两个属性可选
     - `align-self`： `auto | flex-start | flex-end | center | baseline | stretch;`
     > 允许单个项目有与其他项目不一样的对齐方式。可以覆盖`align-items`属性。默认值为`auto`，表示继承父元素的`align-items`属性，没有父元素则取`stretch`
+
+```html
+<div class="container">
+    <div class="left"></div> // 286
+    <div class="right"></div> // 314
+</div>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    .container {
+        width: 600px;
+        height: 300px;
+        display: flex;
+    }
+    .left {
+        flex: 1 2 500px;
+        background: red;
+    }
+    .right {
+        flex: 2 1 400px;
+        background: blue;
+    }
+</style>
+```
+::: tip
++ **`flex-shrink`计算方式：**
+> `flex-shrink` 属性定义空间不够时各个元素如何收缩。其值默认为 `1`。`flex-shrink` 定义的仅仅只是元素宽度变小的一个权重分量。每个元素具体收缩多少，还有另一个重要因素，即它本身的宽度。
+
+**例子：**
+父元素`500px`。三个子元素分别设置为`150px，200px，300px`。三个子元素的 `flex-shrink` 的值分别为 `1，2，3`。首先，计算子元素溢出多少：`150 + 200 + 300 - 500 = -150px`。那这 `-150px` 将由三个元素的分别收缩一定的量来弥补。**具体的计算方式为：每个元素收缩的权重为其 `flex-shrink` 乘以其宽度。**所以总权重为 `1 * 150 + 2 * 200 + 3 * 300 = 1450`
+
++ 三个元素分别收缩：
+    - `150 * 1(flex-shrink) * 150(width) / 1450 = -15.5`
+    - `150 * 2(flex-shrink) * 200(width) / 1450 = -41.4`
+    - `150 * 3(flex-shrink) * 300(width) / 1450 = -93.1`
++ 三个元素的最终宽度分别为：
+    - `150 - 15.5 = 134.5`
+    - `200 - 41.4 = 158.6`
+    - `300 - 93.1 = 206.9`
+
+同样，当所有元素的 `flex-shrink` 之和小于 `1` 时，计算方式也会有所不同：例如把收缩比例改为`0.1 0.2 0.3`，权重则为`145`。三个元素收缩总和并不是`150px`，而是只会收缩`150px` 的`(0.1 + 0.2 + 0.3) / 1`即`60%`的空间：`90px`。
+
++ 每个元素收缩的空间为：
+    - `90 * 0.1(flex-shrink) * 150(width) / 145 = 9.31`
+    - `90 * 0.2(flex-shrink) * 200(width) / 145 = 24.83`
+    - `90 * 0.3(flex-shrink) * 300(width) / 145 = 55.86`
+
++ 三个元素的最终宽度分别为：
+    - `150 - 9.31 = 140.69`
+    - `200 - 24.83 = 175.17`
+    - `300 - 55.86 = 244.14`
+
++ **`flex-grow`计算方式：**
+![img](/dovis-blog/other/45.png)
+
+![img](/dovis-blog/other/46.png)
+:::
 
 3. `grid`布局
 `display:grid`指定容器采用网格布局，默认情况容器都是块级元素，也可以设置为行内元素`display: inline-grid`
