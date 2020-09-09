@@ -2,7 +2,7 @@
 ## 数据类型
 1. 原始类型有`null`, `undefined`, `string`, `number`, `boolean`, `symbol`
 
-> 所以`null`基本类型就不是`object`，虽然`typeof null`会输出`object`？是因为历史遗留。在JS的最初版本中使用的是32位系统，为了性能考虑使用低位存储变量的类型信息，000开头代表是对象，然而`null`表示为全零，所以将它错误的判断为`object` 。
+> 所以`null`基本类型就不是`object`，虽然`typeof null`会输出`object`？是因为历史遗留。在JS的最初版本中使用的是`32`位系统，为了性能考虑使用低位存储变量的类型信息，`000`开头代表是对象，然而`null`表示为全零，所以将它错误的判断为`object` 。
 
 2. 除了原始类型其他都是对象类型
 > 原始类型存储的是值，对象类型存储的是地址（指针）。当创建一个对象类型的时候，计算机会在内存中帮我们开辟一个空间来存放值，但是我们需要找到这个空间，这个空间会拥有一个地址（指针）
@@ -15,14 +15,16 @@ const b = []
 
 > 所以把一个对象赋值给一个变量的时候，这个时候赋值的其实是地址，所以当我们进行数据修改的时候，就会修改存放在地址上的值，也就导致两个变量的值都发生改变
 
-> 函数传递对象参数其实是相当于传递对象指针的副本，所以函数内修改参数对象属性的时候，并不会影响传递进去的对象本身，例如工厂模式生成对象的情况。
+> 函数传递对象参数其实是相当于传递**对象指针的副本**，所以函数内修改参数对象属性的时候，并不会影响传递进去的对象本身，例如工厂模式生成对象的情况。
 
 ## 判断数据类型
-- `typeof`：null,函数，数组都可以判断为对象`object`，所以不能准确判断变量到底是什么类型。
+- `typeof`：`null`、函数、数组都可以判断为对象`object`，所以不能准确判断变量到底是什么类型。
 ```js
 var str1 = 123
 console.log(typeof str1 === 'number') // true
 console.log(typeof Array) // 'function'
+console.log(typeof {}) // 'object'
+console.log(typeof function name(){console.log(222)}) // 'function'
 ```
 - `instanceof`：判断的原理是根据原型链
 ```js
@@ -34,6 +36,7 @@ console.log(p1 instanceof Person) // true
 console.log(p1 instanceof Object) // true
 console.log(Person instanceof Object) // true
 console.log(Person instanceof Function) // true
+console.log(Object instanceof Function) // true
 ```
 ```js
 var str = 'hello world'
