@@ -1,7 +1,7 @@
 # vue实现一个图片懒加载指令
 参考[ConardLi大佬](https://github.com/ConardLi/awesome-coding-js/blob/master/JavaScript/%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD.md)
 
-> 图片的标签是`img`标签，图片的来源主要是`src`属性，浏览器是否发起加载图片的请求是根据是否有`src`属性决定的。所以可以从`img`标签的`src`属性入手，在没进到可视区域的时候，就先不给`img`标签的`src`属性赋值。
+> 图片的标签是`img`标签，图片的来源主要是`src`属性，浏览器是否发起加载图片的请求是根据是否有`src`属性决定的。所以可以从`img`标签的`src`属性入手，在没进到可视区域的时候，就先不给`img`标签的`src`属性赋值。**也可以把`src`的属性写成了`about:blank`，这是因为不能随便写一个不存在的地址，否则控制台会报错：加载失败，如果写成空或不写，那么它会认为`src`就是当前页面。如果写成`about:blank`，大家相安无事，并且不同浏览器兼容性好。**
 ```html
 <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_1280.jpg" alt="">
 <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2014/08/01/00/08/pier-407252_1280.jpg" alt="">
