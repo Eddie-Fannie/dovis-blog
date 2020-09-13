@@ -318,6 +318,11 @@ export function initState (vm: Component) {
 
 ## 挂载阶段
 `beforeMount`到`mounted`钩子函数之间就是挂载阶段。挂载过程中，vue.js会开启`Watcher`来持续追踪依赖的变化。当数据发生变化时，`Watcher`会通知虚拟`DOM`重新渲染视图，并且会在渲染视图前触发`beforeUpdate`钩子函数，渲染完毕后触发`updated`钩子函数。
+
+::: tip
+1. 当`data`被修改时就会先调用`beforeUpdate`。然后重新渲染并虚拟`DOM`并把应用更新。
+2. 更新完成后调用`updated`函数。
+:::
 ### `beforeMount`&`mounted`
 
 ## 卸载阶段
