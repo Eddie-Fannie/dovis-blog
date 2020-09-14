@@ -116,7 +116,8 @@ module.exports = {
             children: [
                 '/frame/Vue/Vue的精髓--组件',
                 '/frame/Vue/vue中的通信',
-                '/frame/Vue/vue中注意的点'
+                '/frame/Vue/vue中注意的点',
+                '/frame/Vue/vue指令的奥秘'
             ]
         },
         {
@@ -127,7 +128,8 @@ module.exports = {
                 '/frame/Vue/虚拟dom',
                 '/frame/Vue/生成真实dom',
                 '/frame/Vue/vue生命周期',
-                '/frame/Vue/初始化状态'
+                '/frame/Vue/初始化状态',
+                '/frame/Vue/模板编译'
             ]
         }
     ],
@@ -233,7 +235,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/fulllink/BuildingTools/初识webpack',
-                '/fulllink/BuildingTools/webpack技巧'
+                '/fulllink/BuildingTools/webpack技巧',
+                '/fulllink/BuildingTools/webpack热更新'
             ]
         }
     ],

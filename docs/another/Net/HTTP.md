@@ -66,16 +66,17 @@
 - `4xx`：客户端出现错误
     + `400 Bad Request`：服务器认为客户端出现了错误，但不明确，一般是 `HTTP` 请求格式错误
     > 产生原因；前端提交数据的字段名称和字段类型与后台的实体没有保持一致；前端提交到后台的数据应该是`json`字符串类型，但是前端没有将对象`JSON.stringfy`转换为字符串
-    + `401 Unauthorized`：用户认证信息确实或者不正确
+    + `401 Unauthorized`：用户认证信息确实或者不正确。发送的请求需要通过`HTTP`认证。
     + `403 Forbidden`：服务器理解请求的含义，但没有权限执行
     + `407 Proxy Authentication Required`：对需要经由代理的请求，认证信息未通过代理服务器的验证
     + `404 Not Found`：服务器没有找到对应的资源
     + `408 Request Timeout`：服务器接收请求超时
+    + `405 Method Not Allowed`：请求方法不被服务端允许。
 
 - `5xx`：服务器端出现错误
     + `500 Internal Server Error`：服务器内部错误，且不属于以下错误类型
     + `502 Bad Gateway`：代理服务器无法获取到合法响应
-    + `503 Service Unavailable`：服务器资源尚未准备好处理当前请求
+    + `503 Service Unavailable`：服务器资源尚未准备好处理当前请求。**服务器当前很忙，暂时无法响应**
     + `505 HTTP Version Not Supported`：请求使用的 `HTTP` 协议版本不支持
 
 ## HTTP几种方法
