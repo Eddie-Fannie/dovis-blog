@@ -378,3 +378,11 @@ div{
     background:#ddd;
 }
 ```
+## 超出部分省略号
+单行
+```css
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+word-break: break-all;
+```
