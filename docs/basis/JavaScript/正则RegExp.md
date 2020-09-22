@@ -137,6 +137,7 @@ console.log(str.match(/[^a-z]+/)) // ['5']
      var str = 'adobe(2016) ps6.4'
      console.log(str.match(/\B(\w+)/g)) // [ 'dobe', '016', 's6' ]
      ```
+   6. 其实`“-”`在紧挨边界的时候不需要转义，也就是说可以写成：`[a-z-] 或 [-a-z]`
 
 - 量词说明
 
