@@ -154,6 +154,78 @@ Object.prototype.toString.call(value) === '[object Object]' && JSON.stringify(va
 // 可以避免undefined/null
 ```
 
+4. **`for...of`和`for...in`的区别**
+::: tip
+`for...of`可以迭代数组，类数组以及任何可以迭代的对象(`map,set,DOM`)
+:::
+
+**`for...of`的魅力**
+1. 数组迭代
+```js
+const products = ['oranges','apples']
+for(const product of products) {
+  console.log(product)
+}
+
+// 就地解构
+const persons = [
+  {name: 'John Smith'},
+  {name: 'Jane Doe'}
+]
+for(const {name} of persons) {
+  console.log(name)
+}
+```
+
+2. 类数组迭代
+```js
+function sum() {
+  let sum = 0
+  for(const number of arguments) {
+    sum += number
+  }
+  return sum;
+}
+sum(1,2,3) // 6
+```
+
+3. 遍历字符串
+4. 遍历对象，`map/set`
+```js
+// Map
+const names = new Map();
+names.set(1, 'one');
+names.set(2, 'two');
+
+for (const [number, name] of names) {
+  console.log(number, name);
+}
+// logs 1, 'one'
+// logs 2, 'two'
+
+// Set
+const colors = new Set(['white', 'blue', 'red', 'white']);
+
+for (color of colors) {
+  console.log(color);
+}
+// 'white'
+// 'blue'
+// 'red
+
+// 对象
+const person = {
+  name: 'John Smith',
+  job: 'agent'
+};
+
+for (const [prop, value] of Object.entries(person)) {
+  console.log(prop, value);
+}
+// 'name', 'John Smith'
+// 'job', 'agent'
+```
+
 ## 高级题
 1. **回调地狱为什么不能捕获异常**
 > 其实这跟 js 的运行机制相关，异步任务执行完成会加入任务队列，当执行栈中没有可执行任务了，主线程取出任务队列中的异步任务并入栈执行，当异步任务执行的时候，捕获异常的函数已经在执行栈内退出了，所以异常无法被捕获。
