@@ -70,11 +70,14 @@
 - JS分为同步和异步任务
 ::: tip
 - 同步任务：在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务。
+> 例如`console.log()`
+
 - 异步任务：不进入主线程，而是进入“任务队列”通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行。
+> 例如`Ajax,DOM的事件操作，setTimeout,Promise的then,Node读取文件`
 :::
 
 1. 同步任务都在JS引擎线程上执行，形成一个执行栈
-2. 事件触发线程管理一个任务队列，异步任务触发条件达成，将回调事件放到任务队列中
+2. **事件触发线程**管理一个任务队列，异步任务触发条件达成，将回调事件放到任务队列中，等待栈为空时，依次进入栈中执行。
 3. 执行栈中所有同步任务执行完毕，此时JS引擎线程空闲，系统会读取任务队列，将可运行的异步任务回调事件添加到执行栈中，开始执行
 
 **主线程不断重复这三步**
@@ -112,12 +115,17 @@ console.log('world')
 - 如此循环
 
 ## 宏任务，微任务（异步任务,宏任务可以有多个，微任务队列只有一个）
+当一个异步任务入栈时，主线程判断该任务为异步任务，并把该任务交给异步处理模块处理，当异步处理模块处理完打到触发条件时，根据任务的类型，将回调函数压入任务队列。
+
+- 如果是宏任务，则新增一个宏任务队列，任务队列中的宏任务可以有多个来源。
+- 如果是微任务，则直接压入微任务队列
+有微任务先执行微任务，再执行宏任务。
 
 ### 什么是宏任务
 我们可以将每次执行栈执行的代码当作一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行),每个宏任务会从头到尾执行完毕，不会执行其他。
-浏览器为了能够使宏任务和`DOM`任务有序进行，会在一个宏任务执行结果后，在下一个宏任务执行前，`GUI`渲染线程开始工作，对页面进行渲染。
+浏览器为了能够使宏任务和`DOM`任务有序进行，**会在一个宏任务执行结果后，在下一个宏任务执行前，`GUI`渲染线程开始工作，对页面进行渲染。**
 
-> 主代码块，`setTimeout`,`setInterval`等，都属于宏任务
+> 主代码块`<script>`，`setTimeout`,`setInterval`,交互事件等，都属于宏任务
 
 **第一个例子**
 ```javascript
@@ -135,15 +143,21 @@ document.body.style = "background:grey"
 ```javascript
 document.body.style="background:blue"
 setTimeout(function(){
-document.body.style ="background:black"
+    document.body.style ="background:black"
 },0)
 ```
 ![img](/dovis-blog/other/3.gif)
 我们可以看到页面先变成蓝色，再瞬间变成黑色，这是因为上面代码为两次宏任务，分别执行一次然后再触发渲染，所以两种颜色都会被渲染出来。
 
+> 如果`js`操作了`dom`，浏览器不会立即渲染，而是会将当前执行栈清空，包括`micro-task`，然后执行渲染操作，执行渲染操作
+
 ### 什么是微任务
+::: tip
+页面渲染事件，各种IO的完成事件等随时被添加到任务队列中，一直会保持先进先出的原则执行，我们不能准确地控制这些事件被添加到任务队列中的位置。但是这个时候突然有高优先级的任务需要尽快执行，那么一种类型的任务就不合适了，所以引入了微任务队列。
+:::
+
 我们知道宏任务结束后会执行渲染，然后执行下一个宏任务，而微任务可以理解为在当前宏任务执行后立即执行的任务。
-> `Promise`,`process`,`nextTick`，`then()`等属于微任务,在微任务中`process`,`nextTick`优先级高于`Promise`，`Promise`高于`then`
+> `Promise.then()`,`process.nextTick`,`Object.observe`，`MutationObserver`等属于微任务,在微任务中`process.nextTick`,优先级高于`Promise`，`Promise`高于`then`
 
 **第一个例子**
 ```javascript
@@ -168,23 +182,23 @@ setTimeout(() => {
     console.log(2)
 },0)
 ```
-上面代码共有两个`setTimeout`，也就是说除主代码外，共有两个宏任务，其中第一个宏任务执行中，输出`1`，并且创建微任务队列，所以在下一个宏任务队列执行前，先执行微任务，在微任务执行中输出`3`，微任务执行后，执行下次宏任务，执行中输出`2`.
+上面代码共有两个`setTimeout`，也就是说除主代码外，共有两个宏任务，其中第一个宏任务执行中，输出`1`，并且创建微任务队列，**所以在下一个宏任务队列执行前，先执行微任务**，在微任务执行中输出`3`，微任务执行后，执行下次宏任务，执行中输出`2`.
 
 **当异步任务进入栈执行时，微任务和宏任务并排进入执行队列时，先执行微任务**
 ```javascript
 setTimeout(function(){
-       console.log(1)
-       Promise.resolve().then(function () {
-           console.log(2)
-       })
-   },0)
-    setTimeout(function () {
-        console.log(3)
-    },0)
+    console.log(1)
     Promise.resolve().then(function () {
-        console.log(4)
+        console.log(2)
     })
-    console.log(5)//5，4，1，2，3
+},0)
+setTimeout(function () {
+    console.log(3)
+},0)
+Promise.resolve().then(function () {
+    console.log(4)
+})
+console.log(5)//5，4，1，2，3
 ```
 + 第一轮循环
     - 同样从全局任务入口，遇到宏任务`setTimeout`，交给异步处理模块，我们暂且记为`setTimeout 1`，由于等待时间为0，直接加入宏任务队列。
@@ -229,3 +243,98 @@ console.log(6)
     - 在宏任务队列中取出一个宏任务，也就是之前的`setTimeout`，输出`2`（**可以看成是在下一轮事件循环开始时执行**）
     - 此时任务队列为空，执行栈为空，整个程序执行完毕。
 :::
+
+## 宏任务微任务运行机制总结
+异步任务的返回结果会被放到一个任务队列中，根据异步事件的类型，这个事件实际上会被放到对应的宏任务和微任务队列中去。在当前执行栈为空时，主线程会查看微任务队列是否有事件存在：
+- 存在，依次执行队列中的事件对应的回调，直到微任务队列为空，然后去宏任务队列中取出最前面的事件，把当前的回调加到当前指向栈。
+- 如果不存在，那么再去宏任务队列中取出一个事件把对应的回调加入当前执行栈。
+
+当前执行栈执行完毕后时会立刻处理所有微任务队列中的事件，然后再去宏任务队列中取出一个事件。同一次事件循环中，微任务永远在宏任务之前执行。
+
+在事件循环中，每进行一次循环操作称为 `tick`，每一次 `tick` 的任务处理模型是比较复杂的，但关键步骤如下：
+- 执行一个宏任务（栈中没有就从事件队列中获取）
+- 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
+- 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
+- 当前宏任务执行完毕，开始检查渲染，然后`GUI`线程接管渲染
+- 渲染完毕后，`JS`线程继续接管，开始下一个宏任务（从事件队列中获取）
+
+简单总结一下执行的顺序：执行宏任务，然后执行该宏任务产生的微任务，若微任务在执行过程中产生了新的微任务，则继续执行微任务，微任务执行完毕后，再回到宏任务中进行下一轮循环。
+
+## 经典面试题分析
+1. `async await`
+```js
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+async function async2() {
+    console.log('async2');
+}
+console.log('script start');
+setTimeout(function() {
+    console.log('setTimeout');
+}, 0)
+async1();
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');
+```
+
+![img](/dovis-blog/other/48.png)
+
+2. `setTimeout Promise`
+```js
+console.log('start');
+setTimeout(() => {
+    console.log('children2');
+    Promise.resolve().then(() => {
+        console.log('children3');
+    })
+}, 0);
+
+new Promise(function(resolve, reject) {
+    console.log('children4');
+    setTimeout(function() {
+        console.log('children5');
+        resolve('children6')
+    }, 0)
+}).then((res) => {
+    console.log('children7');
+    setTimeout(() => {
+        console.log(res);
+    }, 0)
+})
+```
+![img](/dovis-blog/other/49.png)
+
+3. `Promise`立即执行
+```js
+const p = function() {
+    return new Promise((resolve, reject) => {
+        const p1 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(1)
+            }, 0)
+            resolve(2)
+        })
+        p1.then((res) => {
+            console.log(res);
+        })
+        console.log(3);
+        resolve(4);
+    })
+}
+
+
+p().then((res) => {
+    console.log(res);
+})
+console.log('end');
+```
+
+![img](/dovis-blog/other/50.png)
