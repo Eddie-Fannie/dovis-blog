@@ -256,6 +256,17 @@ console.log(6)
 - 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
 - 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
 - 当前宏任务执行完毕，开始检查渲染，然后`GUI`线程接管渲染
+
+::: tip
+进入更新渲染阶段，判断是否需要渲染，这里有一个 `rendering opportunity` 的概念，也就是说不一定每一轮 `event loop` 都会对应一次浏览器渲染，要根据屏幕刷新率、页面性能、页面是否在后台运行来共同决定，通常来说这个渲染间隔是固定的。（所以多个 `task` 很可能在一次渲染之间执行）
+
+- 浏览器会尽可能的保持帧率稳定，例如页面性能无法维持 `60fps`（每 `16.66ms` 渲染一次）的话，那么浏览器就会选择 `30fps` 的更新速率，而不是偶尔丢帧。
+- 如果浏览器上下文不可见，那么页面会降低到 `4fps` 左右甚至更低。
+- 如果满足以下条件，也会跳过渲染：
+    + 浏览器判断更新渲染不会带来视觉上的改变。
+    + `map of animation frame callbacks` 为空，也就是帧动画回调为空，可以通过 `requestAnimationFrame` 来请求帧动画。
+:::
+
 - 渲染完毕后，`JS`线程继续接管，开始下一个宏任务（从事件队列中获取）
 
 简单总结一下执行的顺序：执行宏任务，然后执行该宏任务产生的微任务，若微任务在执行过程中产生了新的微任务，则继续执行微任务，微任务执行完毕后，再回到宏任务中进行下一轮循环。
@@ -338,3 +349,219 @@ console.log('end');
 ```
 
 ![img](/dovis-blog/other/50.png)
+
+4. 黄金题
+```js
+console.log('1');
+
+setTimeout(() => {
+  console.log('2');
+  Promise.resolve().then(() => {
+    console.log('3');
+  })
+  new Promise((resolve) => {
+    console.log('4');
+    resolve();
+  }).then(() => {
+    console.log('5')
+  })
+})
+
+Promise.reject().then(() => {
+  console.log('13');
+}, () => {
+  console.log('12');
+})
+
+new Promise((resolve) => {
+  console.log('7');
+  resolve();
+}).then(() => {
+  console.log('8')
+})
+
+setTimeout(() => {
+  console.log('9');
+  Promise.resolve().then(() => {
+    console.log('10');
+  })
+  new Promise((resolve) => {
+    console.log('11');
+    resolve();
+  }).then(() => {
+    console.log('12')
+  })
+})
+```
+> `1 7 12 8 2 4 3 5 9 11 10 12`
+
+5. 钻石题
+```js
+new Promise((resolve, reject) => {
+    console.log(1)
+    resolve()
+  })
+  .then(() => {
+    console.log(2)
+    new Promise((resolve, reject) => {
+        console.log(3)
+        setTimeout(() => {
+          reject();
+        }, 3 * 1000);
+        resolve()
+    })
+      .then(() => {
+        console.log(4)
+        new Promise((resolve, reject) => {
+            console.log(5)
+            resolve();
+          })
+          .then(() => {
+            console.log(7)
+          })
+          .then(() => {
+            console.log(9)
+          })
+      })
+      .then(() => {
+        console.log(8)
+      })
+  })
+  .then(() => {
+    console.log(6)
+  })
+```
+> `1 2 3 4 5 6 7 8 9`
+
+6. 王者题
+```js
+Promise.resolve()
+  .then(() => {
+    console.log('promise1');
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log('timer2')
+          resolve()
+        }, 0)
+    })
+      .then(async () => {
+        await foo();
+        return new Error('error1')
+      })
+      .then((ret) => {
+        setTimeout(() => {
+          console.log(ret);
+          Promise.resolve()
+          .then(() => {
+            return new Error('error!!!')
+          })
+          .then(res => {
+            console.log("then: ", res)
+          })
+          .catch(err => {
+            console.log("catch: ", err)
+          })
+        }, 1 * 3000)
+      }, err => {
+        console.log(err);
+      })
+      .finally((res) => {
+        console.log(res);
+        throw new Error('error2')
+      })
+      .then((res) => {
+        console.log(res);
+      }, err => {
+        console.log(err);
+      })
+  })
+  .then(() => {
+    console.log('promise2');
+  })
+
+function foo() {
+  setTimeout(() => { 
+    console.log('async1');
+  }, 2 * 1000);
+}
+
+setTimeout(() => {
+  console.log('timer1')
+  Promise.resolve()
+    .then(() => {
+      console.log('promise3')
+    })
+}, 0)
+
+console.log('start');
+```
+![img](/dovis-blog/other/51.png)
+
+7. 荣耀王者
+```js
+async function async1() {
+  console.log('async1 start');
+  new Promise((resolve, reject) => {
+    try {
+      throw new Error('error1')
+    } catch(e) {
+      console.log(e);
+    }
+    setTimeout(() => { // 宏3
+      resolve('promise4')
+    }, 3 * 1000);
+  })
+    .then((res) => { // 微3-1
+      console.log(res);
+    }, err => {
+      console.log(err);
+    })
+    .finally(res => { // 微3-2 // TODO注3
+      console.log(res);
+    })
+  console.log(await async2()); // TODO-注1
+  console.log('async1 end'); // 微1-1 // TODO-注2
+}
+
+function async2() {
+  console.log('async2');
+  return new Promise((resolve) => {
+    setTimeout(() => { // 宏4
+      resolve(2)
+    }, 1 * 3000);
+  })
+}
+
+console.log('script start');
+
+setTimeout(() => { // 宏2
+  console.log('setTimeout');
+}, 0)
+
+async1();
+
+new Promise((resolve) => {
+  console.log('promise1');
+  resolve();
+})
+  .then(() => { // 微1-2
+    console.log('promise2');
+    return new Promise((resolve) => {
+      resolve()
+    })
+      .then(() => { // 微1-3
+        console.log('then 1-1')
+      })
+  })
+  .then(() => { // 微1-4
+    console.log('promise3');
+  })
+
+
+console.log('script end');
+```
+![img](/dovis-blog/other/52.png)
+
+::: tip
+为了优化`promise`的`then`链写法，用同步的方式编写异步代码，让代码看起来更简洁明了 `await`的真实意思是 `async wait`(异步等待的意思)`await`表达式相当于调用后面返回`promise`的`then`方法，异步（等待）获取其返回值。即 `await<==>promise.then`
+:::
