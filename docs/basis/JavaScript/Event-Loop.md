@@ -125,7 +125,7 @@ console.log('world')
 我们可以将每次执行栈执行的代码当作一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行),每个宏任务会从头到尾执行完毕，不会执行其他。
 浏览器为了能够使宏任务和`DOM`任务有序进行，**会在一个宏任务执行结果后，在下一个宏任务执行前，`GUI`渲染线程开始工作，对页面进行渲染。**
 
-> 主代码块`<script>`，`setTimeout`,`setInterval`,交互事件等，都属于宏任务
+> 主代码块`<script>`，`setTimeout`,`setInterval`,`MessageChannel`，`postMessage`,`setImmediate`，交互事件等，都属于宏任务
 
 **第一个例子**
 ```javascript
@@ -264,7 +264,7 @@ console.log(6)
 - 如果浏览器上下文不可见，那么页面会降低到 `4fps` 左右甚至更低。
 - 如果满足以下条件，也会跳过渲染：
     + 浏览器判断更新渲染不会带来视觉上的改变。
-    + `map of animation frame callbacks` 为空，也就是帧动画回调为空，可以通过 `requestAnimationFrame` 来请求帧动画。
+    + `map of animation frame callbacks` 为空，也就是帧动画回调为空，可以通过`requestAnimationFrame` 来请求帧动画。
 :::
 
 - 渲染完毕后，`JS`线程继续接管，开始下一个宏任务（从事件队列中获取）
