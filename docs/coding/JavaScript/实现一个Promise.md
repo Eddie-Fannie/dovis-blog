@@ -1,5 +1,5 @@
 # 实现一个Promise
-## 代码1
+## 实现一个简易版`Promise`
 ```js
 // 三种状态
 const PENDING = 'pending'
@@ -66,4 +66,4 @@ new myPromise((resolve, reject) => {
 })
 ```
 
-## 代码2
+## 实现`Promise/A+` 规范的`Promise`

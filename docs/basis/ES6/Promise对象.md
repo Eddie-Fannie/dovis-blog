@@ -21,11 +21,11 @@
 function timeout(ms) {
     return new Promise((resolve, reject) => {
         setTimeout(resolve, ms, 'done')
-    })
+    }) // new Promise构造函数内的回调同步执行
 }
 timeout(100).then((value) => {
     console.log(value) // done
-})
+}) // then的回调函数是异步执行的
 ```
 ::: tip
 `Promise`实例生成以后，可以`then`方法分别指定`Resolved/Rejected`状态的回调函数。第二个参数为可选
@@ -90,7 +90,17 @@ new Promise((resolve, reject) => {
 
 ## Promise对象的方法
 ### `then`
-> 可以采用链式写法，调用多个`then`，返回一个新的`Promise`实例。第一个`then`回调完成后会将返回的结果作为参数传入第二个`then`
+> 可以采用链式写法，调用多个`then`，返回一个新的`Promise`实例。第一个`then`回调完成后会将返回的结果作为参数传入第二个`then`。**在`then`中使用`return`，那么`return`的值会被`Promise.resolve()`包装**
+```js
+Promise.resolve(1)
+  .then(res => {
+    console.log(res) // => 1
+    return 2 // 包装成 Promise.resolve(2)
+  })
+  .then(res => {
+    console.log(res) // => 2
+  })
+```
 
 ###  `catch`
 > 该方法是`.then(null, rejection)`别名，用于指定发生错误时的回调。`then`方法指定的回调函数如果在运行中抛出错误，也会被`catch`方法捕获。
@@ -249,5 +259,9 @@ const preloadImage = function(path) {
 ## `async...await`
 > 其实 ES7 中的 `async` 及 `await` 就是 `Generator` 以及 `Promise` 的语法糖，内部的实现原理还是原来的，只不过是在写法上有所改变，这些实现一些异步任务写起来更像是执行同步任务。
 
+一个函数如果加上`async`，那么该函数就会返回一个`Promise`
+
 1. `async`函数返回一个`Promise`对象，可以使用`then`方法添加回调函数。`async` 直接将返回值使用`Promise.resolve()` 进行包裹（与 `then` 处理效果相同）
 2. `await` 只能配套 `async` 使用， `await` 内部实现了 `generator` ， `await` 就是 `generator` 加上`Promise` 的语法糖，且内部实现了自动执行 `generator` 。
+
+> `async` 和 `await` 可以说是异步终极解决方案了，相比直接使用 `Promise` 来说，优势在于处理 `then` 的调用链，能够更清晰准确的写出代码，毕竟写一大堆 `then` 也很恶心，并且也能优雅地解决回调地狱问题。当然也存在一些缺点，因为 `await` 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 `await` 会导致性能上的降低。

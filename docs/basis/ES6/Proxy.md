@@ -55,6 +55,36 @@ proxy.time // 35
 - `set(target,propKey,value,receiver)`
 > 拦截对象属性的设置，返回一个布尔值
 
+**`Proxy`来实现数据响应**
+```js
+let onWatch = (obj, setBind, getLogger) => {
+  let handler = {
+    get(target, property, receiver) {
+      getLogger(target, property)
+      return Reflect.get(target, property, receiver)
+    },
+    set(target, property, value, receiver) {
+      setBind(value, property)
+      return Reflect.set(target, property, value)
+    }
+  }
+  return new Proxy(obj, handler)
+}
+
+let obj = { a: 1 }
+let p = onWatch(
+  obj,
+  (v, property) => {
+    console.log(`监听到属性${property}改变为${v}`)
+  },
+  (target, property) => {
+    console.log(`'${property}' = ${target[property]}`)
+  }
+)
+p.a = 2 // 监听到属性a改变
+p.a // 'a' = 2
+```
+
 - `has(target, propKey)`
 > 拦截`propKey in proxy`的操作，返回一个布尔值
 
