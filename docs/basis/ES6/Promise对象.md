@@ -11,6 +11,7 @@
 `Promise`对象有两个特点：
 - 对象的状态不受外界影响。`Promise`对象代表一个异步操作，有3种状态：`Pending`（进行中）,`Fulfilled`（已成功）和`Rejected`（已失败）。只有异步操作的结果可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
 - 一旦状态改变就不会再变，任何时候都可以得到这个结果。`Promise`对象状态改变只有两种可能：`pending-->Fulfilled`和从`Pending-->Rejected`
+- 只有异步操作的结果可以决定当前是哪一种状态。一旦状态改变就不会再变，再对`Promise`对象添加回调函数，也会立即得到结果。
 
 `Promise`缺点：
 - 无法取消，一旦新建就会立即执行，无法中途取消。
@@ -88,8 +89,10 @@ new Promise((resolve, reject) => {
 ```
 > 一般来说，调用`resolve`或者`reject`以后，`Promise`的使命就完成了，后继操作应该放到`then`方法里面，而不应该直接写在`resolve`或`reject`后面。所以，最好在它们前面加上`return`语句，这样不会产生意外，不过这样后面的语句就自然不会执行。
 
-## Promise对象的方法
+## Promise原型链上的方法
+`Promise.prototype.then()/Promise.prototype.catch()`
 ### `then`
+`then`方法第一个参数是`Resolved`状态的回调函数，第二个参数（可选）是`Rejected`状态的回调函数
 > 可以采用链式写法，调用多个`then`，返回一个新的`Promise`实例。第一个`then`回调完成后会将返回的结果作为参数传入第二个`then`。**在`then`中使用`return`，那么`return`的值会被`Promise.resolve()`包装**
 ```js
 Promise.resolve(1)
@@ -102,7 +105,7 @@ Promise.resolve(1)
   })
 ```
 
-###  `catch`
+### `catch`
 > 该方法是`.then(null, rejection)`别名，用于指定发生错误时的回调。`then`方法指定的回调函数如果在运行中抛出错误，也会被`catch`方法捕获。
 
 `reject`方法等同于抛出错误
@@ -143,6 +146,7 @@ p1.catch(error => {
 4. `catch`方法中还能抛出错误。如果后面没有别的`catch`方法，导致这个错误不会被捕获，也不会传递到外层。可以采用链式调用`catch`来捕获前面一个`catch`抛出的错误。
 :::
 
+## Promise实例对象上的方法
 ### `Promise.all()`
 该方法用于将多个`Promise`实例包装成一个新的`Promise`实例。
 ```js
