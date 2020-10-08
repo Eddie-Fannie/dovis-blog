@@ -263,9 +263,62 @@ const preloadImage = function(path) {
 ## `async...await`
 > 其实 ES7 中的 `async` 及 `await` 就是 `Generator` 以及 `Promise` 的语法糖，内部的实现原理还是原来的，只不过是在写法上有所改变，这些实现一些异步任务写起来更像是执行同步任务。
 
-一个函数如果加上`async`，那么该函数就会返回一个`Promise`
+一个函数如果加上`async`，那么该函数就会返回一个`Promise`。`await`表示紧跟在后面的表达式需要等待结果。进一步说，`async`函数完全可以看作由多个异步操作包装成的一个`Promise`对象，而`await`命令就是内部`then`命令的语法糖。
 
-1. `async`函数返回一个`Promise`对象，可以使用`then`方法添加回调函数。`async` 直接将返回值使用`Promise.resolve()` 进行包裹（与 `then` 处理效果相同）
+### 用法
+1. `async`函数返回一个`Promise`对象，可以使用`then`方法添加回调函数。`async` 直接将返回值使用`Promise.resolve()` 进行包裹（与 `then` 处理效果相同）。当函数执行时，一旦遇到`await`就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
+```js
+async function f() {
+    return 'hello world'
+}
+
+f().then(v => console.log(v))
+// hello world
+```
 2. `await` 只能配套 `async` 使用， `await` 内部实现了 `generator` ， `await` 就是 `generator` 加上`Promise` 的语法糖，且内部实现了自动执行 `generator` 。
 
 > `async` 和 `await` 可以说是异步终极解决方案了，相比直接使用 `Promise` 来说，优势在于处理 `then` 的调用链，能够更清晰准确的写出代码，毕竟写一大堆 `then` 也很恶心，并且也能优雅地解决回调地狱问题。当然也存在一些缺点，因为 `await` 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 `await` 会导致性能上的降低。
+
+### 语法
+1. `async`函数内部抛出的错误会导致返回的`Promise`对象变为`reject`状态。抛出的错误对象会被`catch`方法回调函数接收到。
+```js
+async function f() {
+    throw new Error('出错了')
+}
+f().then(
+    v => console.log(v),
+    e => console.log(e)
+)
+// Error: 出错了
+```
+
+2. `async`函数返回的`Promise`对象必须等到内部所有`await`命令后面的`Promise`对象执行完才会发生状态改变，除非遇到`return`语句或者抛出错误。也就是说，只有`async`函数内部的异步操作执行完，才会执行`then`方法指定的回调函数。
+3. 正常情况下，`await`命令后面是一个`Promise`对象，如果不是，会被转成一个立即`resolve`的`Promise`对象。
+```js
+async function f() {
+    return await 123;
+}
+
+f().then(v => console.log(v)) // 123
+```
+4. `await`命令后面的`Promise`对象如果变成`reject`状态，则`reject`的参数会被`catch`方法的回调函数接收到。**跟在`await`前面加上`return`效果一样**。只要一个`await`语句后面的`Promise`变为`reject`，那么整个`async`函数都会中断执行。
+5. 由上述语法得知，如果我们需要前一个异步操作失败，也不要中断后面的异步操作。这时可以：
+- 将第一个`await`放在`try...catch`结构里面，这样第二个`await`都会执行。
+```js
+async function f() {
+    try {
+        await Promise.reject('出错了')
+    } catch(e) {
+
+    }
+    return await Promise.resolve('hello world')
+}
+```
+- 另一种方法是在`await`后面的`Promise`对象添加一个`catch`方法，处理前面可能出现的错误
+```js
+async function f() {
+    await Promise.reject('出错了')
+        .catch(e => console.log(e))
+    return await Promise.resolve('Hello world')
+}
+```

@@ -251,7 +251,9 @@ module.exports = {
                 '/coding/JavaScript/手写new',
                 '/coding/JavaScript/牛客网评测',
                 '/coding/JavaScript/手动实现一个深拷贝',
-                '/coding/JavaScript/实现一个Promise'
+                '/coding/JavaScript/实现一个Promise',
+                '/coding/JavaScript/手写instanceof',
+                '/coding/JavaScript/封装JSONP'
             ]
         }
     ],
