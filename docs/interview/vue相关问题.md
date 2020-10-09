@@ -121,3 +121,6 @@ this.$emit('update:foo', newValue)
 - 路由懒加载(使用`import`)。
 - `webpack`提供的`require.ensure()`，`vue-router`配置路由，使用`webpack`的`require.ensure`技术，也可以实现按需加载。这种情况下，多个路由指定相同的`chunkNam`，会合并打包成一个`js`文件。
 :::
+
+## vue中判断用户首次进入页面还是刷新页面
+![img](/dovis-blog/other/54.png)
