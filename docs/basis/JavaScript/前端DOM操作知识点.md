@@ -29,3 +29,46 @@ var referrer = document.referrer //保存着链接到当前页面的那个页面
 
 不过设置成`wrox.com`松散状态之后，再设置回去就会报错了。
 :::
+
+## jquery dom的api对应原生
+1. 获取dom属性
+```js
+// jquery
+$(element).attr('target') // 返回被选元素的属性值。
+$(element).attr('target',value) // 设置
+
+// js
+document.getElementsByTagName("a")[0].getAttribute("target"); // 返回
+document.getElementsByTagName("a")[0].setAttribute("target", value) // 设置
+```
+
+2. 获取dom外部宽度
+```js
+$(selector).outerWidth(includeMargin) // includeMargin 可选值，默认为false，即不包含margin，只有包含padding+border
+// includeMargin 为false时
+offsetWidth       //返回元素的宽度（包括元素宽度、内边距和边框，不包括外边距）
+
+$(selector).innerWidth() // 
+clientWidth        //返回元素的宽度（包括元素宽度、内边距，不包括边框和外边距）
+
+$(selector).width() // 获取元素宽度
+$(selector).width(value) // 设置元素宽度
+
+dom.style.width
+```
+
+3. 方法返回或设置匹配元素的滚动条的水平位置。
+滚动条的水平位置指的是从其左侧滚动过的像素数。当滚动条位于最左侧时，位置是 0。
+```js
+$(selector).scrollLeft() // 返回
+$(selector).scrollLeft(position) // 设置 不用带单位
+
+// 原生 设置（也可以获取）
+dom.scrollLeft = value
+
+// 也可以用scrollTo方法把内容滚动到指定的坐标。
+scrollTo(xpos,ypos)
+```
+::: tip
+这两个属性只能用于元素设置了`overflow`的`css`样式中。否者这两个属性没有任何意义。且`overflow`的值不能为`visible`，但可以为`hidden,auto,scroll`的之中，但是`hidden`最常见。
+:::
