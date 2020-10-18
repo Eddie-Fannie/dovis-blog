@@ -459,14 +459,16 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
-               
+               '/algorithm/DataStructure/Tree/对称二叉树',
+               '/algorithm/DataStructure/Tree/翻转二叉树'
             ]
         },
         {
             title: '中等题',
             collapsable: false,
             children: [
-              
+              '/algorithm/DataStructure/Tree/最大二叉树',
+              '/algorithm/DataStructure/Tree/从前序与中序遍历序列构造二叉树'
             ]
         }
     ],

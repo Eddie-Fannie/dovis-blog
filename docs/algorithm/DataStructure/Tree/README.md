@@ -151,3 +151,6 @@ var preorderTraversal = function(root) {
     return res
 };
 ```
+
+## 递归二叉树的秘笈
+> 写树相关的算法，简单说就是，先搞清楚当前 root 节点该做什么，然后根据函数定义递归调用子节点，递归调用会让孩子节点做相同的事情。
