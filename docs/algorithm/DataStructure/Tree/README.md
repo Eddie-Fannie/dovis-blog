@@ -98,7 +98,7 @@ var preorderTraversal = function (root) {
 
 **中序遍历**
 ```js
-var preorderTraversal = function(root) {
+var inorderTraversal = function(root) {
     const res = []
     function traversal(root) {
         if(root) {
