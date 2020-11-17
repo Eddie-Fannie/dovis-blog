@@ -1,7 +1,7 @@
 # 链表
 > 链表中的元素在内存中并不是连续放置的。每个元素由一个存储元素本身的节点和一个指向下一个元素的引用（也称指针或链接）组成。在数组中，我们可以**直接访问任何位置的任何元素，而要想访问链表中间的一个元素，则需要从起点（表头）开始迭代链表直到找到所需的元素。**
 
-把存储数据元素信息的域称为数据域，把存储直接后继位置的域称为指针域。指针域中存储的信息称作指针或链。这两部分信息组成数据元素`ai(下标)`的存储映像，称为结点(Node)。链表最后一个结点指针指向空Null
+把存储数据元素信息的域称为数据域，把存储直接后继位置的域称为指针域。指针域中存储的信息称作指针或链。这两部分信息组成数据元素`ai(下标)`的存储映像，称为结点(`Node`)。链表最后一个结点指针指向空`Null`
 
 为了更加方便对链表进行操作，会在单链表的第一个结点前附设一个结点，称为头结点。**若线性表为空表，则头结点的指针域为空**
 ```bash
@@ -10,7 +10,7 @@ node = value + next(指向下一个元素的引用)
 p->data = ai(数据域), p->next->data = ai+1
 ```
 
-**头指针是指链表指向第一个结点的指针，若链表有头结点，则是指向头结点的指针。头指针的链表的必要元素。整个链表的存取必须从头指针开始进行。头结点是为了操作的统一和方便而设立的，放在第一个元素的结点之前，其数据域一般无意义。
+**头指针是指链表指向第一个结点的指针，若链表有头结点，则是指向头结点的指针。头指针的链表的必要元素。整个链表的存取必须从头指针开始进行。头结点是为了操作的统一和方便而设立的，放在第一个元素的结点之前，其数据域一般无意义。**
 
 1. 循环列表时可以拿头结点来参照，如：`head = head.next`
 2. 链表插入
@@ -37,28 +37,28 @@ p->next = p->next->next
 
 ```js
 export class Node {
-    constructor(element) {
-        this.element = element;
-        this.next = undefined;
-    }
+  constructor(element) {
+    this.element = element;
+    this.next = undefined;
+  }
 }
 ```
 ## 向链表尾部添加元素
 > 链表为空，添加的是第一个元素；链表不为空，向其追加元素。
 ```js
 push(element) {
-    const node = new Node(element)
-    let current;
-    if(this.head == null) {
-        this.head = node;
-    } else {
-        current = this.head;
-        while(current.next != null) {
-            current = current.next;
-        }
-        current.next = node
+  const node = new Node(element)
+  let current;
+  if(this.head == null) {
+    this.head = node;
+  } else {
+    current = this.head;
+    while(current.next != null) {
+        current = current.next;
     }
-    this.count++
+    current.next = node
+  }
+  this.count++
 }
 ```
 > 向空列表添加一个元素。当我们创建一个`LinkedList`对象时，`head`会指向`undefined`（或者是`null`）。链表最后一个节点的下一个元素始终是`undefined`或`null`。
