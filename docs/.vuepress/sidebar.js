@@ -349,7 +349,9 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/最长单词',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/青蛙跳台阶',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/括号生成',
-                '/algorithm/AlgorithmicThinking/DynamicProgramming/打家劫舍'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/打家劫舍',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/买卖股票最佳时机',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/连续数列'
             ]
         }
     ],
