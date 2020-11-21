@@ -351,7 +351,8 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/括号生成',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/打家劫舍',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/买卖股票最佳时机',
-                '/algorithm/AlgorithmicThinking/DynamicProgramming/连续数列'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/连续数列',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/判断子序列'
             ]
         }
     ],
