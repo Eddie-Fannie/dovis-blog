@@ -153,4 +153,95 @@ var preorderTraversal = function(root) {
 ```
 
 ## 递归二叉树的秘笈
-> 写树相关的算法，简单说就是，先搞清楚当前 root 节点该做什么，然后根据函数定义递归调用子节点，递归调用会让孩子节点做相同的事情。
+> 写树相关的算法，简单说就是，先搞清楚当前 `root` 节点该做什么，然后根据函数定义递归调用子节点，递归调用会让孩子节点做相同的事情。
+
+深度遍历模板：
+- N叉树
+```js
+function dfs(root) {
+ if (满足特定条件）{
+  // 返回结果 or 退出搜索空间
+ }
+ for (const child of root.children) {
+        dfs(child)
+ }
+}
+
+```
+- 二叉树
+```js
+function dfs(root) {
+ if (满足特定条件）{
+  // 返回结果 or 退出搜索空间
+ }
+    dfs(root.left)
+    dfs(root.right)
+}
+```
+- 前序遍历
+```js
+function dfs(root) {
+ if (满足特定条件）{
+  // 返回结果 or 退出搜索空间
+    }
+    // 主要逻辑
+    dfs(root.left)
+    dfs(root.right)
+}
+```
+- 后序遍历
+```js
+function dfs(root) {
+ if (满足特定条件）{
+  // 返回结果 or 退出搜索空间
+    }
+    dfs(root.left)
+    dfs(root.right)
+    // 主要逻辑
+}
+```
+
+广度遍历模板
+- 标记层：
+```python
+class Solution:
+    def bfs(k):
+        # 使用双端队列，而不是数组。因为数组从头部删除元素的时间复杂度为 N，双端队列的底层实现其实是链表。
+        queue = collections.deque([root])
+        # 记录层数
+        steps = 0
+        # 需要返回的节点
+        ans = []
+        # 队列不空，生命不止！
+        while queue:
+            size = len(queue)
+            # 遍历当前层的所有节点
+            for _ in range(size):
+                node = queue.popleft()
+                if (step == k) ans.append(node)
+                if node.right:
+                    queue.append(node.right)
+                if node.left:
+                    queue.append(node.left)
+            # 遍历完当前层所有的节点后 steps + 1
+            steps += 1
+        return ans
+```
+
+- 不标记层
+```python
+class Solution:
+    def bfs(k):
+        # 使用双端队列，而不是数组。因为数组从头部删除元素的时间复杂度为 N，双端队列的底层实现其实是链表。
+        queue = collections.deque([root])
+        # 队列不空，生命不止！
+        while queue:
+            node = queue.popleft()
+            # 由于没有记录 steps，因此我们肯定是不需要根据层的信息去判断的。否则就用带层的模板了。
+            if (node 是我们要找到的) return node
+            if node.right:
+                queue.append(node.right)
+            if node.left:
+                queue.append(node.left)
+        return -1
+```
