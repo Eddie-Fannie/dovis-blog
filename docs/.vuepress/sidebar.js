@@ -175,7 +175,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/another/Git/如何使用gitflow',
-                '/another/Git/工作中使用git'
+                '/another/Git/工作中使用git',
+                '/another/Git/Git相关基础知识'
             ]
         }
     ],
@@ -392,7 +393,9 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
-                '/algorithm/DataStructure/Array/种花问题'
+                '/algorithm/DataStructure/Array/种花问题',
+                '/algorithm/DataStructure/Array/比较字符串最小字母出现频次',
+                '/algorithm/DataStructure/Array/词典中最长的单词',
             ]
         },
         {
@@ -463,7 +466,11 @@ module.exports = {
             collapsable: false,
             children: [
                '/algorithm/DataStructure/Tree/对称二叉树',
-               '/algorithm/DataStructure/Tree/翻转二叉树'
+               '/algorithm/DataStructure/Tree/翻转二叉树',
+               '/algorithm/DataStructure/Tree/路径总和',
+               '/algorithm/DataStructure/Tree/从上到下打印二叉树',
+               '/algorithm/DataStructure/Tree/二叉树的最大深度',
+               '/algorithm/DataStructure/Tree/N叉树的遍历',
             ]
         },
         {
