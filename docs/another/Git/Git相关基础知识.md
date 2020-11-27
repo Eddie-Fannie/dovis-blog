@@ -117,5 +117,5 @@ $ git mv htllo.html world.html # 状态变为renamed
 
 ## 修改commit记录
 - `git rebase`命令来修改
-- 先把`Commit`用`git reset`命令删除，整理后重新commit
-- 使用`--amend`参数改动最后一次commit
+- 先把`Commit`用`git reset`命令删除，整理后重新`commit`
+- 使用`--amend`参数改动最后一次`commit`

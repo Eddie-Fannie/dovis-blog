@@ -9,15 +9,27 @@ var proxy = new Proxy(target, handler);
 例子：
 ```js
 var proxy = new Proxy({}, {
-    get: function(target,property) {
-        return 35
-    }
+  get: function(target,property) {
+      return 35
+  }
 })
 proxy.time // 35
-```
-> 如果没有Proxy介入，操作就是要访问目标对象的。第二个参数为配置对象，`get`方法用来拦截对目标对象属性的访问请求。该方法同样也有两个参数，`target`代表则目标对象，`property`表示所要访问的属性。可以看到由于拦截函数总是返回35，所以访问任何属性都将得到35。
 
-> 要想Proxy起作用，要针对Proxy实例进行操作才行。如果配置对象没有设置任何拦截，则**等同于直通目标原对象**
+const person = {
+    name:'tom'
+}
+const proxy = new Proxy(person,{
+    get(target,prop) {
+        console.log(`${prop} is ${target[prop]}`)
+        return target[prop]
+    }
+})
+console.log(proxy.name) // tom
+console.log(person === proxy) // false
+```
+> 如果没有`Proxy`介入，操作就是要访问目标对象的。第二个参数为配置对象，`get`方法用来拦截对目标对象属性的访问请求。该方法同样也有两个参数，`target`代表则目标对象，`property`表示所要访问的属性。可以看到由于拦截函数总是返回`35`，所以访问任何属性都将得到`35`。
+
+> 要想`Proxy`起作用，要针对`Proxy`实例进行操作才行。如果配置对象没有设置任何拦截，则**等同于直通目标原对象**
 
 ## Proxy实例的方法（设置拦截多个操作）
 - `get(target, propKey, receiver)`
