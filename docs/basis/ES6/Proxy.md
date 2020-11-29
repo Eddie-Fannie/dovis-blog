@@ -35,7 +35,7 @@ console.log(person === proxy) // false
 - `get(target, propKey, receiver)`
 > 拦截对象属性的读取，最后一个参数可选（参考`Reflect.get`）
 + 例子
-    - get方法可以继承
+    - `get`方法可以继承
     ```js
     let proto = new Proxy({}, {
         get(target, propertyKey,receiver) {
@@ -46,7 +46,7 @@ console.log(person === proxy) // false
     let obj = Object.create(proto)
     obj.xxx // "GET xxx"
     ```
-    - 如果一个属性不可配置或不可写，则该属性不能被代理。通过Proxy访问该属性就会报错。
+    - 如果一个属性不可配置或不可写，则该属性不能被代理。通过`Proxy`访问该属性就会报错。
     ```js
     const target = Object.defineProperties({},{
         foo: {
@@ -63,6 +63,26 @@ console.log(person === proxy) // false
     const proxy = new Proxy(target, handler)
     proxy.foo // TypeError: Invariant check failed
     ```
+
+```js
+var person = {
+  name: '张三'
+}
+var proxy = new Proxy(person,{
+  get: function(target, property) {
+    if(property in target) {
+      return target[property]
+    } else {
+      throw new ReferenceError('...')
+    }
+  }
+})
+proxy.name // 张三
+proxy.age // 报错
+// 如果没有这个拦截函数，访问不存在的属性只会返回undefined
+
+// get方法可以继承
+```
 
 - `set(target,propKey,value,receiver)`
 > 拦截对象属性的设置，返回一个布尔值
@@ -119,3 +139,43 @@ p.a // 'a' = 2
 
 - `construct(target, args)`
 > 拦截Proxy实例作为构造函数调用的操作。比如`new Proxy(...args)`
+
+## `Object.defineProperty` vs `Proxy`的区别
+- `Object.defineProperty`无法一次性监听所有属性，必须遍历或者递归来实现。
+
+```js
+const person = {
+  name:'tom',
+  age: 22
+}
+
+Object.defineProperty(person, 'name',{
+  get() {
+      return value
+  },
+  set(newVal) {
+      value = newVal
+  }
+})
+person.name = 'linjiaheng'
+
+// 多个属性
+let girl = {
+  name: "marry",
+  age: 22
+}
+/* Proxy 监听整个对象*/
+girl = new Proxy(girl, {
+  get() {}
+  set() {}
+})
+/* Object.defineProperty */
+Object.keys(girl).forEach(key => {
+  Object.defineProperty(girl, key, {
+    set() {},
+    get() {}
+  })
+})
+```
+- `Object.defineProperty`无法监听新增加的属性，需要手动再去做一次监听。
+- `Object.defineProperty`可以监听数组的变化，却无法对`push/shift/pop/unshift`等方法进行响应。对于新增的数组项监听不到。

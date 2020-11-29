@@ -44,14 +44,14 @@ function resolve(value) {
     setTimeout(() => {
         self.value = value;
         self.onFulfilled(self.value)
-    })
+    },0)
 }
 
 function reject(error) {
     setTimeout(() => {
         self.error = error;
         self.onRejected(self.error)
-    })
+    },0)
 }
 ```
 
@@ -225,9 +225,9 @@ const REJECTED = "rejected";
 
 function MyPromise(fn) {
     const self = this;
-    self.value = null;
+    self.value = null;//初始值
     self.error = null;
-    self.status = PENDING;
+    self.status = PENDING;//初始状态
     self.onFulfilledCallbacks = [];
     self.onRejectedCallbacks = [];
 
@@ -422,3 +422,167 @@ MyPromise.reject = function(error) {
 ::: tip
 `all`的原理就是返回一个`promise`，在这个`promise`中给所有传入的`promise`的`then`方法中都注册上回调，回调成功了就把值放到结果数组中，所有回调都成功了就让返回的这个`promise`去`reslove`，把结果数组返回出去，`race`和`all`大同小异，只不过它不会等所有`promise`都成功，而是谁快就把谁返回出去
 :::
+
+## 自己手写版本
+```js
+function myPromise(excutor) {
+    var self = this
+    self.status = 'pending'
+    self.data = undefined
+    self.callbacks = []  // 每个元素的结构：{onResolved(){}，onRejected(){}}
+    function resolve(value) {
+        if(self.status !== 'pending') return false;
+        //执行callbacks里的函数，并保存data,并将当前promise状态改为resolved
+        self.status = 'resolved'
+        self.data = value
+        if(self.callbacks.length > 0) {
+            self.callbacks.forEach(callbackObj => {
+                callbackObj.onResolved(value)
+            });
+        }
+    }
+    function reject(value) {
+        if(self.status !== 'pending') return false;
+        self.status = 'rejected'
+        self.data = value
+        if(self.callbacks.length > 0) {
+            self.callbacks.forEach(callbackObj => {
+                callbackObj.onRejected(value)
+            })
+        }
+    }
+    // 实现当在执行excutor的时候，执行异常时直接执行reject方法
+    try {
+        excutor(resolve,reject)
+    } catch (error) {
+        reject(error)
+    }
+   
+}
+myPromise.prototype.then = function(onResolved,onRejected){
+    onResolved = typeof onResolved === 'function'? onResolved: value => value
+    onRejected = typeof onRejected === 'function'? onRejected: reason => {throw reason}
+
+    var self = this
+
+    return new myPromise((resolve,reject)=>{
+       /*
+        调用指定回调函数的处理，根据执行结果。改变return的promise状态
+         */
+        function handle(callback) {
+            try{
+                const result = callback(self.data)
+                if (result instanceof myPromise){
+                    // 2. 如果回调函数返回的是promise，return的promise的结果就是这个promise的结果
+                    result.then(
+                        value => {resolve(value)},
+                        reason => {reject(reason)}
+                    )
+                } else {
+                    // 1. 如果回调函数返回的不是promise，return的promise的状态是resolved，value就是返回的值。
+                    resolve(result)
+                }
+            }catch (e) {
+                //  3.如果执行onResolved的时候抛出错误，则返回的promise的状态为rejected
+                reject(e)
+            }
+        }
+        if(self.status === 'pending'){
+            // promise当前状态还是pending状态，将回调函数保存起来
+            self.callbacks.push({
+                onResolved(){
+                    handle(onResolved)
+                },
+                onRejected(){
+                    handle(onRejected)
+                }
+            })
+        }else if(self.status === 'resolved'){
+            setTimeout(()=>{
+                handle(onResolved)
+            })
+        }else{ // 当status === 'rejected'
+            setTimeout(()=>{
+                handle(onRejected)
+            })
+        }
+    })
+
+}
+
+myPromise.prototype.catch = function(onRejected) {
+    // catch方法的作用跟then里的第二歌回调函数一样
+    return this.then(undefined,onRejected)
+}
+myPromise.resolve = function(value) {
+ // 可以传入成功状态的promise/失败的promise/不是promise
+ return new myPromise((resolve,reject) => {
+    if(value instanceof myPromise) {
+        value.then(
+            value => {resolve(value)},
+            reason => {reject(reason)}
+        )
+    } else {
+        resolve(value)
+    }
+ })
+}
+myPromise.reject = function(reason) {
+    // 返回一个状态rejected的promise即可
+    return new myPromise((resolve,reject) => {
+        reject(reason)
+    })
+}
+myPromise.all = function(promises) {
+    const values = new Array(promises.length)
+    var resolvedCount = 0 //计状态为resolved的promise的数量
+    return new myPromise((resolve,reject) => {
+        // 遍历promises，获取每个promise的结果
+        promises.forEach((p,index) => {
+            // promises数组不一定都是promise对象，所以要利用resolve包装一下
+            myPromise.resolve(p).then(
+                value => {
+                    // p状态为resolved，将值保存起来
+                    values[index] = value
+                    resolvedCount++;
+                    // 如果全部p都为resolved状态，return的promise状态为resolved
+                    if(resolvedCount === promises.length){
+                        resolve(values)
+                    }
+                },
+                reason => {
+                    //只要有一个失败，return的promise状态就为reject
+                    reject(reason)
+                }
+            )
+        })
+    })
+}
+myPromise.race = function(promises) {
+    return new myPromise((resolve,reject) => {
+        promises.forEach((p,index) => {
+            myPromise.resolve(p).then(
+                value => {
+                    // 只要有一个成功，返回的promise的状态九尾resolved
+                    resolve(value)
+                },
+                reason => { //只要有一个失败，return的promise状态就为reject
+                    reject(reason)
+                }
+            )
+        })
+    })
+}
+
+myPromise.allSettled = function(promises) {
+    return myPromise.all(promises.map(p => myPromise.resolve(p)
+        .then(value => ({
+            status: 'resolved',
+            value
+        }), reason => ({
+            status: 'rejected',
+            reason
+        }))
+    ))
+}
+```
