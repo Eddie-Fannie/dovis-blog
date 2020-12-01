@@ -384,5 +384,8 @@ div{
 white-space: nowrap;
 text-overflow: ellipsis;
 overflow: hidden;
-word-break: break-all;
 ```
+
+## 表格自动换行
+`word-break`:`noraml`使用浏览器默认的换行规则；`break-all`：允许单词内换行；`keep-all`：只能在半角空格或连字符处换行；
+`word-wrap`：`normal`是用浏览器默认的换行规则；`break-word`：在长单词或`url`地址内部换行；
