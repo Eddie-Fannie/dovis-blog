@@ -110,7 +110,7 @@ if (a == 1 && a == 2 && a == 3) {
   console.log('yay');
 }
 ```
-7. `href="#"`与`href='javascript：void（0）'`的区别
+7. **`href="#"`与`href='javascript：void（0）'`的区别**
 `href="#"`方法其实也是空连接的意思，但是点击之后会自动跳转到页面的最上面，因为用了这个方法就相当于点击了一个锚记，但是这个锚记又没写`ID`，所以就默认跳转到页面顶部。但是不整体刷新页面的情况下，可以使用`void(0)`。
 ```bash
 javascript:void (expression) # 用法
@@ -120,6 +120,9 @@ javascript:void (expression) # 用法
 <a href="javascript:void(document.form.submit())"> 单此处提交表单</a> #单此处提交表单
 ```
 > 链接（`href`）直接使用`javascript:void(0)`在IE中可能会引起一些问题，比如：造成gif动画停止播放等，所以，最安全的办法还是使用`“####”`。`href`上加`js`是为了防止链接跳转，以前用`#`但是在部分浏览器下回跳转到页面顶部。这样就不好了，于是有人想到了添加`onclick=“return false”`
+
+8. **`return`和`return false`的区别**
+> `return false`阻止默认行为，取消事件冒泡，以及停止回掉执行返回。`return`就是`return undefined`停止后续函数执行。
 
 ## 中级题
 1. **在JavaScript文件开头包含`use strict`意义**

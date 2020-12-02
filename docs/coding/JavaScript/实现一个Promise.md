@@ -431,7 +431,7 @@ function myPromise(excutor) {
     self.data = undefined
     self.callbacks = []  // 每个元素的结构：{onResolved(){}，onRejected(){}}
     function resolve(value) {
-        if(self.status !== 'pending') return false;
+        if(self.status !== 'pending') return;
         //执行callbacks里的函数，并保存data,并将当前promise状态改为resolved
         self.status = 'resolved'
         self.data = value
@@ -442,7 +442,7 @@ function myPromise(excutor) {
         }
     }
     function reject(value) {
-        if(self.status !== 'pending') return false;
+        if(self.status !== 'pending') return;
         self.status = 'rejected'
         self.data = value
         if(self.callbacks.length > 0) {

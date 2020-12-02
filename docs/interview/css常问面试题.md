@@ -120,7 +120,7 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     > `clear`属性表示设置元素的左右边界不允许出现浮动元素
     - 父级元素触发`BFC`
     - 包含浮动元素的父标签添加样式`overflow:hidden/auto;`
-    - 父级`div`定义为在`zoom`
+    - 父级`div`定义伪元素和`zoom:1`
     - 建立伪类选择器
     ```html
     //添加:after伪元素
@@ -386,3 +386,10 @@ text-overflow: ellipsis;
 overflow: hidden;
 word-break: break-all;
 ```
+
+## zoom/scale的区别
+- 控制缩放的值不一样。`zoom`更全面，但是不能是负数，只能等比例控制；而`scale`虽然只能是数值，但是能负数，可以只控制`1`个维度。
+- `zoom`的缩放是相对于左上角的；而`scale`默认是居中缩放(`transfrom-origin`可以改变）；
+- `zoom`的缩放改变了元素占据的空间大小；而`scale`的缩放占据的原始尺寸不变，页面布局不会发生变化；
+- 对文字的缩放规则不一致。`zoom`缩放依然受限于最小`12`像素中文大小限制；而`scale`就是纯粹的对图形进行比例控制，文字`50%`原来尺寸。
+- 在文档流中`zoom`加在任意一个元素上都会引起一整个页面的重新渲染，而`scale`只是在当前的元素上重绘。
