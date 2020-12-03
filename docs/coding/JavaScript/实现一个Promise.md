@@ -585,4 +585,14 @@ myPromise.allSettled = function(promises) {
         }))
     ))
 }
+
+myPromise.prototype.finally = function(fn) {
+    return this.then(value => {
+       fn();
+       return value;
+    }, reason => {
+        fn();
+        throw reason;
+    });
+};
 ```

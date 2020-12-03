@@ -31,7 +31,7 @@ export default install (_Vue) {
 
 我们采用 `Vue.mixin` 方法将 `vuexInit` 方法混淆进 `beforeCreate` 钩子中，并用 `Vue` 保存 Vue 对象。那么 `vuexInit` 究竟实现了什么呢？
 
-我们知道，在使用 Vuex 的时候，我们需要将 `store` 传入到 Vue 实例中去。
+我们知道，在使用 Vuex 的时候，我们需要将 `store` 传入到 `Vue` 实例中去。
 
 ```javascript
 /*将store放入Vue创建时的option中*/
@@ -41,7 +41,7 @@ new Vue({
 });
 ```
 
-但是我们却在每一个 vm 中都可以访问该 `store`，这个就需要靠 `vuexInit` 了。
+但是我们却在每一个`vm`中都可以访问该 `store`，这个就需要靠 `vuexInit` 了。
 
 ```javascript
 function vuexInit () {
@@ -106,9 +106,9 @@ Vue.prototype.globalData = globalData;
 <div>{{globalData.d}}</div>
 ```
 
-上述代码在全局有一个 `globalData`，它被传入一个 `Vue` 对象的 `data` 中，之后在任意 Vue 模板中对该变量进行展示，因为此时 `globalData` 已经在 Vue 的 `prototype` 上了所以直接通过 `this.prototype` 访问，也就是在模板中的 `{ {globalData.d} }`。此时，`setTimeout` 在 1s 之后将 `globalData.d` 进行修改，我们发现模板中的 `globalData.d` 发生了变化。其实上述部分就是 Vuex 依赖 Vue 核心实现数据的“响应式化”。
+上述代码在全局有一个 `globalData`，它被传入一个 `Vue` 对象的 `data` 中，之后在任意 `Vue` 模板中对该变量进行展示，因为此时 `globalData` 已经在 `Vue` 的 `prototype` 上了所以直接通过 `this.prototype` 访问，也就是在模板中的 `{ {globalData.d} }`。此时，`setTimeout` 在 `1s` 之后将 `globalData.d` 进行修改，我们发现模板中的 `globalData.d` 发生了变化。其实上述部分就是 `Vuex` 依赖 `Vue` 核心实现数据的“响应式化”。
 
-讲完了 Vuex 最核心的通过 Vue 进行数据的「响应式化」，接下来我们再来介绍两个 `Store` 的 API。
+讲完了 `Vuex` 最核心的通过 `Vue` 进行数据的「响应式化」，接下来我们再来介绍两个 `Store` 的 API。
 
 ### commit
 
@@ -127,7 +127,7 @@ commit (type, payload, _options) {
 
 ### dispatch
 
-`dispatch` 同样道理，用于触发 action，可以包含异步状态。
+`dispatch` 同样道理，用于触发 `action`，可以包含异步状态。
 
 ```javascript
 dispatch (type, payload) {
