@@ -1,8 +1,8 @@
 # 如何生成真实DOM
-[虚拟DOM](/dovis-blog/frame/Vue/虚拟dom)最核心的部分是`patch`（patching算法），可以将vnode渲染成真实的DOM。
+[虚拟DOM](/dovis-blog/frame/Vue/虚拟dom)最核心的部分是`patch`（patching算法），可以将`vnode`渲染成真实的`DOM`。
 
 ## update
-> Vue的`_update`是实例的⼀个私有⽅法，它被调⽤的时机有2个，⼀个是⾸次渲染，⼀个是数据更新的时候；由于我们这⼀章节只分析⾸次渲染部分，数据更新部分会在之后分析响应式原理的时候涉及。`_update`⽅法的作⽤是把VNode渲染成真实的DOM。
+> Vue的`_update`是实例的⼀个私有⽅法，它被调⽤的时机有2个，⼀个是⾸次渲染，⼀个是数据更新的时候；由于我们这⼀章节只分析⾸次渲染部分，数据更新部分会在之后分析响应式原理的时候涉及。`_update`⽅法的作⽤是把`VNode`渲染成真实的`DOM`。
 
 ```js
 Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
