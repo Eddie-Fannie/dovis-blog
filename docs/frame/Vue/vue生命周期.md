@@ -1,5 +1,5 @@
 # vue生命周期
-> 每个`vue`实例在被创建之前都要经过一系列的初始化过程。设置数据监听，编译模板，挂载实例到`DOM`中，在数据变化时更新`DOM`等。
+> 每个`vue`实例在被创建之前都要经过一系列的初始化过程。设置数据监听，编译模板，挂载实例到`DOM`中，在数据变化时更新`DOM`等。**在`Vue`生命周期钩子会自动绑定 `this` 上下文到实例中，因此你可以访问数据，对 `property` 和方法进行运算**
 
 ![img](/dovis-blog/vue/lifecycle.png)
 
@@ -19,6 +19,7 @@ function Vue (options) {
 }
 ```
 生命周期的初始化流程在`this._init`中实现。
+
 ### `beforeCreate`&`created`
 > `beforeCreate`和`created`函数都是在实例化`Vue`的阶段，在`_init`方法中执行的。
 
@@ -312,9 +313,27 @@ export function initState (vm: Component) {
 
 ### 初始化`provide`
 
+::: tip
+`beforeCreate -> created`
+- 初始化`vue`实例，进行数据观测
+
+`created`
+- 完成数据观测，属性和方法运算，`watch/event`事件回调的配置
+- 可调用`methods`中的方法，访问/修改`data`数据触发响应式渲染`dom`，可以通过`computed`和`watch`完成数据计算
+- 此时`vm.$el`并没有被创建
+:::
+
 ## 模板编译阶段
 在`created`和`beforeMount`之间的阶段是模板编译阶段。目标是将模板编译为渲染函数。构建版本的不存在这个阶段。
-> 当使用`vue-loader`或`vueify`时，*.vue文件内部的模板会在构建时预编译，所以最终打好包里是不需要编译器的，用运行版本即可。**由于模板这时已经预编译成渲染函数，所以生命周期中并不存在模板编译阶段，初始化阶段的下一个生命周期直接就是挂载阶段。**
+
+> 当使用`vue-loader`或`vueify`时，`*.vue`文件内部的模板会在构建时预编译，所以最终打好包里是不需要编译器的，用运行版本即可。**由于模板这时已经预编译成渲染函数，所以生命周期中并不存在模板编译阶段，初始化阶段的下一个生命周期直接就是挂载阶段。**
+
+::: tip
+`created` -> `beforeMount`
+- 判断是否存在`el`选项，若不存在则停止编译，直到调用`vm.$mount(el)`才会继续编译
+- 优先级：`render` -> `template` -> `outerHTML`
+- `vm.el`获取到的是挂载`DOM`的
+:::
 
 ## 挂载阶段
 `beforeMount`到`mounted`钩子函数之间就是挂载阶段。挂载过程中，vue.js会开启`Watcher`来持续追踪依赖的变化。当数据发生变化时，`Watcher`会通知虚拟`DOM`重新渲染视图，并且会在渲染视图前触发`beforeUpdate`钩子函数，渲染完毕后触发`updated`钩子函数。
@@ -323,7 +342,40 @@ export function initState (vm: Component) {
 1. 当`data`被修改时就会先调用`beforeUpdate`。然后重新渲染并虚拟`DOM`并把应用更新。
 2. 更新完成后调用`updated`函数。
 :::
+
 ### `beforeMount`&`mounted`
+::: tip
+`beforeMount`
+- 此阶段可以获取到`vm.el`
+- 此阶段`vm.el`虽已完成`DOM`初始化，但并未挂载在`el`选项上
+
+`beforeMount` -> `mounted`
+- 此阶段`vm.el`完成挂载，`vm.$el`生成的`DOM`替换了`el`选项对应的`DOM`
+
+`mounted`
+- `vm.el`已完成`DOM`的挂载与渲染，此刻打印`vm.$el`，发现之前的挂载点及内容已被替换成新的`DOM`
+
+`beforeUpdate`
+- 更新的数据必须是被渲染在模板上的（`el`/`tempalte`/`render`之一）
+- 此时`view`层还未更新
+- 若在`beforeUpdate`中再次修改数据，不会再次触发更新方法。
+
+`updated`
+- 完成`view`层更新
+- 若再次修改数据，会再次触发更新方法`beforeUpdate/updated`
+:::
 
 ## 卸载阶段
 应用调用`vm.$destroy`方法后，Vue.js的生命周期会进入卸载阶段。在这个阶段，vue.js会将自身从父组件中删除，取消实例上所有依赖的追踪并且移除所有的事件监听器。
+
+### `beforeDestroy`&`destroyed`
+::: tip
+`beforeDestroy`
+- 实例被销毁前调用，此时实例属性与方法仍可访问
+
+`destroyed`
+- 完全销毁一个实例。可清理它与其他实例的连接，解绑全部指令及事件监听器
+- 并不能清除`DOM`，仅仅销毁实例
+:::
+## `keep-alive`缓存组件
+### `activated`&`deactivated`

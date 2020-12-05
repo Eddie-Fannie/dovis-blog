@@ -131,7 +131,8 @@ module.exports = {
                 '/frame/Vue/生成真实dom',
                 '/frame/Vue/vue生命周期',
                 '/frame/Vue/初始化状态',
-                '/frame/Vue/模板编译'
+                '/frame/Vue/模板编译',
+                '/frame/Vue/Vuex原理'
             ]
         }
     ],
@@ -471,6 +472,8 @@ module.exports = {
                '/algorithm/DataStructure/Tree/从上到下打印二叉树',
                '/algorithm/DataStructure/Tree/二叉树的最大深度',
                '/algorithm/DataStructure/Tree/N叉树的遍历',
+               '/algorithm/DataStructure/Tree/从根到叶的二进制之和',
+               '/algorithm/DataStructure/Tree/平衡二叉树'
             ]
         },
         {
