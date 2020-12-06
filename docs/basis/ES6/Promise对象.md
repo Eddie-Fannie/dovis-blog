@@ -630,14 +630,7 @@ function onFinally() {
 
 ### 用法
 1. `async`函数返回一个`Promise`对象，可以使用`then`方法添加回调函数。`async` 直接将返回值使用`Promise.resolve()` 进行包裹（与 `then` 处理效果相同）。当函数执行时，一旦遇到`await`就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
-```js
-async function f() {
-    return 'hello world'
-}
 
-f().then(v => console.log(v))
-// hello world
-```
 2. `await` 只能配套 `async` 使用， `await` 内部实现了 `generator` ， `await` 就是 `generator` 加上`Promise` 的语法糖，且内部实现了自动执行 `generator` 。
 
 > `async` 和 `await` 可以说是异步终极解决方案了，相比直接使用 `Promise` 来说，优势在于处理 `then` 的调用链，能够更清晰准确的写出代码，毕竟写一大堆 `then` 也很恶心，并且也能优雅地解决回调地狱问题。当然也存在一些缺点，因为 `await` 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 `await` 会导致性能上的降低。
@@ -686,4 +679,14 @@ async function f() {
         .catch(e => console.log(e))
     return await Promise.resolve('Hello world')
 }
+```
+
+6. `async`函数内部`return`语句返回的值，会成为`then`方法回调函数的参数。
+```js
+async function f() {
+    return 'hello world'
+}
+
+f().then(v => console.log(v))
+// hello world
 ```

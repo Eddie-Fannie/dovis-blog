@@ -114,6 +114,10 @@ console.log('world')
 - 事件队列中的回调事件，是由各自线程插入到事件队列中的
 - 如此循环
 
+::: tip
+执行栈：当我们调用一个方法的时候，js会生成一个与这个方法对应的执行环境（也叫执行上下文）。这个执行环境中存在着这个方法的私有作用域，上层作用域的指向，方法的参数，这个作用域中定义的变量以及这个作用域的`this`对象。而当一系列方法被依次调用的时候，因为js是单线程的，同一时间只能执行一个方法，于是这些方法被排队在一个单独的地方。这个地方被称为执行栈。
+:::
+
 ## 宏任务，微任务（异步任务,宏任务可以有多个，微任务队列只有一个）
 当一个异步任务入栈时，主线程判断该任务为异步任务，并把该任务交给异步处理模块处理，当异步处理模块处理完打到触发条件时，根据任务的类型，将回调函数压入任务队列。
 
@@ -323,6 +327,10 @@ new Promise(function(resolve, reject) {
 ```
 ![img](/dovis-blog/other/49.png)
 
+::: tip
+这题在`node 10.8`环境下答案为`start children4 2 5 3 7 6`
+:::
+
 3. `Promise`立即执行
 ```js
 const p = function() {
@@ -394,6 +402,10 @@ setTimeout(() => {
 })
 ```
 > `1 7 12 8 2 4 3 5 9 11 10 12`
+
+::: tip
+这题在`node 10.8`环境下答案为`1 7 12 8 2 4 9 11 3 5 10 12`
+:::
 
 5. 钻石题
 ```js
@@ -562,9 +574,76 @@ console.log('script end');
 ```
 ![img](/dovis-blog/other/52.png)
 
+8. 逆天王者
+```js
+console.log('script start');
+
+setTimeout(() => {
+  console.log('Gopal');
+}, 1 * 2000);
+
+Promise.resolve()
+.then(function() {
+  console.log('promise1');
+}).then(function() {
+  console.log('promise2');
+});
+
+
+async function foo() {
+  await bar()
+  console.log('async1 end')
+}
+foo()
+
+async function errorFunc () {
+  try {
+    // Tips:参考：https://zh.javascript.info/promise-error-handling：隐式 try…catch
+    // Promise.reject()方法返回一个带有拒绝原因的Promise对象
+    // Promise.reject('error!!!') === new Error('error!!!')
+    await Promise.reject('error!!!')
+  } catch(e) { // try中的错误也可以捕获到的
+    console.log(e) // error!!!
+  }
+  console.log('async1');
+  return Promise.resolve('async1 success')
+}
+errorFunc().then(res => console.log(res)) //'async1 success'
+
+function bar() {
+  console.log('async2 end') 
+}
+
+console.log('script end');
+```
+> 输出`script start`->`async2 end`->`script end`->`promise1`->`async1 end`->`error!!!`->`async1`->`promise2`->`async1 success`->`Gopal`
 ::: tip
-为了优化`promise`的`then`链写法，用同步的方式编写异步代码，让代码看起来更简洁明了 `await`的真实意思是 `async wait`(异步等待的意思)`await`表达式相当于调用后面返回`promise`的`then`方法，异步（等待）获取其返回值。即 `await<==>promise.then`
+为了优化`promise`的`then`链写法，用同步的方式编写异步代码，让代码看起来更简洁明了 `await`的真实意思是 `async await`(异步等待的意思) `await`表达式相当于调用后面返回`promise`的`then`方法，异步（等待）获取其返回值。即 `await<==>promise.then`
 :::
+
+9. 
+```js
+let resolvePromise = new Promise(resolve => {
+  let resolvedPromise = Promise.resolve()
+  resolve(resolvedPromise);
+  // 提示：resolve(resolvedPromise) 等同于：
+  // Promise.resolve().then(() => resolvedPromise.then(resolve));
+})
+resolvePromise.then(() => {
+  console.log('resolvePromise resolved')
+})
+let resolvedPromiseThen = Promise.resolve().then(res => {
+  console.log('promise1')
+})
+resolvedPromiseThen
+  .then(() => {
+    console.log('promise2')
+  })
+  .then(() => {
+    console.log('promise3')
+  })
+```
+> `promise1`->`promise2`->`resolvePromise resolved`->`promise3`
 
 ## Node中的Event Loop
 > `Node` 的 `Event Loop` 分为 `6` 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。

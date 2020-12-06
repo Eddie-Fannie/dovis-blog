@@ -83,6 +83,7 @@ document.body.clientWidth || document.documentElement.clientWidth // 高度也�
 ```
 
 利用`getBoundlingClientRect()`方法返回一个矩形对象，来确定元素的大小。
+
 ## jquery dom的api对应原生
 1. 获取dom属性
 ```js
