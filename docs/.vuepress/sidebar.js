@@ -66,7 +66,8 @@ module.exports = {
                 '/basis/JavaScript/继承',
                 '/basis/JavaScript/Js节流防抖',
                 '/basis/JavaScript/事件机制',
-                '/basis/JavaScript/web的一些API'
+                '/basis/JavaScript/web的一些API',
+                '/basis/JavaScript/js的错误处理'
             ]
         },
         {
