@@ -6,7 +6,7 @@
 ## 初始化阶段
 如图所示，`new Vue()`到`created`之间的阶段叫做初始化阶段。
 
-> `new Vue()`被调用时发生了什么？
+> `new Vue()`被调用时发生了什么？**合并配置，初始化生命周期，初始化事件中心，初始化渲染，初始化`data,props,computed,watcher`等等。**
 
 ```js
 function Vue (options) {
@@ -50,7 +50,7 @@ Vue.prototype._init = function(options?: Object) {
      if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
-    // 如果用户在实例化Vue.js时传递el选项，则自动开启模板编译阶段与挂载阶段
+    // 如果用户在实例化Vue.js时传递el选项，则自动开启模板编译阶段与挂载阶段，挂载的目标是把模板渲染成最终的DOM
     // 如果没有传递el选项，则不进入下一个生命周期流程
     // 用户需要执行vm.$mount方法，手动开启模板编译阶段和挂载阶段
 }
@@ -343,6 +343,75 @@ export function initState (vm: Component) {
 2. 更新完成后调用`updated`函数。
 :::
 
+```js
+const mount = Vue.prototype.$mount
+Vue.prototype.$mount = function (
+  el?: string | Element,
+  hydrating?: boolean
+): Component {
+  el = el && query(el)
+
+  /* istanbul ignore if */
+  if (el === document.body || el === document.documentElement) {
+    process.env.NODE_ENV !== 'production' && warn(
+      `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
+    )
+    return this
+  }
+
+  const options = this.$options
+  // resolve template/el and convert to render function
+  if (!options.render) {
+    let template = options.template
+    if (template) {
+      if (typeof template === 'string') {
+        if (template.charAt(0) === '#') {
+          template = idToTemplate(template)
+          /* istanbul ignore if */
+          if (process.env.NODE_ENV !== 'production' && !template) {
+            warn(
+              `Template element not found or is empty: ${options.template}`,
+              this
+            )
+          }
+        }
+      } else if (template.nodeType) {
+        template = template.innerHTML
+      } else {
+        if (process.env.NODE_ENV !== 'production') {
+          warn('invalid template option:' + template, this)
+        }
+        return this
+      }
+    } else if (el) {
+      template = getOuterHTML(el)
+    }
+    if (template) {
+      /* istanbul ignore if */
+      if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+        mark('compile')
+      }
+
+      const { render, staticRenderFns } = compileToFunctions(template, {
+        outputSourceRange: process.env.NODE_ENV !== 'production',
+        shouldDecodeNewlines,
+        shouldDecodeNewlinesForHref,
+        delimiters: options.delimiters,
+        comments: options.comments
+      }, this)
+      options.render = render
+      options.staticRenderFns = staticRenderFns
+
+      /* istanbul ignore if */
+      if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+        mark('compile end')
+        measure(`vue ${this._name} compile`, 'compile', 'compile end')
+      }
+    }
+  }
+  return mount.call(this, el, hydrating)
+}
+```
 ### `beforeMount`&`mounted`
 ::: tip
 `beforeMount`
