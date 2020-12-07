@@ -14,4 +14,19 @@ function myInstanceof(left, right) {
     proto = Object.getPrototypeOf(proto);
   }
 }
+
+function myInstanceof(left,right) {
+  if(typeof left !== 'object' || left === null) return false;
+  let leftProto = left.__proto__;
+  let rightProto = right.__proto__
+  while(true) {
+    if(leftProto === null) {
+      return false;
+    }
+    if(leftProto === rightProto) {
+      return true;
+    }
+    leftProto = leftProto.__proto__
+  }
+}
 ```
