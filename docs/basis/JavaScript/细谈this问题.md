@@ -19,7 +19,7 @@
     alert(object.getNameFunc()()) // lin jia heng(非严格模式）
 ```
 
-而下面的例子就可以成功返回“My Object”
+而下面的例子就可以成功返回`“My Object”`
 
 ```javascript
     var name = 'lin jia heng'
@@ -213,16 +213,18 @@ a.func2()       // Cherry
 
 #### bind
 
-> 如果你想将某个函数绑定新的`this`指向并且固定传入几个变量可以在绑定的时候就传入，之后调用新函数传入的参数都会排在后面。**不管我们给函数 `bind` 几次，`fn` 中的 `this` 永远由第一次 `bind` 决定**
+> 如果你想将某个函数绑定新的`this`指向并且固定传入几个变量可以在绑定的时候就传入，**之后调用新函数传入的参数都会排在后面**。**不管我们给函数 `bind` 几次，`fn` 中的 `this` 永远由第一次 `bind` 决定**
 
 ```javascript
 const obj = {}
 function test(...args){
     console.log(this === obj)//true, 因为bind方法把this指向了obj对象
-    console.log(args)
+    console.log(args) // ['lin','jiaheng,'linjiaheng']
 }
 const newFn = test.bind(obj, 'lin', 'jiaheng')//因为bind返回一个新函数，所以要赋值给一个新变量
 newFn('jiahenglin')
+
+
 var a ={
     name : "Cherry",
     fn : function (a,b) {
