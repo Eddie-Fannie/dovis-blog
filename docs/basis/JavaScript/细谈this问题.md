@@ -30,6 +30,7 @@
         }
     }
     alert(object.getNameFunc()) // My Object
+
     var name = 'lin jia heng'
     var object = {
         name: 'My Object',
@@ -63,6 +64,30 @@ func() //undefined
 ```
 
 这就验证了第一个例子中为什么特意表明在非严格模式下才成立了。
+
+3. 
+```js
+var me = {
+    name: 'xiuyan',
+    hello: function() {
+        console.log(`你好，我是${this.name}`)
+    }
+}
+
+var you = {
+    name: 'xiaoming'，
+    hello: function() {
+        var targetFunc = me.hello
+        targetFunc()
+    }
+}
+
+var name = 'BigBear'
+
+// 调用位置
+you.hello()
+```
+> `targetFunc`调用时没有为他指明任何对象前缀，js引擎仍然会认为`targetFunc`是一个挂载在`window`上的方法，进而把`this`指向`window`对象。
 
 ## 作为一个构造函数使用
 
@@ -121,6 +146,7 @@ var obj = {
     }
 }
 obj.func();//obj
+
 var obj = {
     name: 'hh',
     func: () => {
@@ -142,6 +168,7 @@ var obj = {
     }
 }
 obj.func();// Window
+
 var obj = {
     name: 'hh',
     func: function() {
@@ -169,7 +196,7 @@ var f = a.fn;
 f();
 ```
 
-> fn()最后仍然是被`window`调用的，所以`this`指向的也是`window`。`this`的指向并不是在创建的时候就确定并一成不变的，在es5中`this`永远指向最后调用它的那个对象。
+> `fn()`最后仍然是被`window`调用的，所以`this`指向的也是`window`。`this`的指向并不是在创建的时候就确定并一成不变的，在es5中`this`永远指向最后调用它的那个对象。
 
 ```javascript
 'use strict' //严格模式下
@@ -207,7 +234,7 @@ var a = {
 a.func2()       // Cherry
 ```
 
-> 在 func2 中，首先设置` var _this = this`;，这里的 `this` 是调用 `func2` 的对象`a`，为了防止在 `func2` 中的 `setTimeout `被 `window` 调用而导致的在 `setTimeout` 中的 `this` 为 `window`。我们将 `this`(指向变量`a`) 赋值给一个变量` _this`，这样，在 `func2` 中我们使用 `_this` 就是指向对象 `a `了。
+> 在 `func2` 中，首先设置` var _this = this`;，这里的 `this` 是调用 `func2` 的对象`a`，为了防止在 `func2` 中的 `setTimeout `被 `window` 调用而导致的在 `setTimeout` 中的 `this` 为 `window`。我们将 `this`(指向变量`a`) 赋值给一个变量` _this`，这样，在 `func2` 中我们使用 `_this` 就是指向对象 `a `了。
 
 ### 使用apply，call，bind（显示绑定）
 
@@ -364,6 +391,7 @@ bar.call(window); // 2
 **单个传递形式**
 
 ![img](/dovis-blog/other/26.png)
+
 ## 总结
 
 1. 对于没有挂载在任何对象上的函数，在非严格模式下 `this` 就是指向 `window` 的。
@@ -379,3 +407,76 @@ bar.call(window); // 2
 2. 函数是否通过显示绑定或者硬绑定调用，如果是的话，`this`指向指定对象
 3. 函数是否在某个上下文中调用（隐式绑定），如果是的话，`this`指向那个上下文对象
 4. 如果都不是，使用默认绑定，严格模式下就指向`undefined`,否则绑定到全局对象。
+
+::: tip
+下面三种特殊情况，`this`会`100%`指向`window`：
+- 立即执行函数(`IIFE`)
+- `setTimeout`中传入的函数
+- `setInterval`中传入的函数
+:::
+
+## `this`的题目
+1. 
+```js
+// 声明位置
+var me = {
+    name: 'xiuyan',
+    hello: function() {
+        console.log(`你好，我是${this.name}`)
+    }
+}
+var you = {
+    name: 'xiaoming',
+    hello: me.hello
+}
+
+// 调用位置
+me.hello() // xiuyan
+you.hello() // xiaoming
+
+
+var me = {
+    name: 'xiuyan',
+    hello: function() {
+        console.log(`你好，我是${this.name}`)
+    }
+}
+var name = 'BigBear'
+var hello = me.hello
+
+// 调用位置
+me.hello() // xiuyan
+hello() // BigBear
+```
+
+2. `this`在箭头函数中类似词法作用域，由书写位置决定
+```js
+var a = 1;
+var obj = {
+    a: 2,
+    func2: () => {
+        console.log(this.a)
+    },
+    func3: function() {
+        console.log(this.a)
+    }
+}
+
+// func1
+var func1 = () => {
+    console.log(this.a)
+}
+
+// func2
+var func2 = obj.func2
+
+// func3
+var func3 = obj.func3
+
+func1()
+func2()
+func3()
+obj.func2()
+obj.func3()
+//1,1,1,1,2
+```

@@ -16,7 +16,7 @@ Function.prototype.myCall = function(context = window) {
     context.fn = this
     const args = Array.from(arguments).slice(1) // 将需要传递的参数定义出来
     const result = context.fn(...args)
-    delete context.fn
+    delete context.fn // 仅仅是改掉this而不想新增一个方法，所以要删除掉
     return result;
 }
 
@@ -39,6 +39,27 @@ Function.prototype.myCall = function(context) {
     return result;
 }
 ```
+
+::: tip
+```js
+Function.prototype.myCall = function(context) {
+    // step1: 把函数挂到目标对象上（这里的this就是我们要改造的那个函数）
+    context.func = this
+    // step2:执行函数
+    context.func()
+    // step3：删除step1中挂到目标对象上的函数
+    delete context.func
+}
+```
+补充传入参数：
+```js
+Function.prototype.myCall = function(context,...args) {
+    context.func = this
+    context.func(...args)
+    delete context.func
+}
+```
+:::
 
 ## 手写`apply`
 因为`apply`传参是数组传参，所以取得数组，将其剥离为顺序参数进行函数调用
