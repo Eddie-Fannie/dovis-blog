@@ -596,3 +596,113 @@ myPromise.prototype.finally = function(fn) {
     });
 };
 ```
+
+## 修言课程版本
+一个`Promise`应该具备的基本特征：
+- 可以接收一个`executor`作为入参
+- 具备`pending/resolved/rejected`这三种状态
+
+```js
+function CutePromise(executor) {
+    // value记录异步任务成功的执行结果
+    this.value = null;
+    // reason记录异步任务失败的原因
+    this.reason = null;
+    // status记录当前状态，初始状态为pending
+    this.status = 'pending'
+    var self = this;
+
+    //定义resolve函数
+    function resolve(value) {
+        //异步任务成功后，把结果赋值给value
+        self.value = value
+        // 将当前状态切换为resolved
+        self.status = 'resolved'
+    }
+    function reject(reason) {
+        self.reason = reason
+        self.status = 'rejected'
+    }
+    executor(resolve,reject)
+}
+
+// then
+CutePromise.prototype.then = function(onResolved,onRejcted) {
+    // 必须为函数，不然透传来兜底
+    if(typeof onResolved !== 'function') {
+        onResolved = function(x) {
+            return x
+        }
+    }
+    if(typeof onRejected !== 'function') {
+        onRejected = function(e) {
+            throw e
+        }
+    }
+    var self = this;
+    if(self.status === 'resolved') {
+        onResolved(self.value)
+    } else if(self.status === 'rejected') {
+        onRejected(self.reason);
+    }
+}
+```
+
+链式调用：
+- `then`方法中应该直接把`this`给`return`出去，链式调用常规操作
+- 链式调用允许我们多次调用`then`,多个`then`中传入的`onResolved`和`onRejected`任务，我们需要维护在一个队列中；
+- 要想办法确保`then`方法执行的时机，务必在`onResolved/onRejected`队列批量执行前。不然队列任务批量执行的时候，任务本身都还没收集完。
+```js
+function CutePromise(executor) {
+    this.value = null;
+    this.reason = null;
+    this.status = 'pending'
+    this.onResolvedQueue = []
+    this.onRejectedQueue = []
+
+    var self = this
+    function resolve(value) {
+        if(self.status !== 'pending') {
+            return
+        }
+        self.value = value;
+        self.status = 'resolved'
+        setTimeout(function() {
+            self.onResolvedQueue.forEach(resolved => resolved(self.value))
+        }) // 时间没传，默认0
+    }
+
+    function reject(reason) {
+        if(self.status !== 'pending') return;
+        self.reason = reason
+        self.status = 'rejected'
+        setTimeout(function(){
+            self.onRejectedQueue.forEach(rejected => rejected(self.reason))
+        })
+    }
+    executor(resolve,reject)
+}
+
+CutePromise.prototype.then = function(onResolved,onReject) {
+    if(typeof onResolved !== 'function') {
+        onResolved = function(x) {
+            return x;
+        }
+    }
+    if(typeof onRejected !== 'function') {
+        onRejected = function(e) {
+            throw e
+        }
+    }
+    var self = this;
+    if(self.status === 'resolved') {
+        onResolved(self.value)
+    } else if(self.status === 'rejected') {
+        onRejected(self.reason);
+    } else if(self.status === 'pending') {
+        self.onResolvedQueue.push(onResolved)
+        self.onRejectedQueue.push(onRejected)
+    }
+    return this;
+}
+```

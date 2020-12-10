@@ -16,6 +16,16 @@ console.log(i) // Uncaught ReferenceError: i is not defined
 2. 暂时性死区
 > 只要块级作用域内存在`let`命令，所声明的变量就绑定这个区域，不受外部影响。
 
+```js
+var me = 'xiuyan'
+{
+    me = 'bear'
+    let me;
+}
+// Uncaught ReferenceError: Cannot access 'me' beforeinitialization 
+```
+> 如果区块中存在`let/const`命令，这个区块对这些声明的变量，从一开始就形成封闭作用域。假如我们在声明前去使用这类变量，就会报错。这就是暂时性死区。
+
 3. 不允许重复声明
 
 ## const命令

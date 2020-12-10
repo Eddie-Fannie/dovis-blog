@@ -1,4 +1,6 @@
 # Promise对象
+>`Promise`对象是一个代理对象。它接受传入的`executor`作为入参，允许你把异步任务的成功和失败分别绑定到对应的处理方法上去。
+
 ::: tip
 异步编程四种方式
 1. 回调函数（最基本的方法，把B写成A的回调函数）、
@@ -33,7 +35,7 @@ timeout(100).then((value) => {
 ::: tip
 `Promise`实例生成以后，可以`then`方法分别指定`Resolved/Rejected`状态的回调函数。第二个参数为可选
 
-`resolve`函数的参数除了正常值外还可能是另外一个`Promise`实例。如果把p1作为参数传给p2实例，此时p1的状态会传递给p2。如果p1的状态是`Pending`，那么p2的回调函数会等待p1状态改变；如果p1状态已经是`Resolved/Rejected`，那么p2的回调函数将立刻执行。
+`resolve`函数的参数除了正常值外还可能是另外一个`Promise`实例。如果把`p1`作为参数传给`p2`实例，此时`p1`的状态会传递给`p2`。如果`p1`的状态是`Pending`，那么`p2`的回调函数会等待`p1`状态改变；如果`p1`状态已经是`Resolved/Rejected`，那么`p2`的回调函数将立刻执行。
 :::
 
 ```js
@@ -96,6 +98,7 @@ new Promise((resolve, reject) => {
 
 ## Promise原型对象上的方法
 `Promise.prototype.then()/Promise.prototype.catch()`
+
 ### `then`
 `then`方法第一个参数是`Resolved`状态的回调函数，第二个参数（可选）是`Rejected`状态的回调函数。**如果给`then()`函数传递来了非函数参数则会默认忽略**
 > 可以采用链式写法，调用多个`then`，返回一个新的`Promise`实例。第一个`then`回调完成后会将返回的结果作为参数传入第二个`then`。**在`then`中使用`return`，那么`return`的值会被`Promise.resolve()`包装**
@@ -154,6 +157,16 @@ let p2 = p1.then(() => {
 setTimeout(console.log, 0, p2)  // Promise {<rejected>: 这是一个错误}
 ```
 :::
+
+```js
+// 给then传递非函数的参数会被忽视，发生Promise的值穿透问题
+Promise.resolve(1)
+    .then(Promise.resolve(2))
+    .then(3)
+    .then()
+    .then(console.log)
+// 1
+```
 
 ### `catch`
 > 该方法是`.then(null, rejection)`别名，用于指定发生错误时的回调。`then`方法指定的回调函数如果在运行中抛出错误，也会被`catch`方法捕获。
@@ -287,6 +300,17 @@ setTimeout(console.log, 0, p1)
 // Promise {<pending>}
 ```
 
+```js
+var p1 = Promise.resolve('1号选手')
+var p2 = '2号选手'
+var p3 = new Promise((resolve,reject) => {
+  setTimeout(resolve,100,'3号选手')
+})
+Promise.all([p1,p2,p3]).then(values => {
+  console.log(values)
+})
+// ['1号选手','2号选手','3号选手']
+```
 **如果作为参数的`Promise`实例本身定义了`catch`方法，那么它被`rejected`时并不会触发`Promise.all()`的`catch`方法**
 
 ### `Promise.race()`
@@ -299,11 +323,11 @@ let p1 = Promise.race([
     new Promise((resolve, reject) => {
         resolve(9)
     }).then(res => {
-        console.log(res)
+        console.log(res) //9
     })
 ])
-let p2 = p1.then(res => {
-    console.log(err)
+let p2 = p1.then(err => {
+    console.log(err) //3
 })
 setTimeout(console.log, 0, p1)
 // 9
@@ -337,6 +361,17 @@ setTimeout(console.log, 0, p1)
 // 9
 // 6
 // Promise {<rejected>: 6}
+
+var p1 = new Promise(function(resolve,reject) {
+  setTimeout(resolve,100,'1号选手')
+})
+var p2 = new Promise(function(resolve,reject) {
+  setTimeout(resolve,50,{name: '2号选手'})
+})
+Promise.race([p1,p2]).then((res) => {
+  console.log(res)
+})
+// {name: '2号选手'}
 ```
 
 ::: tip
@@ -690,3 +725,7 @@ async function f() {
 f().then(v => console.log(v))
 // hello world
 ```
+
+::: tip
+`await`关键字后，整个函数会像被`yield`了一样，暂停下来，直到异步任务的结果返回后，才会被唤醒，继续执行后面的语句。
+:::

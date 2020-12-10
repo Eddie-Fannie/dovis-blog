@@ -1,4 +1,112 @@
 # ES6数据类型新增的属性和方法
+## 变量的解构赋值
+- 数组的解构赋值
+```js
+let [a,b,c] = [1,2,3] // a=1,b=2,c=3
+let [head,...tail] = [1,2,3,4] // [2,3,4]
+let [x,y,...z] = ['a'] // x='a',y=undefined,z=[]
+
+// 默认值
+let [foo=true] = [] // foo=true
+let [x,y='b'] = ['a'] // x='a',y='b'
+let [x,y='b'] = ['a',undefined] // x='a',y='b'
+let [x=1] = [undefined] // x = 1
+let [x=1] = [null] // x= null Es6中使用严格相等运算符来判断一个位置是否有值，所以如果一个数组成员!==undefined,默认值是不会生效的
+```
+
+- 对象的解构赋值
+```js
+var {foo:baz} = {foo:'aaa',bar:'bbb'}
+baz // 'aaa'
+
+let {foo:baz} = {foo:'aaa',bar: 'bbb'}
+baz // 'aaa'
+foo // error:foo is not defined 
+// 也就是说，对象的解构赋值的内部机制是先找到同名属性，然后再赋值给对应的变量。真正被赋值的是后者，而不是前者。
+
+let node = {
+    loc: {
+        start: {
+            line: 1,
+            column: 5
+        }
+    }
+}
+var {loc,loc:{start},loc:{start:{line}}} = node; // line 1
+
+// 对象解构也可以指定默认值
+var {x,y=5} = {x:1} // x=1,y=5
+
+// 如果将一个已经声明的变量用于解构赋值，必须非常小心
+let x;
+{x} = {x:1} // SyntaxError: syntax error
+// 正确
+let x;
+({x} = {x:1}) // ES6规则是，只要有可能导致解构歧义就不得使用圆括号
+
+// 解构同时重命名
+const school = {
+    classes: {
+        stu: {
+            name:'Blob',
+            age: 24
+        }
+    }
+}
+const {classes: {stu: {name: newName } } } = school
+newName // Blob
+```
+
+- 字符串解构
+```js
+const [a,b,c,d,e] = 'hello'
+a // h
+b // e
+...
+```
+
+- 数值/布尔值
+```js
+// 解构赋值时，如果等号右边是数值/布尔值，先转对象
+let {toString: a} = 123 ; // = true
+s === Number.prototype.toString // true
+```
+> 只要等号右边部署对象/数组就会先将其转为对象。由于`undefined/null`无法转为对象，所以解构赋值时回报错`TypeError`
+
+- 函数参数解构
+```js
+function add([x,y]) {
+    return x + y
+}
+add([1,2]) // 3
+
+[[1,2],[3,4]].map(([a,b]) => a +b)
+// [3,7]
+
+// 默认值
+[1,undefined,3].map((x ='yes') => x) // [1,'yes',3]
+```
+
+### 圆括号问题
+- 不能使用
+    + 变量声明语句
+    ```js
+    let [(a)] = [1]
+    ```
+    + 函数参数
+    + 赋值语句的模式
+    ```js
+    ({p:a}) = {p:42}
+
+    [({p:a}),{x:c}] = [{},{}]
+    ```
+
+- 可以使用
+    + 赋值语句的非模式部分
+    ```js
+    [(b)] = [3]
+    ```
+
 ## 字符串的扩展
 1. 每个字符固定两个字节
 2. 字符串可以使用`for...of`遍历
