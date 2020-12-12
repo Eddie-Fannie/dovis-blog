@@ -3,7 +3,7 @@
 > 调用环境总是`window`
 
 ## 防抖
-> 在事件被触发`n`秒后再执行回调，如果在这`n`秒内又被触发，则重新计时。
+> 在事件被触发`n`秒后再执行回调，如果在这`n`秒内又被触发，则重新计时。在某段时间内，不管你触发多少次回调，我都只认最后一次。
 
 ```js
 function debounce(func, wait) {
@@ -28,7 +28,7 @@ container.addEventListener('mousemove', (e) => {
 })
 ```
 ::: tip
-没有防抖之前鼠标移入dom会使数字一直递增；防抖之后，鼠标移入隔了3秒数字递增至2，然后频繁滑动鼠标不会使数字继续递增，只有停止鼠标触发事件之后的第三秒数字才继续递增。**鼠标移出dom容器外数字会递增最后一次。**
+没有防抖之前鼠标移入`dom`会使数字一直递增；防抖之后，鼠标移入隔了`3`秒数字递增至`2`，然后频繁滑动鼠标不会使数字继续递增，只有停止鼠标触发事件之后的第三秒数字才继续递增。**鼠标移出`dom`容器外数字会递增最后一次。**
 :::
 
 ### 防抖代码升级
@@ -58,10 +58,10 @@ function debounce(func, wait) {
 function throttle(func, wait) {
     var context, args;
     var previous = 0;
-
+// 如果这里保留调用上下文：context = this，则指向全局的window
     return function() {
         var now = +new Date();
-        context = this;
+        context = this; // 保留调用时的上下文
         args = arguments;
         if (now - previous > wait) {
             func.apply(context, args);
@@ -83,6 +83,7 @@ container.addEventListener('mousemove',throttle(() => {
 ```js
 function throttle(func, wait) {
     var timeout;
+    var context,args
     return function() {
         context = this;
         args = arguments;
@@ -108,7 +109,7 @@ container.addEventListener('mousemove',throttle(() => {
 
 ::: tip
 前面两种方法比较：
-1. 第一种事件会立即执行，第二种事件会在n秒后第一次执行。
+1. 第一种事件会立即执行，第二种事件会在`n`秒后第一次执行。
 2. 第一种事件停止触发后没有办法再次执行事件，第二种停止触发后依然再执行一次。
 :::
 
@@ -126,12 +127,10 @@ function throttle(fun, delay) {
             clearTimeout(deferTimer)
             deferTimer = setTimeout(function () {
                 last = now
-                console.log(last)
                 fun.apply(that, _args)
             }, delay)
         }else {
             last = now
-            console.log(last)
             fun.apply(that,_args)
         }
     }

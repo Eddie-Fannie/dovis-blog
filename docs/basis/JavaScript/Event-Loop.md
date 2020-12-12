@@ -645,6 +645,23 @@ resolvedPromiseThen
 ```
 > `promise1`->`promise2`->`resolvePromise resolved`->`promise3`
 
+10. 
+```js
+setTimeout(() => {
+  console.log('timeout1')
+},0)
+setTimeout(() => {
+  console.log('timeout2')
+  Promise.resolve().then(function(){
+    console.log('promise1')
+  })
+},0)
+setTimeout(() => {
+  console.log('timeout3')
+},0)
+```
+>在浏览器环境&`node11`下结果：`timeout1 timeout2 promise1 timeout3`。在`node10.8`环境下为`timeout1 timeout2 timeout3 promise1`
+
 ## Node中的Event Loop
 > `Node` 的 `Event Loop` 分为 `6` 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
 
@@ -683,8 +700,41 @@ if (!window.setImmediate) {
 ```
 
 ### `close callbacks`
-`close callbacks`阶段执行`close`事件。
+`close callbacks`阶段执行`close`事件。比如`socket.on('close',...)`就会在这个阶段触发
 
 ::: tip
-最后我们来讲讲 `Node` 中的 `process.nextTick`，这个函数其实是独立于 `Event Loop` 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 `nextTick` 队列，就会清空队列中的所有回调函数，并且优先于其他 `microtask` 执行。
+`Node v11.0`之前的事件循环机制：
+- 执行全局的`Script`代码（与浏览器无差）
+- 把微任务队列清空：注意，`Node`清空微任务队列的手法比较特别。在浏览器中，我们只有一个微任务队列需要接受处理；但在`Node`中，有两类微任务队列：`next-tick`队列和其他队列。其中前者队列用来专门收敛`process.nextTick`派发的异步任务。在清空队列时，优先清空`next-tick`队列中的任务，随后才会清空其他微任务；
+- 开始执行宏任务。注意，`Node`执行宏任务的方式和浏览器不同：在浏览器中，我们每次出队并执行一个宏任务；而在`Node`中，我们每次会尝试清空当前阶段对应宏任务队列里面的所有认为。
+- 步骤`3`开始会进入`3->2->3->2`的循环。
+
+`Node11`事件循环已经和浏览器的趋同
+> `node11`开始，`timers`阶段的`setTimeout/setInterval`等函数派发任务，包括`setImmediate`派发的任务，都被修改为：一旦执行完当前阶段的一个任务，就立刻执行微任务队列。
 :::
+
+## `Node`的`Event Loop`题目
+1. `nextTick和Promise.then`
+```js
+Promise.resolve().then(function() {
+  console.log('promsie')
+}).then(function() {
+  console.log('promise2')
+})
+
+process.nextTick(() => {
+  console.log('nextTick1')
+  process.nextTick(() => {
+    console.log('nextTick2')
+    process.nextTick(() => {
+      console.log('nextTick3')
+      process.nextTick(() => {
+        console.log('nextTick4')
+      })
+    })
+  })
+})
+
+//nextTick1,nextTick2,nextTick3,nextTick4,promise1,promise2
+```
+>不管是什么微任务，全部都要排在`process.nextTick`后面执行。
