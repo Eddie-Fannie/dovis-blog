@@ -33,7 +33,7 @@ p->next = p->next->next
 ## 创建链表
 - 数据结构为动态，需要将第一个元素引用保存下来`head`。
 - 声明一个属性用来存储链表的元素数量`count`
-- 要表示链表中的第一个以及其他元素，我们需要一个助手类，叫作`Node`。Node类表示我们想要添加到链表中的项。它包含一个`element`属性，该属性表示要加入链表元素的值；以及一个`next`属性，该属性是指向链表中下一个元素的指针。
+- 要表示链表中的第一个以及其他元素，我们需要一个助手类，叫作`Node`。`Node`类表示我们想要添加到链表中的项。它包含一个`element`属性，该属性表示要加入链表元素的值；以及一个`next`属性，该属性是指向链表中下一个元素的指针。
 
 ```js
 export class Node {
@@ -54,7 +54,7 @@ push(element) {
   } else {
     current = this.head;
     while(current.next != null) {
-        current = current.next;
+      current = current.next;
     }
     current.next = node
   }
@@ -143,3 +143,7 @@ class LinkList {
   }
 }
 ```
+
+::: tip
+由于不必须按顺序存储，链表在插入的时候可以达到 `O(1)` 的复杂度，比另一种线性表 —— 顺序表快得多，但是查找一个节点或者访问特定编号的节点则需要 `O(n)` 的时间，而顺序表相应的时间复杂度分别是 `O(log n)` 和 `O(1)`。
+:::
