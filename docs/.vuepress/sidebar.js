@@ -158,7 +158,8 @@ module.exports = {
             children: [
                 '/advanced/Performance/前端优化',
                 '/advanced/Performance/高性能优化十万条数据',
-                '/advanced/Performance/vue实现一个图片懒加载指令'
+                '/advanced/Performance/vue实现一个图片懒加载指令',
+                '/advanced/Performance/慕课前端性能课程'
             ]
         }
     ],
@@ -256,7 +257,8 @@ module.exports = {
                 '/coding/JavaScript/手动实现一个深拷贝',
                 '/coding/JavaScript/实现一个Promise',
                 '/coding/JavaScript/手写instanceof',
-                '/coding/JavaScript/封装JSONP'
+                '/coding/JavaScript/封装JSONP',
+                '/coding/JavaScript/用异步思想实现东西'
             ]
         }
     ],
@@ -266,7 +268,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/reading/编写高质量Javascript的188个建议',
-                '/reading/你不知道的js上卷'
+                '/reading/你不知道的js上卷',
+                '/reading/web性能实战'
             ]
         }
     ],
