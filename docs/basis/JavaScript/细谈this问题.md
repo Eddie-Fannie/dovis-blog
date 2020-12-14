@@ -17,6 +17,14 @@
         }
     }
     alert(object.getNameFunc()()) // lin jia heng(非严格模式）
+
+    var object = {
+        name: 'My Object',
+        getNameFunc: function () {
+            console.log(this.name) // My Object
+        }
+    }
+object.getNameFunc()
 ```
 
 而下面的例子就可以成功返回`“My Object”`
@@ -479,4 +487,21 @@ func3()
 obj.func2()
 obj.func3()
 //1,1,1,1,2
+```
+
+3. 
+```js
+let obj = {
+    a:20,
+    b:this.a + 10,
+    say:function() {
+        return(this.a + 10)
+    }
+}
+console.log(obj.b);//?
+console.log(obj.say(),obj.say)//?
+// NaN
+// 30 function(){
+//    return this.a + 10
+//}
 ```

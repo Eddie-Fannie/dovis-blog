@@ -157,3 +157,26 @@ flatten(problem); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
 例子6: 验证
+
+## `for...of`
+::: tip
+`for...in`用于对数组或对象进行循环操作。
+`for...of`语句遍历可迭代对象定义要迭代的数据。只循环集合本身元素
+
+```js
+var a = ['A','B','C']
+a.name = "Hello"
+for(var x in a) {
+  console.log(x) // '0','1','2','name'
+}
+// for...in循环把name包括在内，但Array的length属性却不在内。
+// for...of修复这个问题
+var a = ['A','B','C']
+a.name = 'Hello'
+for(var x of a) {
+  console.log(x) // A,B,C
+}
+```
+- `for...in`用于数组遍历时，索引转为字符串了，而普通`for/forEach`循环为数值类型
+- 遍历顺序是对象属性的枚举顺序，并不一定按数组的下标顺序来遍历。
+:::
