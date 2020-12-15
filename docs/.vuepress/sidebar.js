@@ -417,7 +417,8 @@ module.exports = {
             title: '基础题',
             collapsable: false,
             children: [
-               '/algorithm/DataStructure/Stack-Queue/翻转字符串'
+               '/algorithm/DataStructure/Stack-Queue/翻转字符串',
+               '/algorithm/DataStructure/Stack-Queue/有效的括号'
             ]
         },
         {
