@@ -179,8 +179,8 @@ console.log(3)
 **第二个例子**
 ```javascript
 setTimeout(()=>{
-    console.log(1)
-    Promise.resolve(3).then(data => console.log(data))
+  console.log(1)
+  Promise.resolve(3).then(data => console.log(data))
 },0)
 setTimeout(() => {
     console.log(2)
@@ -191,16 +191,16 @@ setTimeout(() => {
 **当异步任务进入栈执行时，微任务和宏任务并排进入执行队列时，先执行微任务**
 ```javascript
 setTimeout(function(){
-    console.log(1)
-    Promise.resolve().then(function () {
-        console.log(2)
-    })
+  console.log(1)
+  Promise.resolve().then(function () {
+      console.log(2)
+  })
 },0)
 setTimeout(function () {
-    console.log(3)
+  console.log(3)
 },0)
 Promise.resolve().then(function () {
-    console.log(4)
+  console.log(4)
 })
 console.log(5)//5，4，1，2，3
 ```
@@ -334,24 +334,24 @@ new Promise(function(resolve, reject) {
 3. `Promise`立即执行
 ```js
 const p = function() {
-    return new Promise((resolve, reject) => {
-        const p1 = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(1)
-            }, 0)
-            resolve(2)
-        })
-        p1.then((res) => {
-            console.log(res);
-        })
-        console.log(3);
-        resolve(4);
+  return new Promise((resolve, reject) => {
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(1)
+        }, 0)
+        resolve(2)
     })
+    p1.then((res) => {
+        console.log(res);
+    })
+    console.log(3);
+    resolve(4);
+  })
 }
 
 
 p().then((res) => {
-    console.log(res);
+  console.log(res);
 })
 console.log('end');
 ```
@@ -416,11 +416,11 @@ new Promise((resolve, reject) => {
   .then(() => {
     console.log(2)
     new Promise((resolve, reject) => {
-        console.log(3)
-        setTimeout(() => {
-          reject();
-        }, 3 * 1000);
-        resolve()
+      console.log(3)
+      setTimeout(() => {
+        reject();
+      }, 3 * 1000);
+      resolve()
     })
       .then(() => {
         console.log(4)
@@ -662,6 +662,84 @@ setTimeout(() => {
 ```
 >在浏览器环境&`node11`下结果：`timeout1 timeout2 promise1 timeout3`。在`node10.8`环境下为`timeout1 timeout2 timeout3 promise1`
 
+11. 
+```js
+Promise.resolve()
+  .then(() => { // 外层第一个then
+    Promise.resolve().then(() => {
+      console.log(1);
+    }).then(() => {
+      console.log(2);
+    })
+  })
+  .then(() => { // 外层第二个then
+    console.log(3);
+  })
+```
+> 道题很容易做错，你可能会想着打印出 `1 2 3`，但是最外层的两个 `then` 属于同一级别关系，因此会先加入外层第一个 `then` ，然后再加入外层第二个 `then`。此时主线程没有同步代码，于是取微任务队列中的任务，先执行输出 `1`，然后又添加了一个输出 `2` 的微任务，然后取出微任务队列头部的任务，输出 `3`，最后取出最后一个任务，输出 `2`。
+
+12. 
+```js
+async function async1() {
+  await async2();
+  console.log('async1 end');
+}
+
+async function async2() {
+  console.log('async2 end');
+}
+async1();
+console.log(10);
+```
+> 这题考察了 `async/await`，在执行 `async1` 函数时，遇到 `await async2()`; 这段代码，而 `async2`函数是个同步函数，直接输出 `async2 end`，然后因为是 `await`，返回的是 `promise`对象，返回值是 async2()执行的结果，即默认的 `undefined`，之后的代码属于微任务，加入微任务队列，此时再走同步代码，输出 `10`，之后，主线程已经执行完毕，然后去找微任务队列，取出之前加入的微任务，输出 `async1 end`。
+
+13. 
+```js
+async function async1() {
+  try {
+    await async2();
+  } catch (err) {
+    console.log('async1 end');
+    console.log(err);
+  }
+}
+
+async function async2() {
+  console.log('async2 end');
+  return Promise.reject(new Error('error!!!'));
+}
+async1();
+console.log(10);
+```
+> 输出`async2 end -> 10 -> async1 end -> Error:error!!!`。**这里要注意的就是对于 `await` 返回 `reject` 状态，必须要用 `try / catch` 进行捕获错误，不然就会报错！**
+
+14. 
+```js
+let a;
+
+const b = new Promise((resolve, reject) => {
+  console.log('promise1');
+  resolve();
+}).then(() => {
+  console.log('promise2');
+}).then(() => {
+  console.log('promise3');
+}).then(() => {
+  console.log('promise4');
+});
+
+a = new Promise(async (resolve, reject) => {
+  console.log(a);
+  await b;
+  console.log(a);
+  console.log('after1');
+  await a;
+  resolve(true);
+  console.log('after2');
+})
+
+console.log('end');
+```
 ## Node中的Event Loop
 > `Node` 的 `Event Loop` 分为 `6` 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
 

@@ -107,7 +107,8 @@ module.exports = {
             children: [
                 '/basis/ES6/Proxy',
                 '/basis/ES6/Promise对象',
-                '/basis/ES6/Generator函数'
+                '/basis/ES6/Generator函数',
+                '/basis/ES6/Iterator和for...of循环'
             ]
         }
     ],
