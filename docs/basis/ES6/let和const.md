@@ -24,9 +24,33 @@ var me = 'xiuyan'
 }
 // Uncaught ReferenceError: Cannot access 'me' beforeinitialization 
 ```
-> 如果区块中存在`let/const`命令，这个区块对这些声明的变量，从一开始就形成封闭作用域。假如我们在声明前去使用这类变量，就会报错。这就是暂时性死区。
+> 如果区块中存在`let/const`命令，这个区块对这些声明的变量，从一开始就形成封闭作用域。假如我们在声明前去使用这类变量，就会报错。这就是暂时性死区。**起始于函数开头，终止于相关变量声明语句的所在行**
+
+```js
+function bar1() {
+    console.log(foo3) // 暂时性死区
+    let foo3 = 'foo3'
+    console.log(foo3) // 这里可以正常访问，当然是在前面不报错的前提下。
+}
+```
+
+暂时性死区，函数的参数默认设置也会受它影响
+```js
+function foo(arg1=arg2,arg2) {
+    console.log(`${arg1} ${arg2}`)
+}
+foo(undefined,'arg2')
+// 因为arg2在后面还未定义，所以报错：Uncaught:ReferenceError: arg2 is not defined
+```
 
 3. 不允许重复声明
+```js
+function foo(arg1) {
+    let arg1
+}
+foo('arg1')
+```
+> 报错：`Uncaught SyntaxError:Identifier 'arg1' has already been declared.`
 
 ## const命令
 > `const`保证的并不是变量的值不得改动，而是变量指向的那个内存地址不得改动。对于简单类型的数据，值就保存在变量指向的内存地址中，因此等同于变量。但对于引用类型数据来说，变量指向的内存地址保存的只是一个指针。因此**声明一个对象为常量必须非常小心**
@@ -64,3 +88,25 @@ const b = 20;
 
 2. `var`存在变量提升，`let/const`没有。
 3. 函数提升优先于变量提升，函数提升会把整个函数挪到作用域顶部，变量提升只会把声明挪到作用域顶部。
+
+## 函数/变量提升
+
+```js
+console.log(foo); 
+var foo = 1  //变量提升
+console.log(foo)
+foo()
+function foo(){ //函数提升
+   console.log('函数')
+}
+
+// 等价
+function foo(){ //提到顶端
+   console.log('函数')
+}
+var foo  
+console.log(foo) //输出foo这个函数，因为上面foo没有被赋值，foo还是原来的值 
+foo = 1;  //赋值不会提升,赋值后 foo就不再是函数类型了，而是number类型
+console.log(foo) //输出1
+foo() //这里会报错，因为foo不是函数了
+```

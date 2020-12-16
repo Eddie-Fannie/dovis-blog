@@ -52,7 +52,7 @@ object.getNameFunc()
     alert(object.getNameFunc()()) // My Object
 ```
 ## 在函数中执行
-> 在函数中，`this`永远指向最后调用函数的那个对象。**如果将函数赋值变量再调用，`this`则指向`window`**
+> 在函数中，`this`永远指向最后调用函数的那个对象。
 1. 在非严格模式（默认绑定）
 
 ```javascript
@@ -110,7 +110,7 @@ var p1 = new Person('kk');
 // Person
 ```
 
-**此时`this`指向这个构造函数调用的时候实例化出来的对象**
+**此时`this`指向这个构造函数调用的时候实例化出来的对象，如果构造函数显示`return`返回一个值，且返回的是一个对象（返回复杂类型），那么`this`就指向这个返回的对象；**
 
 当然，构造函数其实也是一个函数，如果将构造函数当成普通函数来调用，`this`指向`Window`
 
@@ -133,7 +133,7 @@ setTimeout(function() {
 如果没有特殊指向，定时器的回调函数中`this`的指向都是`Window`。这是因为JS的定时器方法是定义在`Window`下的。
 
 ## 在箭头函数中使用
-> 箭头函数的绑定无法被修改。箭头函数的`this`为父作用域的`this`，不是调用时的`this`。箭头函数的`this`指向是静态的，在声明的时候就已经确定了。
+> 箭头函数的绑定无法被修改。箭头函数的`this`为父作用域的`this`，不是调用时的`this`。箭头函数的`this`指向是静态的，在声明的时候就已经确定了。箭头函数中的`this`指向是由其所属函数或全局作用域决定的。
 
 1. 在全局环境中使用：
 
@@ -400,8 +400,62 @@ bar.call(window); // 2
 
 ![img](/dovis-blog/other/26.png)
 
-## 总结
+## `this`优先级
+```js
+function foo(a) {
+    console.log(this.a)
+}
+const obj1 = {
+    a:1,
+    foo: foo
+}
+const obj2 = {
+    a: 2,
+    foo: foo
+}
+obj1.foo.call(obj2)
+obj2.foo.call(obj1)
+```
+> 输出分别为`2,1`，也就是说`call,apply`的显式绑定一般优先级更高。
 
+```js
+function foo(a) {
+    this.a = a
+}
+const obj1 = {}
+
+var bar = foo.bind(obj1)
+bar(2)
+console.log(obj1.a)
+```
+> 上述代码通过`bind`将`bar`函数中的`this`绑定为`obj1`对象。执行`bar(2)`后，`obj1.a`值为`2`，即执行`bar(2)`后，`obj1`对象为`{a:2}`。当再使用`bar`作为构造函数时，执行如下代码输出`3`
+
+```js
+var bar = new bar(3)
+console.log(baz.a)
+```
+
+> `bar`函数本身是通过`bind`方法构造函数，其内部已经将`this`绑定为`obj1`，当它再次作为构造函数通过`new`调用时，返回的实例就已经和`obj1`解绑了。也就是说，`new`绑定修改了`bind`绑定中的`this`指向，因此`new`绑定的优先级比显式`bind`绑定的更高。
+
+```js
+function foo() {
+    return a => {
+        console.log(this.a)
+    }
+}
+
+const obj1 = {
+    a: 2
+}
+const obj2 = {
+    a: 3
+}
+const bar = foo.call(obj1)
+console.log(bar.call(obj2))
+```
+> 以上代码输出`2`。由于`foo`中的`this`绑定到了`obj1`上，所以`bar`（引用箭头函数）中的`this`也会绑定到`obj1`上，箭头函数的绑定无法被修改。
+
+## 总结
 1. 对于没有挂载在任何对象上的函数，在非严格模式下 `this` 就是指向 `window` 的。
 2. 匿名函数的`this`永远指向`window` 。
 3. 不要根据`this`的英文语法角度错误理解成指向函数自身。
@@ -505,3 +559,20 @@ console.log(obj.say(),obj.say)//?
 //    return this.a + 10
 //}
 ```
+
+4. 
+```js
+var a = 123
+const foo = () => a => {
+    console.log(this.a)
+}
+const obj1 = {
+    a:2
+}
+const obj2 = {
+    a:3
+}
+var bar = foo.call(obj1)
+console.log(bar.call(obj2))
+```
+> 代码会输出`123`。如果代码第一行是`const a =123`则输出`undefined`，因为`const`定义的变量没有挂载到全局对象上。
