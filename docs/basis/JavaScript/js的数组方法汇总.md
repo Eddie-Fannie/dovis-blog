@@ -178,3 +178,70 @@ for(var x of a) {
 - `for...in`用于数组遍历时，索引转为字符串了，而普通`for/forEach`循环为数值类型
 - 遍历顺序是对象属性的枚举顺序，并不一定按数组的下标顺序来遍历。
 :::
+
+**`for...of`的魅力**
+1. 数组迭代
+```js
+const products = ['oranges','apples']
+for(const product of products) {
+  console.log(product)
+}
+
+// 就地解构
+const persons = [
+  {name: 'John Smith'},
+  {name: 'Jane Doe'}
+]
+for(const {name} of persons) {
+  console.log(name)
+}
+```
+
+2. 类数组迭代
+```js
+function sum() {
+  let sum = 0
+  for(const number of arguments) {
+    sum += number
+  }
+  return sum;
+}
+sum(1,2,3) // 6
+```
+
+3. 遍历字符串
+4. 遍历对象，`map/set`
+```js
+// Map
+const names = new Map();
+names.set(1, 'one');
+names.set(2, 'two');
+
+for (const [number, name] of names) {
+  console.log(number, name);
+}
+// logs 1, 'one'
+// logs 2, 'two'
+
+// Set
+const colors = new Set(['white', 'blue', 'red', 'white']);
+
+for (color of colors) {
+  console.log(color);
+}
+// 'white'
+// 'blue'
+// 'red
+
+// 对象
+const person = {
+  name: 'John Smith',
+  job: 'agent'
+};
+
+for (const [prop, value] of Object.entries(person)) {
+  console.log(prop, value);
+}
+// 'name', 'John Smith'
+// 'job', 'agent'
+```
