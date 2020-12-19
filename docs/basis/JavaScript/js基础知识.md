@@ -225,15 +225,15 @@ console.log(079) // 79
 
 **转为字符串**
 1. `toString()`（`null`和`undefined`没有这个方法）
-> 调用数值的该方法时，传入一个参数作为基数，可以返回规定进制的字符串值。没有参数就默认十进制呗
+> 该方法属于对象`Object`方法，由于所有对象都继承了`Object`的对象实例。所以`Array/Boolean/Date/Error/Function/Number/String`都能调用该方法。调用数值的该方法时，传入一个参数作为基数，可以返回规定进制的字符串值。没有参数就默认十进制呗
 
 ```js
 var num = 10
-num.toString(16); // a
-num.toString(8); // 12
+num.toString(16); // 'a' a的十六进制为10
+num.toString(8); // '12'
 
 // 引擎中这样执行，因为num基本数据类型没有toString方法
-var num = new String(10);
+var num = new Number(10);
 num.toString(); // '10'
 num = null;
 ```
@@ -242,6 +242,13 @@ num = null;
 2. `null`和`undefined`因为没有相应对构造函数，所以没有`toString()`方法，则用`String()`方法转为字符串
 ```js
 console.log(String(null)) // 'null'
+```
+
+3. 在js中数字后面的`'.'`操作符意义不确定。因为可能是一个浮点数的标志也可能是取一个对象的属性的运算符。但是js的解释器把它当成了浮点数的标志。
+```js
+console.log(10.toString())// Uncaught SyntaxErro: Invalid or unexpected token
+console.log(10..toString()) // '10'
+console.log((10.).toString) // '10'
 ```
 
 ## 运算符
@@ -261,12 +268,13 @@ console.log(age) // 21
     - 不包含有效数值-->`NaN`
     - 布尔值-->`1/0`-->再递增或递减
     - 浮点-->执行加减1操作
-    - 对象--> 调用对象`valueOf()`方法-->进行转换，若为`NaN`;则利用`toString()`方法继续。
+    - 对象--> 调用对象`valueOf()`方法-->进行转换，若为`NaN`;则利用`toString()`方法继续。[解析对象原始值转换](/dovis-blog/basis/JavaScript/解析对象原始值转换)
 
 2. `+`特别情况
 - 两方都为字符串，则形成字符串拼接
 - 运算中其中一方为字符串，那么就会把另外一方也转换为字符串
-- 如果一方不是字符串或者数字，那么就会转换为数字或者字符串
+- 如果一方不是字符串或者数字，那么就会转换为数字或者字符串，针对数组/对象的
+- 其他情况都会转为`number`类型，`undefined`转为`NaN`
 
 ```js
 4+[1,2,3] // 41,2,3
@@ -277,7 +285,10 @@ console.log(age) // 21
 ```js
 'a'+ +'c' // aNaN
 
-undefined+10 //NaN
+undefined+10 //NaN undefined转为NaN
+
+console.log({}+true) // [object Object]true
+{}+true // 1 浏览器控制台
 ```
 - 一元操作符在数值前相当于正负，若在对象，字符串，布尔值，浮点数前就会进行数值转换操作，规则和上述一样。
 3. **除了加法运算符，其他运算符只要其中一方为数字，另外一方则转为数字。**
@@ -291,7 +302,7 @@ undefined+10 //NaN
 - 如果一个操作数为布尔值，则也转换为数值
 
 6. 相等操作符
-- `null` == `undefined`。这两个基本类型数据不能转换为其他值
+- **`null` == `undefined`**。这两个基本类型数据不能转换为其他值
 - 两个操作数都为对象，就要看两个对象是否同一个。（地址是否指向同一个）
 - 判断两者类型是否为`string/number`，是的话就会将字符串转换为`number`
 - 判断其中一方是否为`boolean`，是的话就会把`boolean`转为`number`再进行判断。
@@ -366,6 +377,7 @@ console.log(typeof obj2) // object
 
 - `trim()`：删除前后空格符，返回一个字符串副本。`trimLeft/trimRight`
 - `charCodeAt()`：获取字符编码。
+
 
 ## 位操作符
 位操作符用于最基本的层次上，即按内存中表示数值的位来操作数值。对于有符号的整数，`32`位中的前31位用于表示整数的值。第32位用于表示数值的符号：`0`表示正数，`1`表示负数。负数同样用二进制存储，但使用的格式是二进制补码。

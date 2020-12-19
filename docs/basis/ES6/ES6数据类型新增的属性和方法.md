@@ -19,11 +19,6 @@ let [x=1] = [null] // x= null Es6中使用严格相等运算符来判断一个�
 var {foo:baz} = {foo:'aaa',bar:'bbb'}
 baz // 'aaa'
 
-let {foo:baz} = {foo:'aaa',bar: 'bbb'}
-baz // 'aaa'
-foo // error:foo is not defined 
-// 也就是说，对象的解构赋值的内部机制是先找到同名属性，然后再赋值给对应的变量。真正被赋值的是后者，而不是前者。
-
 let node = {
     loc: {
         start: {
@@ -35,7 +30,10 @@ let node = {
 var {loc,loc:{start},loc:{start:{line}}} = node; // line 1
 
 // 对象解构也可以指定默认值
+var {x=3} = {} // x=3
 var {x,y=5} = {x:1} // x=1,y=5
+var {x:y=3} = {} //y=3
+var {x:y=3} = {x:5} // y=5
 
 // 如果将一个已经声明的变量用于解构赋值，必须非常小心
 let x;
@@ -56,6 +54,49 @@ const school = {
 const {classes: {stu: {name: newName } } } = school
 newName // Blob
 ```
+
+::: tip
+- 对象的解构赋值的内部机制是先找到同名属性，然后再赋值给对应的变量。真正被赋值的是后者，而不是前者。
+```js
+let {foo:baz} = {foo:'aaa',bar: 'bbb'}
+baz // 'aaa'
+foo // error:foo is not defined 
+```
+
+> 上面的代码中，`foo`是匹配的模式,`baz`才是变量。真正被赋值的是变量`baz`，而不是模式`foo`
+
+```js
+let obj = {
+    p: [
+        'Hello',
+        {y: 'World'}
+    ]
+}
+let {p: [x,{y}]} = obj
+x// 'Hello'
+y // World
+```
+> 这时`p`是模式不是变量，不会被赋值。如果要`p`被赋值，可以这样：
+
+```js
+let {p,p:[x,{y}]} = obj // 因为相对应let {p: p,p: [x,{y}]} = obj,后面那个p才是变量
+```
+
+- 默认值生效的条件是，对象的属性值严格等于`undefined`
+```js
+var {x=3} = {x:undefined}; // x=3
+var {x=3} = {x:null} // x=null
+```
+
+- 数组本质是对象，因此可以对数组进行对象属性的解构
+```js
+let arr = [1,2,3]
+let {0: first,[arr.length-1] : last} = arr;
+
+first//1
+last//3
+```
+:::
 
 - 字符串解构
 ```js
@@ -83,9 +124,51 @@ add([1,2]) // 3
 [[1,2],[3,4]].map(([a,b]) => a +b)
 // [3,7]
 
-// 默认值
+// undefined会触发函数参数的默认值
 [1,undefined,3].map((x ='yes') => x) // [1,'yes',3]
+
+//函数参数使用默认值 变量x,y指定默认值
+function move({x=0,y=0} = {}) {
+    return [x,y]
+}
+move({x:3,y:8}) // [3,8]
+move({x:3}) //[3,0]
+move({}) // [0,0]
+move() // [0,0]
+
+// 函数move参数指定默认值
+function move({x,y} = {x:0,y:0}) {
+    reutrn [x,y]
+}
+move({x:3,y:8}) // [3,8]
+move({x:3}) // [3,undefined]
+move({}) // [undefined,undefined]
+move() // [0,0]
 ```
+
+::: tip
+```js
+// 超级猩猩笔试题
+
+//根据函数默认值和解构
+function func() {
+    return {
+        a,b
+    }
+}
+console.log(func()) // 输出{a:1,b:2}
+console.log(func({a:3})) // 输出{a:3,b:456}
+console.log(func({})) // 输出{a:123,b:456}
+
+// 所以func函数参数如下
+function func({a:a=123,b:b=456} = {a:1,b:2}) {
+    return {
+        a,
+        b
+    }
+}
+```
+:::
 
 ### 圆括号问题
 - 不能使用
@@ -130,7 +213,7 @@ add([1,2]) // 3
 
 ## 数值的扩展
 1. 八进制用`0b/0B/0o/0o`表示。如果要使用`0b/0x`前缀的字符串数值转为十进制数值，要使用`Number`方法。
-2. `Number.isFinite()`判断一个数值是否有限，有限返回`true`。`NaN`返回false，传入其他类型都返回`false`
+2. `Number.isFinite()`判断一个数值是否有限，有限返回`true`。`NaN`返回`false`，传入其他类型都返回`false`
 3. `Number.isNaN()`检查一个值是否为NaN，非`NaN`一律返回`false`
 ```js
 Number.isNaN(9/NaN) // true
@@ -138,9 +221,46 @@ Number.isNaN('true'/0) // true
 Number.isNaN('true'/'true') // true
 ```
 4. ES6将`parseInt/parseFloat()`方法从全局转移到了`Number`对象上，为了减少全局对象的方法，使得语言逐步模块化。方法使用没有变化。
-5. `Number.isInteger()`判断一个值是否为整数，传入非数值类型都返回`false`。类似3和3.0这样将视为同一个值
+5. `Number.isInteger()`判断一个值是否为整数，传入非数值类型都返回`false`。类似`3`和`3.0`这样将视为同一个值
 6. `Number.EPSILON`。引入一个很小的数，目的在于为浮点数计算设置一个误差范围。浮点数计算结果小于该数就可以认为得到正确的结果。
-7. `Number.isSafeInteger()`用来判断一个数是否在安全整数范围（-2^53~2^53）因为超过这个范围就无法精确表示。
+7. `Number.isSafeInteger()`用来判断一个数是否在安全整数范围`（-2^53~2^53`）因为超过这个范围就无法精确表示。
+
+::: tip
+> js中所有数字都保存成`64`位浮点数，所以整数的精确度只能到`53`个二进制位。大于这个范围的整数就无法精确表示。所以引入新的数据类型`Integer`（整数）来解决这个问题。只能用来表示整数，没有位数限制，任何位数的整数都可以精确表示。**为了和`Number`类型区别必须使用后缀`n`表示。** 二进制，八进制，十六进制表示法后缀也要加上。
+
+```js
+1n + 2n = 3n
+typeof 3n // 'bigint'
+```
+
+> js提供`Integer`对象用来生成`Integer`类型数值。转换规则如`Number()`一致。
+
+```js
+Integer(123) // 123n
+Integer('123') // 123n
+Integer(true) // 1n
+Integer(false) // 0n
+
+new Integer() // TypeError
+```
+
+> 在数学运算符号中，`Integer`类型的`+ - * **`二元运算符和`Number`类型行为一样，除法则舍去小数部分返回整数
+```js
+9n / 5n // 1n
+
+1n + 1 // 报错，不能混合运算
+```
+
+**几乎所有`Number`运算符都可以用在该类型中，除了不带符号的右移位运算符`>>>`和一元的求正运算符`+`，因为会报错**。前者是因为该类型没有最高位，后者是在`asm.js`总是报错或者返回`Number`类型。
+
+相等运算符会改变数据类型，也是不允许混合使用。精确相等运算符`===`则不会类型改变可以混合使用
+```js
+0n == 0 // TypeError
+0n == false // TypeError
+
+0n === 0 // false
+```
+:::
 
 ## Math对象的扩展
 1. `Math.trunc()`去除一个小数的小数部分，返回整数部分。对于非数值的参数，用`Number()`转换为数值。对于空值和无法截取整数的值返回`NaN`

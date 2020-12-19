@@ -3,7 +3,7 @@
 1. 文档节点是每个文档的根节点。在`HTML`文档元素始终都是`<html>`元素。
 2. 每个节点都有一个`childNodes`属性，其中保存着一个`NodeList`对象。`NodeList`是一种类数组对象，用于保存一组有序的节点，可以通过方括号，也可以使用`item()`方法访问该类数组中的对象。通过使用列表中每个节点的`previousSibling`和`nextSibling`属性，可以访问类数组列表某个节点的相邻节点。
 3. 每个节点都有一个`parentNode`属性，该属性指向文档树中的父节点。父节点有个`firstChild/lastChild`值表示第一个和最后一个子节点。`hasChildNodes()`表示有子节点时返回`true`
-4. 所有节点都有最后一个属性`ownerDocument`，该属性指向表示整个文档的文档节点。这种关系表示的是任何节点都属于它所在的文档，任何节点都不能同时存在于两个或更多个文档中。
+4. 所有节点都有最后一个属性`ownerDocument`，**该属性指向表示整个文档的文档节点**。这种关系表示的是任何节点都属于它所在的文档，任何节点都不能同时存在于两个或更多个文档中。
 ::: tip
 1. `nodeType`为`1`时为元素节点，为`3`时为文本节点
 :::
@@ -61,8 +61,8 @@ console.log(show.style)
 
 ## 元素大小
 - 偏移量
-    + `offsetLeft`:元素的左外边框至包含元素的上内边框的像素距离
-    + `offsetTop`:元素的上外边框至包含元素的上内边框的像素距离
+    + `offsetLeft`:元素的左外边框至包含元素(`position`不为`static`)的上内边框的像素距离
+    + `offsetTop`:元素的上外边框至包含元素(`position`不为`static`)的上内边框的像素距离
     + `offsetHeight`: 元素在垂直方向上占用的空间大小（包括元素的高度，可见的水平滚动条高度，上下边框高度）
     + `offsetWidth`:元素在水平方向占用空间大小
 > 偏移量属性都是只读的，每次访问它们都需要重新计算。避免重复访问这些属性，避免回流问题的出现，提高性能
@@ -82,7 +82,7 @@ console.log(show.style)
 document.body.clientWidth || document.documentElement.clientWidth // 高度也是这么处理兼容性
 ```
 
-利用`getBoundlingClientRect()`方法返回一个矩形对象，来确定元素的大小。
+利用`getBoundlingClientRect()`方法返回一个矩形对象，来确定元素的具体位置和大小，位置是相对视口的。
 
 ## jquery dom的api对应原生
 1. 获取dom属性

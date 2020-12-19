@@ -67,7 +67,8 @@ module.exports = {
                 '/basis/JavaScript/Js节流防抖',
                 '/basis/JavaScript/事件机制',
                 '/basis/JavaScript/web的一些API',
-                '/basis/JavaScript/js的错误处理'
+                '/basis/JavaScript/js的错误处理',
+                '/basis/JavaScript/解析对象原始值转换'
             ]
         },
         {
