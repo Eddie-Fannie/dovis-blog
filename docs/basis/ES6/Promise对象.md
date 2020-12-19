@@ -51,38 +51,6 @@ console.log('hi')
 2. `then`方法指定的回调函数将在当前脚本所有同步任务执行完成后才执行。
 > 传递给 `new Promise` 的是 `executor` 执行器。当 `Promise` 被创建的时候，`executor` 会立即同步执行。`executor` 函数里通常做了 `2` 件事情：初始化一个异步行为和控制状态的最终转换。
 
-## 用Promise实现Ajax例子
-```js
-var getJson = function(url) {
-    var promise = new Promise((resolve, reject) => {
-        var client = new XMLHttpRequest;
-        client.open('GET', url)
-        client.onreadystatechange = handler;
-        client.responseType = 'json'
-        client.setRequestHeader('Accept', 'application/json')
-        client.send()
-    })
-    function handler() {
-        if(this.readState !== 4) {
-            return;
-        }
-        if(this.status === 200) {
-            console.log(this.response)
-            resolve(this.response)
-        } else {
-            reject(new Error(this.statusText))
-        }
-    }
-    return promise
-}
-
-getJson('http://ueclub.kingdee.com/kux/index/top').then((json) => {
-    console.log(json)
-}, (error) => {
-    console.log(error)
-})
-```
-
 **调用`resolve`或者`reject`并不会终结`Promise`的参数函数的执行**
 ```js
 new Promise((resolve, reject) => {
