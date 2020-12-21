@@ -1,6 +1,6 @@
 # JavaScript基础知识点
 ## 数据类型
-1. 原始类型有`null`, `undefined`, `string`, `number`, `boolean`, `symbol`
+1. 原始类型有`null`, `undefined`, `string`, `number`, `boolean`, `symbol`，`bigInt`
 
 > 所以`null`基本类型就不是`object`，虽然`typeof null`会输出`object`是因为历史遗留。在JS的最初版本中使用的是`32`位系统，为了性能考虑使用低位存储变量的类型信息，`000`开头代表是对象，然而`null`表示为全零，所以将它错误的判断为`object` 。
 

@@ -188,7 +188,17 @@ var obj = {
 obj.func();// obj
 ```
 
-> 箭头函数中的`this`的值取决于该函数外部非箭头函数的`this`的值，否则`this`的值会被设置为全局对象`Window`,且不能通过`call()`,`apply()`和`bind()`方法来改变`this`的值。--《深入理解ES6》。
+```js
+function foo() {
+    setTimeout(() => {
+        console.log('id:',this.id) // id:42
+    },100)
+}
+var id = 21;
+foo.call({id:42})
+```
+
+> 箭头函数中的`this`的值取决于**该函数外部非箭头函数的`this`的值**，否则`this`的值会被设置为全局对象`Window`,且不能通过`call()`,`apply()`和`bind()`方法来改变`this`的值。--《深入理解ES6》。
 
 ## 赋值给另外一个变量进行调用
 

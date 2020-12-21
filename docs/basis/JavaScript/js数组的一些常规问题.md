@@ -48,7 +48,7 @@ data.shift();  // 首部删除  [50,10,20,60,70]
 
 2. `splice()`方法：
 - 删除：可以删除任意数量的项，只需要传入要删除的第一项的位置，和要删除的项数。
-- 插入：可以向指定位置插入任意数量的项。参数为：起始位置，要删除的项数（一般为0，代表不删除），要插入的项
+- 插入：可以向指定位置插入任意数量的项。参数为：起始位置，要删除的项数（一般为`0`，代表不删除），要插入的项
 - 替换：向指定位置插入任意数量的项，同时删除任意数量的项。起始位置，要删除的项数和要插入的项。
 
 ::: tip
@@ -59,7 +59,7 @@ data.shift();  // 首部删除  [50,10,20,60,70]
 `indexOf()`和`lastIndexOf()`。这两个方法都接收两个参数，要查找的项和查找起点位置的索引（可选）。返回要查找的项在数组的位置，没有找到则返回`-1`，要查找的项必须严格相等（`===`），所以`NaN`就查找不出来。**找出符合条件的第一个数组成员即可**
 
 ## 迭代方法
-> ES5定义了5个迭代方法，都带两个参数。要在每一项运行的函数和运行该函数的作用域对象（影响`this`的值，可选）。函数参数则接收三个参数：数组项的值，该项在数组的位置和数组对象本身。
+> ES5定义了`5`个迭代方法，都带两个参数。要在每一项运行的函数和运行该函数的作用域对象（影响`this`的值，可选）。函数参数则接收三个参数：数组项的值，该项在数组的位置和数组对象本身。
 
 - `every()`：对数组每一项运行函数，对每一项都返回`true`，则返回`true`
 - `some()`：和前一个方法不同的地方在于，不需要每一项，有一项返回`true`就足够了
@@ -100,6 +100,9 @@ function unique(arr) {
 }
 ```
 3. 利用`indexOf` **新建一个空的结果数组，`for` 循环原数组，判断结果数组是否存在当前元素，如果有相同的值则跳过，不相同则`push`进数组。**
+
+> `stringObject/Array.indexOf(searchvalue,fromIndex)`方法可以返回某个指定的字符串在字符串中首次出现的位置。`searchvalue`必需。规定需检索的字符串值。`fromIndex`可选的整数参数。规定在字符串中开始检索的位置。合法值为`0-stringObject.length-1`。省略该参数，则将从字符串首字符开始检索。
+
 ```js
 function unique(arr) {
     if(!Array.isArray(arr)) {
@@ -116,7 +119,7 @@ function unique(arr) {
 }
 ```
 
-4. 利用`sort`。**利用sort()排序方法，然后根据排序后的结果进行遍历及相邻元素比对。**
+4. 利用`sort`。**利用`sort()`排序方法，然后根据排序后的结果进行遍历及相邻元素比对。**
 ```js
 function unique(arr) {
     if(!Array.isArray(arr)) {
@@ -202,6 +205,8 @@ function unique(arr) {
 ```
 
 6. 利用`includes`
+> `Array.prototype.includes`采用了`SameValueZero（）`进行比较，内部利用`Map/Set`。所以也可以判断到`NaN`
+
 ```js
 function unique(arr) {
     if(!Array.isArray(arr)) {
@@ -405,6 +410,13 @@ console.log(entries.next().value) // [2, 'c']
     - `join() toString()`会将空位视为`undefined`，而`undefined/null`会转为空字符串
 
 ES6则明确表示空位转为`undefined`
+::: tip
+- `Array.from`方法会将数组的空位转为`undefined`。扩展运算符也是
+- `copyWithin()`会连空位一起复制。
+- `fill()`会将空位视为正常的数组位置。
+- `for...of`循环也会遍历空位。
+- `entries()/keys()/values()/find()/findIndex()`会将空位处理成`undefined`。
+:::
 
 ## ES10新增的数组方法
 1. `flat()` 数组扁平化

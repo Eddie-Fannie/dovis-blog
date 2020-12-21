@@ -282,19 +282,158 @@ Math.sign = Math.sign || function(x) {
 4. `Math.hypot()`返回所有参数的平方和的平方根
 5. 指数运算符`**`。对于特别大的运算结果，和`Math.pow()`计算结果有略微差异。
 
+## 对象的扩展
+
+
 ## 函数扩展
-1. 默认参数为默认声明的，不能用`let/const`再次声明。默认参数应该是函数的尾参数，如果非尾部的参数设置默认值，实际上这个参数是无法忽略的，出发显式输入`undefined`。输入`null`没有这个效果。
+1. 默认参数为默认声明的，函数体内不能用`let/const`再次声明。默认参数应该是函数的尾参数，如果非尾部的参数设置默认值，实际上这个参数是无法忽略的，除非显式输入`undefined`。输入`null`没有这个效果。**使用参数默认值函数不能有同名参数**
 ```js
 function foo(x=5,y=6) {
     console.log(x,y)
 }
 foo(undefined,null) // 5 null
 ```
+
+```js
+function foo(x,x,y=1) {
+    ...
+}
+// SyntaxError: Duplicate parameter name not allowed in this context
+```
 2. 函数的`length`返回形参的个数。如果有默认值的参数，则减去。**形参的数量不包括剩余参数个数，仅包括第一个具有默认值之前的参数个数。**。**与之对比的是，`arguments.length`是函数被调用时实际传参的个数。**
 ```js
 (function (a) {}).length // 1
 (function (a=5) {}).length // 0
 
-(function (a=5, b,c) {}).length // 0
-(function(...args) {}).length // 0
+(function(...args) {}).length // 0 剩余参数rest也不会计入length属性
+```
+
+**如果设置了默认值的参数不是尾参数，那么`length`属性也不再计入后面的参数。**
+```js
+(function (a=0,b,c){}).length // 0
+(function(a,b=1,c){}).length // 1
+```
+
+3. `rest`参数之后不能再有其他参数，否则会报错。
+4. ES2016做了规定，只要函数参数使用了默认值，解构赋值或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错。
+5. 函数的`name`属性返回该函数的函数名。
+- 如果将一个匿名函数赋值给一个变量，ES5的`name`属性会返回空字符串，而ES6返回实际的函数名
+```js
+var f = function(){}
+f.name // '' es5
+f.name // 'f' es6
+```
+
+- 如果将一个具名函数赋值给一个变量，`name`属性返回具名函数的名字，而不是变量名。
+- `Function`构造函数返回的函数实例，`name`属性返回`anonymous`
+- `bind`返回的函数，`name`属性会加上`bound`前缀
+
+### 箭头函数
+::: tip
++ 箭头函数使用的注意事项：
+    - 函数体内的`this`对象就是定义时所在的对象，而不是使用所在的对象。
+    - 不可以当作构造函数。也就是说，不可以使用`new`命令，否则会抛出错误。
+    - 不可以使用`arguments`对象，该对象在函数体内不存在。可以使用`rest`剩余参数。
+    - 不可以使用`yield`命令，因此箭头函数不能用作`Generator`函数。
+:::
+
+> `this`指向的固定化并不是因为箭头函数内部有绑定`this`的机制，实际原因是箭头函数根本没有自己的`this`,导致内部的`this`就是外层代码块的`this`。正是因为没有`this`，所以不能用作构造函数。
+
+**箭头函数转为ES5**
+```js
+// ES6
+function foo() {
+    setTimeout(() => {
+        console.log('id:',this.id)
+    },100)
+}
+
+//es5
+function foo() {
+    var _this = this
+    setTimeout(function() {
+        console.log('id:',_this.id)
+    },100)
+}
+```
+
+> 除了`this`以下三个变量也是箭头函数中不存在的，分别指向外层函数的对应变量：`arguments,super,new.target`。
+
+```js
+function foo() {
+    setTimeout(() => {
+        console.log('args:'+arguments)
+    },100)
+}
+foo(2,4,6,8)
+//args: [2,4,6,8]
+```
+> 箭头函数内部的变量`arguments`其实就是函数`foo`的`arguments`变量。
+
+### 绑定`this`
+> 函数绑定运算符是并排的双冒号`(::)`，双冒号左边是一个对象，右边是一个函数。该运算符会自动将左边的对象作为上下文环境（即`this`对象）绑定到右边的函数上。
+
+```js
+foo::bar
+// 等同于
+bar.bind(foo)
+```
+
+- 如果双冒号左边为空，右边为一个对象的方法，则等同于将该方法绑定到该对象上。
+- 由于双冒号运算符返回的还是原来的对象，因此可以采用链式写法。
+
+### 尾调用
+> 函数最后一步是调用另一个函数
+
+```js
+function f(x) {
+    return g(x)
+}
+
+// 这些就不是了
+function f(x) {
+    let y = g(x)
+    return y;
+}
+
+function f(x) {
+    return g(x) + 1
+}
+// 都是调用了函数之后还有接下来的操作，所以不是尾调用。
+```
+
+::: tip
+函数调用会在内存形成一个调用记录，又称调用帧，保存调用位置和内部变量等信息。所有调用帧会形成一个调用栈。尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置，内部变量等信息就不会再用到了，直接在内层函数的调用帧取代外层函数的即可。
+
+只有不再用到外层函数的内部变量，内层函数的调用帧才会取代外层函数的调用帧，否则就无法进行尾调用优化。
+:::
+
+> 尾调用自身就是尾递归。对于尾递归来说，由于只存在一个调用帧，所以永远不会发生“栈溢出”错误。
+
+```js
+function factorial(n) {
+    if(n===1) return ;
+    return n*factorial(n - 1)
+}
+factorial(5) // 120
+```
+> 阶乘函数，计算`n`的阶乘，最多需要保存`n`个调用记录，复杂度为`O(n)`。如果改写成尾递归，只保留一个调用记录，则复杂度为`O(1)`。
+
+```js
+function factorial(n,total) {
+    if(n === 1) return total;
+    return factorial(n-1,n*total)
+}
+factorial(5,1)
+```
+
+> 只要使用尾递归，就不会发生栈溢出，相对节省内存。
+
+```js
+function Fibonacci2(n,ac1=1,ac2=1) {
+    if(n <= 1) {return ac2}
+    return Fibonacci2(n-1,ac2,ac1 + ac2)
+}
+Fibonacci2(100) // 573147844013817200000
+Fibonacci2(1000) // 7.0330367711422765e+208
 ```

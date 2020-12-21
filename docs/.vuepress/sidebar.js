@@ -161,7 +161,8 @@ module.exports = {
                 '/advanced/Performance/前端优化',
                 '/advanced/Performance/高性能优化十万条数据',
                 '/advanced/Performance/vue实现一个图片懒加载指令',
-                '/advanced/Performance/慕课前端性能课程'
+                '/advanced/Performance/慕课前端性能课程',
+                '/advanced/Performance/页面性能的方法'
             ]
         }
     ],
@@ -317,6 +318,13 @@ module.exports = {
             children: [
                 '/interview/项目考点'
             ]
+        },
+        {
+            title: '面试情况',
+            collapsable: false,
+            children: [
+                '/interview/面试情况'
+            ]
         }
     ],
     '/algorithm/Stack-Queue/': [
@@ -443,7 +451,7 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-              
+                '/algorithm/DataStructure/String/大数相乘'
             ]
         }
     ],
@@ -457,7 +465,8 @@ module.exports = {
                 '/algorithm/DataStructure/LinkedList/移交链表元素',
                 '/algorithm/DataStructure/LinkedList/反转链表',
                 '/algorithm/DataStructure/LinkedList/删除链表的结点',
-                '/algorithm/DataStructure/LinkedList/链表中倒数第k个节点'
+                '/algorithm/DataStructure/LinkedList/链表中倒数第k个节点',
+                '/algorithm/DataStructure/LinkedList/合并两个有序链表'
             ]
         },
         {
