@@ -411,6 +411,7 @@ module.exports = {
                 '/algorithm/DataStructure/Array/种花问题',
                 '/algorithm/DataStructure/Array/比较字符串最小字母出现频次',
                 '/algorithm/DataStructure/Array/词典中最长的单词',
+                '/algorithm/DataStructure/Array/最大数'
             ]
         },
         {
