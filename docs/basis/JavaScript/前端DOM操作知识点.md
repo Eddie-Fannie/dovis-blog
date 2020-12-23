@@ -82,7 +82,15 @@ console.log(show.style)
 document.body.clientWidth || document.documentElement.clientWidth // 高度也是这么处理兼容性
 ```
 
-利用`getBoundlingClientRect()`方法返回一个矩形对象，来确定元素的具体位置和大小，位置是相对视口的。
+利用`getBoundlingClientRect()`方法返回一个矩形对象，来确定元素的具体位置和大小，位置是相对视口的。（不包括文档卷起来的部分）
+
+::: tip
++ 其他方法
+    - `getClientRects`获取元素占据页面的所有矩形区域
+    > `getClientRects` 返回一个`TextRectangle`集合，就是`TextRectangleList`对象。`TextRectangle`对象包含了, `top left bottom right width height` 六个属性`TextRectangle`对于文本对象，W3C提供了一个 `TextRectangle` 对象，这个对象是对文本区域的一个解释。这里的文本区域只针对`inline` 元素，比如：`a, span, em`这类标签元素。**通俗讲可以知道文本区域有多少行**
+
+    ![img](/dovis-blog/other/66.png)
+:::
 
 ## jquery dom的api对应原生
 1. 获取dom属性
