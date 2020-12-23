@@ -194,7 +194,8 @@ module.exports = {
                 '/another/Net/DNS初识',
                 '/another/Net/TCP三次握手',
                 '/another/Net/HTTP',
-                '/another/Net/WebSocket'
+                '/another/Net/WebSocket',
+                '/another/Net/一些小知识点'
             ]
         }
     ],

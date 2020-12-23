@@ -110,3 +110,55 @@ foo = 1;  //赋值不会提升,赋值后 foo就不再是函数类型了，而是
 console.log(foo) //输出1
 foo() //这里会报错，因为foo不是函数了
 ```
+## `Babel`编译处理
+
+::: tip
+- `Babel`编译会将`const/let`编译为`var`。为了保证`const`不可变性，`Babel`如果在编译过程中发现对`const`声明的变量进行二次赋值，则会直接报错，这样就可以在编译阶段对错误进行处理。
+```js
+"use strict"
+function _readOnlyError(name) {
+    throw new Error("\" + name + "\" is read-only")
+}
+var foo = 0;
+foo = (_readOnlyError("a"),1)
+```
+> `Babel`只要检测到`const`声明的变量被改变赋值，就会主动插入一个`_readOnyError`函数，并执行此函数。这个函数的执行内容就是报错，因此代码执行时就会直接抛出异常。
+
+- 至于`let`的块级概念，在`ES5`中一般通过立即调用函数表达式实现块级作用域，但是`Babel`对此的处理非常取巧，会在块内给变量换一个名字，这样在块外自然就无法被访问到了。
+- 暂时性死区又是如何被`Babel`编译的呢？。其实`Babel`在编译时会将`let,const`变量重新命名，同时在js严格模式下不允许使用未声明的变量，这样在声明前使用这个变量就会报错。
+
+- 对于经典的`for`循环问题。`Babel`处理并不让感到意外，具体还是使用闭包来存储变量
+
+```js
+let array = []
+for(let i=0;i<10;i++) {
+    array[i] = function() {
+        console.log(i)
+    }
+}
+array[6]() // 6
+
+let array = []
+for(var i=0;i<10;i++) {
+    array[i] = function() {
+        console.log(i)
+    }
+}
+array[6]() // 10
+```
+
+`Babel`还使用了闭包保存每个循环变量`i`的值。
+```js
+'use strict'
+var array = []
+var _loop = function _loop(i) {
+    array[i] = function() {
+        console.log(i)
+    }
+}
+for(var i=0;i<10;i++) {
+    _loop(i)
+}
+array[6]()
+```
+:::
