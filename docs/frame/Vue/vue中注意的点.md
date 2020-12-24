@@ -9,6 +9,11 @@
 - 当子组件完成挂载后，父组件会主动执行一次`beforeUpdate/updated`钩子函数（仅首次）
 - 父子组件在`data`变化中是分别监控的，但是在更新`props`中的数据是关联的（可实践）
 - 销毁父组件时，先将子组件销毁后才会销毁父组件
+
+1. 加载渲染过程 父 `beforeCreate` -> 父 `created` -> 父 `beforeMount` -> 子 `beforeCreate` -> 子 `created` -> 子 `beforeMount` -> 子 `mounted` -> 父 `mounted`
+2. 子组件更新过程 父 `beforeUpdate` -> 子 `beforeUpdate` -> 子 `updated` -> 父 `updated`
+3. 父组件更新过程 父 `beforeUpdate` -> 父 `updated`
+4. 销毁过程 父 `beforeDestroy` -> 子 `beforeDestroy` -> 子 `destroyed` -> 父 `destroyed`
 :::
 
 4. 兄弟组件生命周期：

@@ -110,6 +110,28 @@ foo = 1;  //赋值不会提升,赋值后 foo就不再是函数类型了，而是
 console.log(foo) //输出1
 foo() //这里会报错，因为foo不是函数了
 ```
+
+```js
+var temp = 1; 
+function test() { 
+    temp = 10; 
+    return; 
+    function temp() {} 
+} 
+test(); 
+console.log(temp); // 1
+
+// 预编译阶段，函数提升
+var temp = 1; 
+function test() { 
+    function temp() {} 
+    temp = 10; 
+    return; 
+    // 因此导致这里面相当于创建了一个值为10的局部变量temp
+} 
+test(); 
+console.log(temp);// 打印的还是全局的了
+```
 ## `Babel`编译处理
 
 ::: tip

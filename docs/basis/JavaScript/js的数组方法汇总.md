@@ -245,3 +245,16 @@ for (const [prop, value] of Object.entries(person)) {
 // 'name', 'John Smith'
 // 'job', 'agent'
 ```
+
+## `map()`
+> `map()`方法定义在JavaScript的`Array`中，它返回一个新的数组，数组中的元素为原始数组调用函数处理后的值。**不会改变原数组，不会对空数组进行检测**
+
+```js
+array.map(function(currentValue, index, arr), thisIndex)
+
+let array = [1, 2, 3, 4, 5];
+let newArray = array.map((item) => {
+  return item * item;
+})
+console.log(newArray)  // [1, 4, 9, 16, 25]
+```
