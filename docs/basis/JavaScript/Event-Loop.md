@@ -704,7 +704,7 @@ async function async2() {
 async1();
 console.log(10);
 ```
-> 这题考察了 `async/await`，在执行 `async1` 函数时，遇到 `await async2()`; 这段代码，而 `async2`函数是个同步函数，直接输出 `async2 end`，然后因为是 `await`，返回的是 `promise`对象，返回值是 async2()执行的结果，即默认的 `undefined`，之后的代码属于微任务，加入微任务队列，此时再走同步代码，输出 `10`，之后，主线程已经执行完毕，然后去找微任务队列，取出之前加入的微任务，输出 `async1 end`。
+> 这题考察了 `async/await`，在执行 `async1` 函数时，遇到 `await async2()`; 这段代码，而 `async2`函数是个同步函数，直接输出 `async2 end`，然后因为是 `await`，返回的是 `promise`对象，返回值是 `async2()`执行的结果，即默认的 `undefined`，之后的代码属于微任务，加入微任务队列，此时再走同步代码，输出 `10`，之后，主线程已经执行完毕，然后去找微任务队列，取出之前加入的微任务，输出 `async1 end`。
 
 13. 
 ```js
