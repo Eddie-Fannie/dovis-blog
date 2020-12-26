@@ -132,6 +132,34 @@ function test() {
 test(); 
 console.log(temp);// 打印的还是全局的了
 ```
+
+```js
+console.log(a)
+var a = 1
+console.log(a)
+function a(){console.log(2)}
+console.log(a)
+var a = 3;
+console.log(a)
+function a() {
+    console.log(3)
+}
+a()
+console.log(a) 
+
+// 等价于
+function a() {console.log(3)} // 函数提升了两个，后面覆盖了前面console.log(2)这个
+var a
+console.log(a) // function a() {console.log(3)} 因为var a并没有赋值，所以打印出函数
+a = 1
+console.log(a) // 1
+console.log(a) // 1
+a = 3
+console.log(a) // 3
+a() // 报错了，此时a不是函数，没办法调用
+console.log(a)
+```
+
 ## `Babel`编译处理
 
 ::: tip

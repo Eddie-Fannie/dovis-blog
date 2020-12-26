@@ -99,7 +99,7 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 :::
 
 ## CSS里的`visibility`属性有个`collapse`属性值
-`visibility`设置为`hidden`，表示元素不可见但在页面仍会占据空间。而`collapse`表示元素不可见，但不占据空间。
+`visibility`设置为`hidden`，表示元素不可见但在页面仍会占据空间。当一个元素的`visibility`属性被设置成`collapse`值后，对于一般的元素，它的表现跟`hidden`是一样的。但例外的是，如果这个元素是`table`相关的元素，例如`table`行，`table group`，`table`列，`table column group`，它的表现却跟`display: none`一样，也就是说，它们占用的空间也会释放。
 
 1. `chrome`中，使用`collapse`值和使用`hidden`没有区别。
 2. `firefox`，`opera和IE`，使用`collapse`值和使用`display：none`没有什么区别。
@@ -147,7 +147,33 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 :::
 
 ## 使用百分比设定单位
-> 如果使用百分数设定内边距，外边距都是相对于元素父级元素的宽度来设置的，而不是高度。
+
+::: tip
+- `position:ablsolute`中的`%`
+> 对于设置绝对定位的元素，我们可以用`left,top`表示其偏移量，我们把这个元素的祖先元素中第一个存在定位属性的元素为参照物，其中`%`是相对于参照物的，`left`相对于参照物的`width`,`top`相对于这个参照物`height`。
+
+- `position:relative`中的`%`
+> 对于设置相对定位的元素，`%`的数值是相对于自身的，`left`相对于自身的`width`,`top`相对于自身的`height`
+
+- `position:fixed`中的`%`
+> 对于设置固定定位的元素，`%`是相对于视口的。`left`-->视口的`width`,`top`相对于视口的`height`
+
+- `margin/padding`的`%`
+> 无论`top/left`都是相对于父元素的宽度的。是宽度！！！
+
+- `border-radius/background-size/transform:translate`
+> 相对于自身的宽高
+
+- `text-indent`
+> 设置首行缩进，相对于父元素的宽。
+
+- `font-size`
+> 相对于父元素的字体大小
+
+- `line-height`
+> 相对于该元素的`font-size`数值的。
+
+:::
 
 ## 布局
 1. 多列布局（如同报纸模式）允许在多个垂直列中布局内容
@@ -193,7 +219,7 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
     :::
     - `flex-shrink`
     > 定义项目的缩小比例，默认为1。项目空间不足，则将缩小。
-    - `flex-basis`。默认占多少
+    - `flex-basis`。该属性定义了在分配多余空间之前，项目占据的主轴空间 
     > 默认值为`auto`
     - `flex`
     > 2-4属性的缩写：` flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]`。后两个属性可选
@@ -315,6 +341,13 @@ border-radius: 一次设置四个角简写属性，分别为`border-top-left-rad
 **常用伪元素和伪类：**
 ![img](/dovis-blog/other/19.png)
 
+::: tip
+1. `:focus-within` 伪类选择器，它表示一个元素获得焦点，或该元素的后代元素获得焦点。划重点，它或它的后代获得焦点。
+2. `nth-child`和`nth-of-type`的区别：
+- `ele:nth-of-type(n)`是指父元素下第`n`个`ele`元素。而`ele:nth-child(n)`是指父元素下第`n`个元素并且这个元素为`ele`，若不是，则选择失效。如果`:nth-child(n)`不指定父元素标签类型（用类选择器代替）则依旧选中第`n`个元素；如果`:nth-type-of(2)`选中所有类型标签的第`n`个。
+- `n`可以是数字，关键词或者公式。关键词：`Odd/even`。用于匹配下标是奇数还是偶数的子元素的关键词。**第一个子元素下标为`1`**。公式则为`an+b`（表示周期的长度，`n`是计数器从`0`开始，`b`是偏移值。
+:::
+
 ## `border:none`和`border: 0`的区别？
 - `{border：0;}`: 把`border`设置为`0`像素，虽然在页面上看不到，但是按`border`默认值理解，浏览器依然对`border-width/border-color`进行了渲染，即已经占用内存值；
 - `{border：none；}`被理解为`border-style:none`。`boder:0;`比`border:none`多渲染了一个`border-width:0`,也就是为什么`border:none`的性能要比`border:0`高；
@@ -389,8 +422,24 @@ div{
 white-space: nowrap;
 text-overflow: ellipsis;
 overflow: hidden;
-word-break: break-all;
 ```
+```css
+.text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+```
+
+::: tip
+- `-webkit-line-clamp: 2`（用来限制在一个块元素显示的文本的行数, `2` 表示最多显示 `2` 行。 为了实现该效果，它需要组合其他的`WebKit`属性）
+- `display: -webkit-box`（和 `1` 结合使用，将对象作为弹性伸缩盒子模型显示 ）
+- `-webkit-box-orient: vertical`（和 `1` 结合使用 ，设置或检索伸缩盒对象的子元素的排列方式 ）
+- `overflow: hidden`（文本溢出限定的宽度就隐藏内容）
+- `text-overflow: ellipsis`（多行文本的情况下，用省略号“…”隐藏溢出范围的文本)
+:::
 
 ## zoom/scale的区别
 - 控制缩放的值不一样。`zoom`更全面，但是不能是负数，只能等比例控制；而`scale`虽然只能是数值，但是能负数，可以只控制`1`个维度。
@@ -402,3 +451,9 @@ word-break: break-all;
 ## 表格自动换行
 `word-break`:`noraml`使用浏览器默认的换行规则；`break-all`：允许单词内换行；`keep-all`：只能在半角空格或连字符处换行；
 `word-wrap`：`normal`是用浏览器默认的换行规则；`break-word`：在长单词或`url`地址内部换行；
+
+## `width: auto`和`width:100%`区别
+一般而言`width:100%`会使元素`box`的宽度等于父元素的`content box`的宽度。`width:auto`会使元素撑满整个父元素，`margin、border、padding、content`区域会自动分配水平空间。
+
+## `font-style`属性中的`italic/oblique`区别
+`italic`和`oblique`这两个关键字都表示“斜体”的意思。它们的区别在于，`italic`是使用当前字体的斜体字体，而`oblique`只是单纯地让文字倾斜。如果当前字体没有对应的斜体字体，则退而求其次，解析为`oblique`，也就是单纯形状倾斜。

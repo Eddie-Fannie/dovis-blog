@@ -129,3 +129,33 @@ this.$emit('update:foo', newValue)
 当组件和混入对象含有同名选项时，这些选项将以恰当的方式进行“合并”。比如数据对象在内部会进行递归合并，并在发生冲突时以组件数据优先。
 - 同名钩子函数将合并为一个数组，因此都将被调用。另外，混入对象的钩子将在组件自身钩子之前调用。
 - 值为对象的选项，如`methods/components/directives`将被合并同一个对象。两个对象键名冲突时，取组件对象的键值对。
+
+## v-model原理
+::: tip
+我们在 `vue` 项目中主要使用 `v-model` 指令在表单 `input、textarea、select` 等元素上创建双向数据绑定，我们知道 `v-model` 本质上不过是语法糖，`v-model` 在内部为不同的输入元素使用不同的属性并抛出不同的事件。
+- `text` 和 `textarea` 元素使用 `value` 属性和 `input` 事件；
+- `checkbox`和`radio`使用`checked`属性和`change`事件
+- `select`字段符`value`作为`prop`并将`change`作为事件。
+:::
+
+```html
+<input v-model='something'>
+    
+<input v-bind:value="something" v-on:input="something = $event.target.value">
+```
+如果在自定义组件中，`v-model` 默认会利用名为 `value` 的 `prop` 和名为 `input` 的事件
+
+```html
+父组件：
+<ModelChild v-model="message"></ModelChild>
+子组件：
+<div>{{value}}</div>
+props:{
+    value: String
+},
+methods: {
+  test1(){
+     this.$emit('input', '小红')
+  },
+}
+```

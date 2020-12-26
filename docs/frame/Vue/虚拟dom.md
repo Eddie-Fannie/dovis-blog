@@ -1,36 +1,36 @@
 # vue的虚拟dom和虚拟节点VNode
 
 ## 什么是虚拟dom
-> 通过js对象模拟出一个我们需要渲染到页面上的dom树的结构，实现了一个修改js对象即可修改页面dom的快捷途径，避免了我们手动再去一次次操作dom-api的繁琐，而且其提供了`diff`算法可以使得用最少的dom操作进行修改。
+> 通过js对象模拟出一个我们需要渲染到页面上的`dom`树的结构，实现了一个修改js对象即可修改页面`dom`的快捷途径，避免了我们手动再去一次次操作`dom-api`的繁琐，而且其提供了`diff`算法可以使得用最少的`dom`操作进行修改。（虚拟`DOM`最终也要挂到浏览器上成为真实`DOM`节点的，因此使用虚拟`DOM`并不能使操作`DOM`次数减少，但能够精确地获取最小的，最必要的操作`DOM`的集合）
 
-1. 虚拟DOM解决方式就是通过状态生成一个虚拟节点树，然后使用虚拟节点树进行渲染。在渲染之前，会使用新生成的虚拟节点树和上一次生成的虚拟节点树进行对比，只渲染不同的部分。
+1. 虚拟`DOM`解决方式就是通过状态生成一个虚拟节点树，然后使用虚拟节点树进行渲染。在渲染之前，会使用新生成的虚拟节点树和上一次生成的虚拟节点树进行对比，只渲染不同的部分。
 
-2. 虚拟节点树其实是由组件树建立起来的整个虚拟节点（Virtual Node,简写vnode）树
+2. 虚拟节点树其实是由组件树建立起来的整个虚拟节点（`Virtual Node`,简写`vnode`）树
 
-3. 虚拟DOM除了它的数据结构定义，映射到真实的DOM实际上要经历VNode的`create`,`diff`,`patch`等过程。VNode的create是通过`createElement`方法创建的。
+3. 虚拟`DOM`除了它的数据结构定义，映射到真实的`DOM`实际上要经历`VNode`的`create`,`diff`,`patch`等过程。`VNode`的`create`是通过`createElement`方法创建的。
 
 ## vue.js中的虚拟dom
-> 在vue.js中，我们使用模板来描述状态与DOM之间的映射关系。Vue.js通过编译将模板转换成渲染函数`createElement`，执行渲染函数就可以得到一个虚拟节点树，使用这个虚拟节点树就可以渲染页面。（通过`patch`把虚拟节点渲染成视图）
+> 在vue.js中，我们使用模板来描述状态与`DOM`之间的映射关系。Vue.js通过编译将模板转换成渲染函数`createElement`，执行渲染函数就可以得到一个虚拟节点树，使用这个虚拟节点树就可以渲染页面。（通过`patch`把虚拟节点渲染成视图）
 
-> 为了避免不必要的DOM操作，虚拟DOM在虚拟节点映射到视图的过程中，将虚拟节点与上一次渲染视图所使用的旧虚拟节点（oldVnode）做对比，找出真正需要更新的节点来进行DOM操作，从而避免操作不用修改的DOM。
+> 为了避免不必要的`DOM`操作，虚拟`DOM`在虚拟节点映射到视图的过程中，将虚拟节点与上一次渲染视图所使用的旧虚拟节点（`oldVnode`）做对比，找出真正需要更新的节点来进行`DOM`操作，从而避免操作不用修改的`DOM`。
 
 ## `createElement`方法
 Vue.js利用`createElement`方法创建VNode
 ![img](/dovis-blog/vue/2.png)
 
-`createElement`方法实际上是对`_createElement`的封装，允许传入的参数更加灵活，处理这些参数之后，调用真正创建VNode的函数就是`_createElement`
+`createElement`方法实际上是对`_createElement`的封装，允许传入的参数更加灵活，处理这些参数之后，调用真正创建`VNode`的函数就是`_createElement`
 ![img](/dovis-blog/vue/3.png)
 
 **五个参数类型**
-- `context`表示VNode的上下文环境，是Component的类型；
+- `context`表示VNode的上下文环境，是`Component`的类型；
 - `tag`表示标签，可以是一个字符串，也可以是一个`Component`；
-- `data`表示VNode的数据；
-- `children`表示当前的VNode的子节点，任意类型；
+- `data`表示`VNode`的数据；
+- `children`表示当前的`VNode`的子节点，任意类型；
 - `normalizationType`表示子节点规范的类型，主要参考`render`函数是编译生成的还是用户手动生成的。
 
-**以下分析`createElement`两个重点流程，children的规范化和VNode如何创建。**
+**以下分析`createElement`两个重点流程，`children`的规范化和`VNode`如何创建。**
 ## children的规范化
-> 由于 `Virtual DOM` 实际上是⼀个树状结构，每⼀个`VNode`可能会有若⼲个⼦节点，这些⼦节点应该也是`VNode`的类型。 `_createElement`接收的第 4 个参数 `children` 是任意类型的，因此我们需要把它们规范成`VNode`类型。这⾥根据`normalizationType`的不同，调⽤了`normalizeChildren(children)`和 `simpleNormalizeChildren(children)`⽅法。
+> 由于 `Virtual DOM` 实际上是⼀个树状结构，每⼀个`VNode`可能会有若⼲个⼦节点，这些⼦节点应该也是`VNode`的类型。 `_createElement`接收的第 `4` 个参数 `children` 是任意类型的，因此我们需要把它们规范成`VNode`类型。这⾥根据`normalizationType`的不同，调⽤了`normalizeChildren(children)`和 `simpleNormalizeChildren(children)`⽅法。
 
 ```js
 export function simpleNormalizeChildren (children: any) {
@@ -107,11 +107,11 @@ function normalizeArrayChildren (children: any, nestedIndex?: string): Array<VNo
 > `normalizeArrayChildren`接收2个参数，`children`表⽰要规范的⼦节点，`nestedIndex`表⽰嵌套的索引，因为单个`child`可能是⼀个数组类型。 `normalizeArrayChildren`主要的逻辑就是遍历`children`，获得单个节点c，然后对c的类型判断，如果是⼀个数组类型，则递归调⽤`normalizeArrayChildren`; 如果是基础类型，则通过`createTextVNode`⽅法转换成`VNode`类型； 否则就已经是`VNode`类型了，如果`children`是⼀个列表并且列表还存在嵌套的情况，则根据 `nestedIndex`去更新它的`key`。这⾥需要注意⼀点，在遍历的过程中，对这3种情况都做了如下处理：如果存在两个连续的`text`节点，会把它们合并成⼀个`text`节点。经过对`children`的规范化，`children`变成了⼀个类型为`VNode`的`Array`。
 
 ## 什么是VNode
-> 在Vue.js中存在一个VNode类，使用它可以实例化不同类型的vnode实例，而不同类型的vnode实例各自表示不同类型的DOM元素。
+> 在Vue.js中存在一个VNode类，使用它可以实例化不同类型的`vnode`实例，而不同类型的`vnode`实例各自表示不同类型的`DOM`元素。
 
 ![img](/dovis-blog/vue/4.png)
 
-**Vue.js对状态采取中等粒度的侦测策略。当状态发生变化，只通知到组件级别，然后组件内使用虚拟DOM来渲染视图。Vue1采取细粒度，这样一个细小的状态发生变化，都会利用`watcher`侦测，大大消耗了内存。但如果一个组件只有一个状态发生变化，整个组件就要重新渲染，这样也会造成很大的性能损耗，所以对vnode进行缓存就尤为重要了。**
+**Vue.js对状态采取中等粒度的侦测策略。当状态发生变化，只通知到组件级别，然后组件内使用虚拟`DOM`来渲染视图。`Vue1`采取细粒度，这样一个细小的状态发生变化，都会利用`watcher`侦测，大大消耗了内存。但如果一个组件只有一个状态发生变化，整个组件就要重新渲染，这样也会造成很大的性能损耗，所以对`vnode`进行缓存就尤为重要了。**
 
 ## VNode类型
 + vnode类型
@@ -240,4 +240,218 @@ if (typeof tag === 'string') {
 > 这⾥先对`tag`做判断，如果是`string`类型，则接着判断如果是内置的⼀些节点，则直接创建⼀个普通`VNode`，如果是为已注册的组件名，则通过`createComponent`创建⼀个组件类型的`VNode`，否则创建⼀个未知的标签的`VNode`。如果是`tag`⼀个`Component`类型，则直接调⽤`createComponent`创建⼀个组件类型的`VNode`节点。
 
 ## 为什么使用虚拟DOM
-之所以需要使用状态生成VNode，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实DOM节点，从而避免不必要的DOM操作，节省一定的性能开销。
+之所以需要使用状态生成`VNode`，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实`DOM`节点，从而避免不必要的`DOM`操作，节省一定的性能开销。
+
+## 虚拟`DOM`到真实`DOM`的一个伪代码过程
+> 学习《前端开发核心进阶》积累
+
+```js
+// 首先实现一个setAttribute方法。使用该方法来对DOM节点进行属性设置
+const setAttribute = (node,key,value) => {
+  switch(key) {
+    case 'style':
+      node.style.cssText = value
+      break;
+    case 'value':
+      let tagName = node.tagName || ''
+      tagName = tagName.toLowerCase()
+      if(tagName === 'input' || tagName === 'textarea') {
+        node.value = value
+      } else {
+        node.setAttribute(key,value)
+      }
+      break;
+    default:
+      node.setAttribute(key,value)
+      break;
+  }
+}
+
+// 实现一个用于生成虚拟DOM的类
+class Element {
+  constructor(tagName, attributes={}, children = []) {
+    this.tagName = tagName
+    this.attributes = attributes
+    this.children = children
+  }
+  // 加入render函数，根据虚拟DOM生成真实DOM片段
+  render() {
+    let element = document.createElement(this.tagName)
+    let attributes = this.attributes
+    for(let key in attributes) {
+      setAttribute(element,key,attributes[key])
+    }
+    let children = this.children
+    children.forEach(child => {
+      let childElement = child instanceof Element
+        ? child.render()
+        : document.createTextNode(child) // 若是字符串直接创建文本节点
+      element.appendChild(childElement)
+    })
+    return element
+  }
+}
+
+function element(tagName,attributes,children) {
+  return new Element(tagName,attributes,children)
+}
+
+//将真实DOM节点渲染到浏览器上
+const renderDom = (element,target) => {
+  target.appendChild(element)
+}
+
+// 测试例子
+const chap = element('ul',{id: 'list'},[
+  element('li',{class: 'chapter'},['chapter1']),
+  element('li',{class: 'chapter'},['chapter2']),
+  element('li',{class: 'chapter'},['chapter3'])
+])
+const dom = chap.render()
+renderDom(dom,document.body)
+```
+
+## `diff`算法伪代码
+> 《前端开发核心知识进阶》一书积累所得
+
+由上可以产出一份虚拟`DOM`，并渲染在浏览器中。用户进行特定操作后，会产出一份新的虚拟`DOM`，如何得出前后两份虚拟`DOM`的差异，并交给浏览器需要更新的结果呢？
+```js
+const diff = (oldVirtualDom,newVirtualDom) => {
+  let patches = {}
+  // 递归树，将比较后的结果存储到patches中
+  walkToDiff(oldVirtualDom,newVirtualDom,0,patches)
+  return patches
+}
+
+let initialIndex = 0;
+const walkToDiff = (oldVirtualDom,newVirtualDom,index,patches) => {
+  let diffResult = []
+  // 如果newVirtualDom不存在，则说明节点已经移除，接着可以将type为REMOVE的对象推进diffResult并记录index
+  if(!newVirtualDom) {
+      diffResult.push({
+        type: 'REMOVE',
+        index
+      })
+  } else if(typeof oldVirtualDom === 'string' && typeof newVirtualDom === 'string') {
+      // 如果新旧节点都是文本节点
+      if(oldVirtualDom !== newVirtualDom) {
+        diffResult.push({
+          type: 'MODIFY_TEXT',
+          index,
+          data: newVirtualDom
+        })
+      }
+  } else if(oldVirtualDom.tagName === newVirtualDom.tagName) {
+      // 新旧节点类型相同
+      // 比较属性是否相同
+      let diffAttributeResult = {}
+      for(let key in oldVirtualDom) {
+        if(oldVirtualDom[key] !== newVirtualDom[key]) {
+          // 同一个key下，旧新节点的属性不一致，则直接替换掉旧节点的属性
+          diffAttributeResult[key] = newVirtualDom[key]
+        }
+      }
+      for(let key in newVirtualDom) {
+        //旧节点不存在的新属性
+        if(!oldVirtualDom.hasOwnProperty(key)) {
+          diffAttributeResult[key] = newVirtualDom[key]
+        }
+      }
+      if(Object.keys(diffAttributeResult).length > 0) {
+        diffResult.push({
+          type: 'MODIFY_ATTRIBUTES',
+          diffAttributeResult
+        })
+      }
+      // 如果有子节点则遍历子节点
+      oldVirtualDom.children.forEach((child,index) => {
+        walkToDiff(child,newVirtualDom.children[index],++initialIndex,patches)
+      })
+  } else {
+    // 如果节点类型不同，已经被直接替换了，则直接将新的结果放入diffResult数组中
+    diffResult.push({
+      type: 'REPLACE',
+      newVirtualDom
+    })
+  }
+  if(!oldVirtualDom) {
+    diffResult.push({
+      type: 'REPLACE',
+      newVirtualDom
+    })
+  }
+  if(diffResult.length) {
+    patches[index] = diffResult
+  }
+}
+
+// 测试案例
+const chap = element('ul',{id: 'list'},[
+  element('li',{class: 'chapter'},['chapter1']),
+  element('li',{class: 'chapter'},['chapter2']),
+  element('li',{class: 'chapter'},['chapter3'])
+])
+const chap2 = element('ul',{id: 'list2'},[
+  element('li',{class: 'chapter2'},['chapter4']),
+  element('li',{class: 'chapter2'},['chapter5']),
+  element('li',{class: 'chapter2'},['chapter6'])
+])
+```
+
+![img](/dovis-blog/other/67.png)
+
+> `walkToDiff`前两个参数是需要比较的虚拟`DOM`对象；第三个参数是用来记录`nodeIndex`，在删除节点时会使用。初始值为`0`；第四个参数为一个闭包变量，用来记录`diff`的结果。
+
+那么如何将这个差异更新到真实的`DOM`上呢，需要使用[`patch`方法](/frame/Vue/生成真实dom.html#update)来完成了。
+
+```js
+const patch = (node, patches) => {
+    let walker = {index: 0}
+    walk(node,walker,patches)
+}
+
+const walk = (node,walker,patches) => {
+    let currentPatch = patches[walker.index]
+    let childrenNodes = node.childrenNodes
+    childrenNodes.forEach(child => {
+        walker.index++
+        walk(child,walker,patches)
+    })
+    if(currentPatch) {
+        doPatch(node,currentPatch)
+    }
+}
+
+// walk函数自身递归，对当前节点的差异调用doPatch方法进行更新
+const doPatch = (node,patches) => {
+    patches.forEach(patch => {
+        switch(patch.type) {
+            case 'MODIFY_ATRIBUTES':
+                const attributes = patch.diffAttributeResult.attributes
+                for(let key in attributes) {
+                    if(node.nodeType !== 1) return
+                    const value = attributes[key]
+                    if(value) {
+                        setAttribute(node,key,value)
+                    } else {
+                        node.removeAttribute(key)
+                    }
+                }
+                break;
+            case 'MODIFY_TEXT':
+                node.textContent = patches.data
+                break;
+            case 'REPLACE':
+                let newNode = (patch.newNode instanceof Element) ? render(patch.newNode) : document.createTextNode(patch.newNode)
+                node.parentNode.replaceChild(newNode,node)
+                break;
+            case 'REMOVE':
+                node.parentNode.removeChild(node)
+                break;
+            default:
+                break;
+        }
+    })
+}
+
+```
