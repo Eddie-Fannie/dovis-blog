@@ -196,7 +196,8 @@ module.exports = {
                 '/another/Net/TCP三次握手',
                 '/another/Net/HTTP',
                 '/another/Net/WebSocket',
-                '/another/Net/一些小知识点'
+                '/another/Net/一些小知识点',
+                '/another/Net/HTTPS'
             ]
         }
     ],
