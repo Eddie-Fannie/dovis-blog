@@ -172,3 +172,24 @@ function swap(arr, i, j) {
     [arr[i], arr[j]] = [arr[j], arr[i]] 
 }
 ```
+
+> 学习了侯策《前端进阶》一书
+
+```js
+function quickSort(arr) {
+    if(arr.length < 2) return arr
+    let pivot = arr[Math.floor(Math.random() * arr.length)] // 找到基准值
+    let left = [],mid = [],right=[]
+    for(let num of arr) {
+        let value = num
+        if(value > pivot) {
+            right.push(value)
+        } else if(value < pivot) {
+            left.push(value)
+        } else {
+            mid.push(value)
+        }
+    }
+    return quickSort(left).concat(mid,quickSort(right))
+}
+```

@@ -53,7 +53,8 @@ module.exports = {
                 '/basis/JavaScript/js数组的一些常规问题',
                 '/basis/JavaScript/js的数组方法汇总',
                 '/basis/JavaScript/ajax原生',
-                '/basis/JavaScript/前端DOM操作知识点'
+                '/basis/JavaScript/前端DOM操作知识点',
+                '/basis/JavaScript/js的一些函数问题'
             ]
         },
         {

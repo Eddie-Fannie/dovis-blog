@@ -396,7 +396,7 @@ console.log(entries.next().value) // [2, 'c']
 
 ## 数组的空位
 ```js
-[, , ,] // 空位
+[, , ,] // 空位[empty,empty,empty]
 ``` 
 > 空位不是`undefined`，一个位置的值等于`undefined`依然有值。空位是没有任何值，`in`运算符可以说明
 ```js
@@ -455,6 +455,7 @@ const flatArr = flattenArray(arr);
 循序渐进完善`flat`函数
 - 初版，拍平成一层
 ```js
+// 递归
 let myFlat = function(flatArr) {
   let result = []
   for(let i of flatArr) {
@@ -465,6 +466,21 @@ let myFlat = function(flatArr) {
     }
   }
   return result
+}
+
+// 迭代
+function flatten(arr) {
+    let arrs =[...arr]
+    let newArr = [];
+    while (arrs.length){
+        let item = arrs.shift()
+        if(Array.isArray(item)){
+            arrs.unshift(...item)
+        }else {
+            newArr.push(item)
+        }
+    }
+    return newArr
 }
 ```
 :::

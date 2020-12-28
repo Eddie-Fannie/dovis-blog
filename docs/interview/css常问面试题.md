@@ -457,3 +457,27 @@ overflow: hidden;
 
 ## `font-style`属性中的`italic/oblique`区别
 `italic`和`oblique`这两个关键字都表示“斜体”的意思。它们的区别在于，`italic`是使用当前字体的斜体字体，而`oblique`只是单纯地让文字倾斜。如果当前字体没有对应的斜体字体，则退而求其次，解析为`oblique`，也就是单纯形状倾斜。
+
+## 分析比较`opacity:0/visibility:hidden/display:none`优劣及适用场景
+::: tip
+- `display: none`;
+1. `DOM 结构`：浏览器不会渲染 `display` 属性为 `none` 的元素，不占据空间；
+2. 事件监听：无法进行 `DOM` 事件监听；
+3. 性能：动态改变此属性时会引起重排，性能较差；
+4. 继承：不会被子元素继承，毕竟子类也不会被渲染；
+5. `transition：transition` 不支持 `display`
+
+- `visibility: hidden`;
+1. `DOM 结构`：元素被隐藏，但是会被渲染不会消失，占据空间；
+2. 事件监听：无法进行 `DOM` 事件监听；
+3. 性 能：动态改变此属性时会引起重绘，性能较高；
+4. 继 承：会被子元素继承，子元素可以通过设置 `visibility: visible`; 来取消隐藏；
+5. `transition：transition` 支持 `visibility`
+
+- `opacity: 0`;
+1. `DOM` 结构：透明度为 `100`%，元素隐藏，占据空间；
+2. 事件监听：可以进行 `DOM` 事件监听；
+3. 性 能：提升为合成层，不会触发重绘，性能较高；
+4. 继 承：会被子元素继承,且，子元素并不能通过 `opacity: 1` 来取消隐藏；
+5. `transition：transition` 支持 `opacity`
+:::
