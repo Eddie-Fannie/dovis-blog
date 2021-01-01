@@ -248,7 +248,8 @@ module.exports = {
             children: [
                 '/fulllink/BuildingTools/初识webpack',
                 '/fulllink/BuildingTools/webpack技巧',
-                '/fulllink/BuildingTools/webpack热更新'
+                '/fulllink/BuildingTools/webpack热更新',
+                '/fulllink/BuildingTools/webpack一些原理'
             ]
         }
     ],
