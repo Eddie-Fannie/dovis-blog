@@ -343,9 +343,9 @@ Object.defineProperty(myObject,'a',{
 9. `Object.freeze(...)`会创建一个冻结对象，这个方法实际上会在一个现有对象上调用`Object.seal(...)`并把所有数据访问属性标记为`writable:false`，这样就无法修改它们的值。这个对象引用的其他对象是不受影响的。可以深度冻结一个对象，遍历对象然后逐个调用该冻结方法，但是这样可能无意会冻结其他对象。
 10. `myObject.a`实际是在`myObject`上实现了`[[Get]]`操作（有点像函数调用：`[[Get]]()`）。对象默认的内置`[[Get]]`操作首先在对象中查找是否有名称相同的属性，如果找到就会返回这个属性的值。其实就是遍历原型链。如果没有找到名称相同的属性，`[[Get]]`操作会返回`undefined`。
 11. 对象默认的`[[Put]]`和`[[Get]]`操作分别可以控制属性值的设置和获取。
-12. `in`操作符会检查属性是否在对象及其`[[Prototype]]`原型链中。相比之下，`hasOwnProperty(..)`只会检查属性是否在对象中，不会检查`[[Prototype]]`链。这时可以使用一种更加强硬的方法来进行判断：`Object.prototype.hasOwnProperty. call(myObject, "a")`，它借用基础的`hasOwnProperty(..)`方法并把它显式绑定到d对象上。看起来`in`操作符可以检查容器内是否有某个值，但是它实际上检查的是某个属性名是否存在。
-13. 在数组上应用`for..in`循环有时会产生出人意料的结果，因为这种枚举不仅会包含所有数值索引，还会包含所有可枚举属性。最好只在对象上应用`for..in`循环，如果要遍历数组就使用传统的`for`循环来遍历数值索引。
-14. `propertyIsEnumerable(..)`会检查给定的属性名是否直接存在于对象中（而不是在原型链上）并且满足`enumerable:true`。`Object.keys(..)`会返回一个数组，包含对象自身所有可枚举属性，`Object.getOwnPropertyNames(..)`会返回一个数组，包含所有属性，无论它们是否可枚举。`in`和`hasOwnProperty(..)`的区别在于是否查找[[Prototype]]链，然而，`Object.keys(..)`和`Object.getOwnPropertyNames(..)`都只会查找对象直接包含的属性。
+12. `in`操作符会检查属性是否在对象及其`[[Prototype]]`原型链中。相比之下，`hasOwnProperty(..)`只会检查属性是否在对象中，不会检查`[[Prototype]]`链。这时可以使用一种更加强硬的方法来进行判断：`Object.prototype.hasOwnProperty.call(myObject, "a")`，它借用基础的`hasOwnProperty(..)`方法并把它显式绑定到对象上。看起来`in`操作符可以检查容器内是否有某个值，但是它实际上检查的是某个属性名是否存在。
+13. 在数组上应用`for..in`循环有时会产生出人意料的结果，**因为这种枚举不仅会包含所有数值索引，还会包含所有可枚举属性**。最好只在对象上应用`for..in`循环，如果要遍历数组就使用传统的`for`循环来遍历数值索引。
+14. `propertyIsEnumerable(..)`会检查给定的属性名是否直接存在于对象中（而不是在原型链上）并且满足`enumerable:true`。`Object.keys(..)`会返回一个数组，包含对象自身所有可枚举属性，`Object.getOwnPropertyNames(..)`会返回一个数组，包含所有属性，无论它们是否可枚举。`in`和`hasOwnProperty(..)`的区别在于是否查找`[[Prototype]]`链，然而，`Object.keys(..)`和`Object.getOwnPropertyNames(..)`都只会查找对象直接包含的属性。
 15. `every(..)`和`some(..)`中特殊的返回值和普通`for`循环中的`break`语句类似，它们会提前终止遍历。`for..of`循环首先会向被访问对象请求一个迭代器对象，然后通过调用迭代器对象的`next()`方法来遍历所有返回值。
 16. 数组有内置的`@@iterator`，因此`for..of`可以直接应用在数组上。我们使用内置的`@@iterator`来手动遍历数组，看看它是怎么工作的：
 ```js

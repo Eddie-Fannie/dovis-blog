@@ -69,7 +69,7 @@ class MyMatcher {
 6. `Symbol.split`
 7. `Symbol.iterator`
 8. `Symbol.toPrimitive`
->对象的`Symbol.toPrimitive`属性指向一个方法，对象被转为原始类型的值会调用这个方法，返回该对象对应的原始类型的值。被调用时接收一个字符串参数，表示当前运算的模式。一共有3种模式。**优先级要高于`valueOf`、`toString`。对于`==`操作符，`hint`传递的值是`default`。**
+> 对象的`Symbol.toPrimitive`属性指向一个方法，对象被转为原始类型的值会调用这个方法，返回该对象对应的原始类型的值。被调用时接收一个字符串参数，表示当前运算的模式。一共有3种模式。**优先级要高于`valueOf`、`toString`。对于`==`操作符，`hint`传递的值是`default`。**
 - `Number`：该场合需要转成数值
 - `String`：该场合需要转成字符串
 - `Default`：该场合可以转成数值，也可以转成字符串。

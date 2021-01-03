@@ -753,6 +753,25 @@ a = new Promise(async (resolve, reject) => {
 
 console.log('end');
 ```
+
+15. 
+```js
+process.nextTick(() => {
+  console.log('nextTick')
+})
+Promise.resolve()
+  .then(() => {
+    console.log('then')
+  })
+setImmediate(() => {
+  console.log('setImmediate')
+})
+console.log('end')
+```
+> `process.nextTick` 和 `promise.then` 都属于 `microtask`，而 `setImmediate` 属于 `macrotask`，在事件循环的 `check` 阶段执行。事件循环的每个阶段（`macrotask`）之间都会执行 `microtask`，事件循环的开始会先执行一次 `microtask`。
+
+> `end nextTick then setImmediate`
+
 ## Node中的Event Loop
 > `Node` 的 `Event Loop` 分为 `6` 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
 
