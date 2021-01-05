@@ -69,7 +69,8 @@ module.exports = {
                 '/basis/JavaScript/事件机制',
                 '/basis/JavaScript/web的一些API',
                 '/basis/JavaScript/js的错误处理',
-                '/basis/JavaScript/解析对象原始值转换'
+                '/basis/JavaScript/解析对象原始值转换',
+                '/basis/JavaScript/高阶函数'
             ]
         },
         {
@@ -136,7 +137,8 @@ module.exports = {
                 '/frame/Vue/vue生命周期',
                 '/frame/Vue/初始化状态',
                 '/frame/Vue/模板编译',
-                '/frame/Vue/Vuex原理'
+                '/frame/Vue/Vuex原理',
+                '/frame/Vue/vue的api原理'
             ]
         }
     ],
@@ -250,7 +252,8 @@ module.exports = {
             children: [
                 '/fulllink/BuildingTools/初识webpack',
                 '/fulllink/BuildingTools/webpack技巧',
-                '/fulllink/BuildingTools/webpack热更新'
+                '/fulllink/BuildingTools/webpack热更新',
+                '/fulllink/BuildingTools/webpack一些原理'
             ]
         }
     ],
