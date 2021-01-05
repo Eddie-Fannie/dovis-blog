@@ -163,7 +163,9 @@ module.exports = {
                 '/advanced/Performance/高性能优化十万条数据',
                 '/advanced/Performance/vue实现一个图片懒加载指令',
                 '/advanced/Performance/慕课前端性能课程',
-                '/advanced/Performance/页面性能的方法'
+                '/advanced/Performance/页面性能的方法',
+                '/advanced/Performance/使用ServiceWorker提升性能',
+                '/advanced/Performance/协同项目优化'
             ]
         }
     ],
