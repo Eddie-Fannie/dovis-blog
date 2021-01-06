@@ -138,7 +138,8 @@ module.exports = {
                 '/frame/Vue/初始化状态',
                 '/frame/Vue/模板编译',
                 '/frame/Vue/Vuex原理',
-                '/frame/Vue/vue的api原理'
+                '/frame/Vue/vue的api原理',
+                '/frame/Vue/vue的异步更新原理'
             ]
         }
     ],
