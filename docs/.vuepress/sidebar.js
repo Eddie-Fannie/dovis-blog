@@ -461,7 +461,8 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/DataStructure/String/大数相乘'
+                '/algorithm/DataStructure/String/大数相乘',
+                '/algorithm/DataStructure/String/无重复的最长字符串'
             ]
         }
     ],
