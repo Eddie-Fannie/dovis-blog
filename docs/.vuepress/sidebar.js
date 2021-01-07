@@ -454,7 +454,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/DataStructure/String/最长公共前缀',
-                '/algorithm/DataStructure/String/重复的子字符串'
+                '/algorithm/DataStructure/String/重复的子字符串',
+                '/algorithm/DataStructure/String/同构字符串'
             ]
         },
         {
