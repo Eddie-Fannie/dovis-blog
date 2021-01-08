@@ -348,7 +348,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/AlgorithmicThinking/SlidingWindow/无重复字符',
-                '/algorithm/AlgorithmicThinking/SlidingWindow/滑动窗口最大值'
+                '/algorithm/AlgorithmicThinking/SlidingWindow/滑动窗口最大值',
+                '/algorithm/AlgorithmicThinking/SlidingWindow/重复的DNA序列'
             ]
         },
         {
@@ -377,7 +378,9 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/打家劫舍',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/买卖股票最佳时机',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/连续数列',
-                '/algorithm/AlgorithmicThinking/DynamicProgramming/判断子序列'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/判断子序列',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/使用最小花费爬楼梯',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/除数博弈'
             ]
         }
     ],
@@ -518,7 +521,8 @@ module.exports = {
             title: 'leetcode公司题库',
             collapsable: false,
             children: [
-               '/algorithm/Company/ByteDance'
+               '/algorithm/Company/ByteDance',
+               '/algorithm/Company/Shopee'
             ]
         }
     ]
