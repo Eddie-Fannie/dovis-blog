@@ -365,7 +365,8 @@ module.exports = {
             title: '回溯思想',
             collapsable: false,
             children: [
-                '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合'
+                '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合',
+                '/algorithm/AlgorithmicThinking/Recall/括号生成'
             ]
         },
         {
@@ -381,6 +382,13 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/判断子序列',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/使用最小花费爬楼梯',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/除数博弈'
+            ]
+        },
+        {
+            title: '双指针',
+            collapsable: false,
+            children: [
+                '/algorithm/AlgorithmicThinking/TwoPointer/盛最多水的容器'
             ]
         }
     ],
