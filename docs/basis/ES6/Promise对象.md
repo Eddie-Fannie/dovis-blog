@@ -380,6 +380,22 @@ p1.then((value) => {
 3. 参数不是`thenable`或者根本不是对象。该方法就会返回一个新的`Promise`对象，状态为`Resolved`
 4. **不带任何参数，直接返回一个`Resolved`状态的`Promise`对象**
 
+::: tip
+需要注意的是，立即`resolve`的`Promise`对象是在本轮事件循环`event loop`结束时，而不是在下一轮事件循环开始时。
+```js
+setTimeout(function(){
+  console.log('three')
+},0)
+Promise.resolve().then(function(){
+  console.log('two')
+})
+console.log('one')
+// one
+// two
+// three
+```
+:::
+
 ### `Promise.reject()`
 ```js
 var p = Promise.reject('出错了')

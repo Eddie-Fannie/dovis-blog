@@ -586,3 +586,17 @@ var bar = foo.call(obj1)
 console.log(bar.call(obj2))
 ```
 > 代码会输出`123`。如果代码第一行是`const a =123`则输出`undefined`，因为`const`定义的变量没有挂载到全局对象上。
+
+5. 
+```js
+window.data = 5
+var foo = {
+  data: 6,
+  click() {
+    console.log(this.data)// undefined
+  }
+}
+let dom = document.getElementsByClassName('test')[0]
+dom.addEventListener('click',foo.click)
+```
+> 因为事件处理程序中`this`指向绑定的`dom`对象，所以打印`undefined`。要打印`6`可以改成`dom.addEventListener('click',foo,click())`。打印`5`则改为箭头函数。
