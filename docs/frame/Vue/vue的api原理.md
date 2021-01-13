@@ -31,3 +31,152 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 ```
 - 如果目标是数组，直接使用数组的 `splice` 方法触发相应式；
 - 如果目标是对象，会先判读属性是否存在、对象是否是响应式，最终如果要对属性进行响应式处理，则是通过调用 `defineReactive` 方法进行响应式处理（ `defineReactive` 方法就是 `Vue` 在初始化对象时，给对象属性采用 `Object.defineProperty` 动态添加 `getter` 和 `setter` 的功能所调用的方法）
+
+## 事件相关的实例方法
+### `vm.$on`
+```js
+vm.$on(event,callback)
+```
+参数：`event: string|Array<string>`；`callback: Function`
+
+> 监听当前实例上的自定义事件，事件可以由`vm.$emit`触发。回调函数会接收所有传入事件所触发的函数的额外参数。
+
+```js
+vm.$on('test',function(msg) {
+  console.log(msg)
+})
+
+vm.$emit('test','hi')
+```
+
+::: tip
+事件的实现并不难，只需要在注册事件时将回调函数收集起来，在触发事件时将收集起来的回调函数依次调用即可。
+
+```js
+Vue.prototype.$on = function(event,fn) {
+  const vm = this
+  if(Array.isArray(event)) {
+    for(let i=0;i<event.length;i++) {
+      this.$on(event[i],fn)
+    }
+  } else {
+    (vm._events[event] || (vm._events[event] = [])).push(fn)
+  }
+  return vm
+}
+```
+
+在上面的代码中，当`event`参数为数组时，需要遍历数组，将其中的每一项递归调用`vm.$on`，使回调可以被注册到数组中每项事件名所指定的事件列表中。当`event`参数不为数组时，就向事件列表中添加回调。通俗讲，就是将回调注册到事件列表中。
+
+`vm._events`是一个对象，用来存储事件。在代码中，我们使用事件名（`event`）从`vm._events`中取出事件列表，如果列表不存在，则使用空数组初始化，然后再将回调函数添加到事件列表中。`vm._events`时在执行`new Vue()`时会执行`this._init`方法进行一系列初始化操作，其中就会在vue实例上创建一个`_events`属性，用来存储事件。
+
+```js
+vm._events = Object.create(null)
+```
+:::
+
+### `vm.$off`
+移除自定义事件监听器
+```js
+vm.$off([event,callback])
+```
+- 如果没有提供参数，则移除所有事件监听器
+- 如果只提供事件，则移除事件所有监听器
+- 如果同时提供事件和回调，则只移除这个回调的监听器
+
+```js
+Vue.prototype.$off = function(event,fn) {
+  const vm = this
+  // 没有提供参数
+  if(!arguments.length) {
+    vm._events = Object.create(null)
+    return vm
+  }
+  // event支持数组
+  if(Array.isArray(event)) {
+    for(let i=0,l=event.length;i<l;i++) {
+      this.$off(event[i],fn)
+    }
+    return vm
+  }
+  // 只提供事件时
+  const cbs = vm._events[event]
+  if(!cbs) return vm
+  // 移除该事件所有监听器
+  if(arguments.length === 1) {
+    vm._events[event] = null
+    return vm
+  }
+
+  // 只移除与fn相同的监听器
+  if(fn) {
+    const cbs = vm._event[event]
+    let cb 
+    let i = cbs.length
+    while(i--) {
+      cb = cbs[i]
+      if(cb === fn || cb.fn === fn) {
+        cbs.splice(i,1)
+        break
+      }
+    }
+  }
+  return vm
+}
+```
+
+::: tip
+这里有个细节需要注意的是，在代码中遍历列表是从后向前循环，这样在列表中移除当前位置的监听器时，不会影响列表中未遍历到的监听器位置。如果是从前向后遍历，那么当从列表中移除一个监听器时，后面的监听器会自动向前移动一个位置，这样导致下一轮循环跳过一个元素。
+:::
+
+### `vm.$once`
+> `vm.$once`只能被触发一次，所以实现这个功能的思路是：在`vm.$once`中调用`vm.$on`来监听自定义事件的功能，当自定义事件触发后执行拦截器，将监听器从事件列表中删除
+
+```js
+Vue.prototype.$once = function(evnet,fn) {
+  const vm = this
+  function on () {
+    vm.$off(event,on)
+    fn.apply(vm,arguments)
+  }
+  on.fn = fn
+  vm.$on(event,on)
+  return vm
+}
+```
+
+::: tip
+首先将函数`on`注册到事件中。当自定义事件被触发时，会先执行函数`on`。这个函数会使用`vm.$off`移除自定义事件，并手动执行函数`fn`。就可以实现`vm.$once`的功能。
+
+`on.fn = fn`。这里要注意的是前面介绍`$off`时会提到在移除监听器时会对比用户提供的监听器函数和列表中的是否一致，这导致使用拦截器代替监听器注入到事件列表中就会使得拦截器和用户提供的不一致，移除操作就会失效。
+
+所以才在`vm.$off`会有`cb.fn === fn`这个判断。
+:::
+
+### `vm.$emit`
+```js
+vm.$emit(event, [...args])
+```
+触发当前实例上的事件。附加参数都会传给监听器回调。
+
+::: tip
+实现思路是使用事件名从`vm._events`中取出对应的事件监听器回调函数列表，然后依次执行列表中的监听器回调并将参数传递给监听器回调。
+
+```js
+Vue.prototype.$emit = function(event) {
+  const vm = this
+  let cbs = vm._events[event]
+  if(cbs) {
+    const args = toArray(arguments,1) // 类数组转数组，去除第一项
+    for(let i = 0,l=cbs.length;i<l;i++) {
+      try {
+        cbs[i].apply(vm,args)
+      } catch(e) {
+        handleError(e,vm,`event handler for ${event}`)
+      }
+    }
+  }
+  return vm
+}
+```
+:::
