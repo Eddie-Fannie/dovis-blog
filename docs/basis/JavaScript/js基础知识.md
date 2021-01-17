@@ -183,7 +183,9 @@ console.log(079) // 79
 
 
     ::: tip
-    `toFixed(num)`:`toFixed()` 方法可把 `Number` 四舍五入为指定小数位数的数字; 参数`num`: 代表小数位数。**返回的是字符串格式了**
+    1. `Number(['1'])`转为`1`。先调用`valueOf`转成`['1']`还不是原始值，则调用`toString`转成`'1'`。
+    2. `'true' == true //false Number('true')->NaN  Number(true)->1`
+    3. `toFixed(num)`:`toFixed()` 方法可把 `Number` 四舍五入为指定小数位数的数字; 参数`num`: 代表小数位数。**返回的是字符串格式了**
     :::
 
 + 2. `parseInt()`函数，解析字符串，并返回一个整数
@@ -338,6 +340,13 @@ console.log({}+true) // [object Object]true
 ```js
 [] == ![] // true 都转为0。后者![]是先布尔类型转换，转换为false，然后数值转换为0
 '' == !'' // false 前者转为0后者为1
+
+var a = [0];
+if (a) {
+  console.log(a == true); // false
+} else {
+  console.log(a);
+}
 ```
 7. 逗号操作符
 - 用于声明多个变量

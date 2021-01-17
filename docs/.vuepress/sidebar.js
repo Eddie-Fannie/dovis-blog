@@ -202,7 +202,8 @@ module.exports = {
                 '/another/Net/HTTP',
                 '/another/Net/WebSocket',
                 '/another/Net/一些小知识点',
-                '/another/Net/HTTPS'
+                '/another/Net/HTTPS',
+                '/another/Net/HTTP协议原理'
             ]
         }
     ],
@@ -270,7 +271,16 @@ module.exports = {
                 '/coding/JavaScript/实现一个Promise',
                 '/coding/JavaScript/手写instanceof',
                 '/coding/JavaScript/封装JSONP',
-                '/coding/JavaScript/用异步思想实现东西'
+                '/coding/JavaScript/用异步思想实现东西',
+                '/coding/JavaScript/实现一个eventEmitter',
+                '/coding/JavaScript/其他api的实现'
+            ]
+        },
+        {
+            title: "CSS模块",
+            collapsable: false,
+            children: [
+                '/coding/CSS/一些css场景实现'
             ]
         }
     ],
@@ -366,7 +376,8 @@ module.exports = {
             collapsable: false,
             children: [
                 '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合',
-                '/algorithm/AlgorithmicThinking/Recall/括号生成'
+                '/algorithm/AlgorithmicThinking/Recall/括号生成',
+                '/algorithm/AlgorithmicThinking/Recall/组合总和'
             ]
         },
         {
@@ -438,7 +449,7 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-               
+                '/algorithm/DataStructure/Array/求众数'
             ]
         }
     ],
@@ -496,7 +507,7 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-              
+                '/algorithm/DataStructure/LinkedList/删除链表的倒数第N个节点'
             ]
         }
     ],

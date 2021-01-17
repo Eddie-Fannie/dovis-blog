@@ -178,6 +178,15 @@ console.log(obj)
 `push(1)`，因为此时`obj`中定义`length`为`2`，所以从数组中的第二项开始插入，也就是数组的第三项（下表为`2`的那一项），因为数组是从第`0`项开始的，这时已经定义了下标为`2`和`3`这两项，所以它会替换第三项也就是下标为`2`的值，第一次执行`push`完，此时`key`为`2`的属性值为`1`，同理：第二次执行`push`方法，`key`为`3`的属性值为`2`。因为只是定义了`2/3`项，没有定义`0/1`项，所以前面会是`empty`
 :::
 
+5. 写出执行结果
+```js
+var min = Math.min();
+max = Math.max();
+console.log(min < max);
+```
+> `Math.min` 的参数是 `0` 个或者多个，如果多个参数很容易理解，返回参数中最小的。如果没有参数，则返回 `Infinity`，无穷大。
+而 `Math.max` 没有传递参数时返回的是`-Infinity`.所以输出 `false`
+
 ## 高级题
 1. **回调地狱为什么不能捕获异常**
 > 其实这跟 js 的运行机制相关，异步任务执行完成会加入任务队列，当执行栈中没有可执行任务了，主线程取出任务队列中的异步任务并入栈执行，当异步任务执行的时候，捕获异常的函数已经在执行栈内退出了，所以异常无法被捕获。
@@ -321,5 +330,84 @@ function Foo() {
 // let obj = new Foo()
 Foo.a()
 ```
+
+**举一反三字节面试题**
+```js
+function Foo() {
+  getName = function() {
+    console.log(1)
+  }
+  // console.log(this.getName)
+  return this;
+}
+Foo.getName = function() {
+  console.log(2)
+}
+Foo.prototype.getName = function() {
+  console.log(3)
+}
+var getName = function() {
+  console.log(4)
+}
+function getName() {
+  console.log(5)
+}
+
+Foo.getName() // 2
+getName() // 4
+Foo().getName() // 1
+getName() // 1
+new Foo.getName() // 2 点的优先级比new无参数列表优先级高（20>19)，这里相当于new (Foo.getName())。执行完点运算后又因为有括号为有参数运算，这时new优先级和函数调用（）一样，所以从左到右运算
+new Foo().getName() // 3 new这里是有参数列表，优先级和点一样都是20，所以从左到右访问
+new new Foo().getName() //3
+```
+:::
+
+6. 写出执行结果，并解释原因
+```js
+var x=1;
+if(function f(){}){
+    x += typeof f;
+}
+console.log(x) / 1undefined
+```
+> 函数声明写在运算符中，其为`true`，但放在运算符中的函数声明在执行阶段是找不到的。另外，对未声明的变量执行`typeOf`不会报错，会返回`undefined`
+
+7. 写出执行结果
+```js
+let x,y;
+try {
+  throw new Error()
+} catch(x) {
+  x = 1
+  y = 2
+  console.log(x) // 1
+}
+console.log(x) // undefined
+console.log(y) // 2
+```
+
+8. 写出执行结果
+```js
+let length = 10;
+function fn() {
+  console.log(this.length);
+}
+var obj = {
+  length: 5,
+  method: function(fn) {
+    fn();
+    arguments[0]();
+  }
+};
+obj.method(fn,1);
+// 0 2
+```
+
+::: tip
+`fn()`时`this`指向`window`全局对象，因为全局对象本身有`length`属性为`0`
+
+`arguments[0]`指向 `fn`,所以 `arguments[0]()` 是作为 `arguments`对象的属性`[0]`来调用 `fn`的，所以 `fn` 中的 `this` 指向属性访问主体的对象 `arguments`；这里`this`指向`arguments`。
+因为`fn`作为一个参数存储在`arg`对象里，`argumengts`的长度为`2`，所以输出`2`
 
 :::

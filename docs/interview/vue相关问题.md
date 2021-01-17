@@ -75,6 +75,36 @@ document.addEventListener('keyup', (e) => {
 ## `delete`和`Vue.delete`删除数组的区别
 > `delete`只是被删除的元素变成了 `empty/undefined` 其他的元素的键值还是不变。`Vue.delete`直接删除数组，改变了数组的键值。
 
+::: tip
++ `delete`知识点补充：
+    - `delete` 操作符用来删除一个对象的属性。
+    - `delete`在删除一个不可配置的属性时在严格模式和非严格模式下的区别:
+    1. 在严格模式中，如果属性是一个不可配置（non-configurable）属性，删除时会抛出异常;
+    2. 非严格模式下返回 `false`。
+    - `delete`能删除的：
+    1. 可配置对象的属性
+    2. 隐式声明的全局变量(这个全局变量其实是`global`对象(`window`)的属性)
+    3. 用户定义的属性 
+    4. 在ECMAScript 6中，通过 `const` 或 `let` 声明指定的 `"temporal dead zone" (TDZ)` 对 `delete` 操作符也会起作用
+    - `delete`不能删除：
+    1. 显式声明的全局变量 
+    2. 内置对象的内置属性 
+    3. 一个对象从原型继承而来的属性
+    - `delete`删除数组元素：
+    1. 当你删除一个数组元素时，数组的 `length` 属性并不会变小，数组元素变成`undefined`
+    2. 当用 `delete` 操作符删除一个数组元素时，被删除的元素已经完全不属于该数组。
+    3. 如果你想让一个数组元素的值变为 `undefined` 而不是删除它，可以使用 `undefined` 给其赋值而不是使用 `delete` 操作符。此时数组元素是在数组中的
+    - `delete` 操作符与直接释放内存（只能通过解除引用来间接释放）没有关系。
+
+```js
+var a = [1,2,3,4]
+delete a[2]
+console.log(a) // [1,2,empty,4]
+console.log(a[2]) // undefined
+console.log(a.length) // 4
+```
+:::
+
 ## Vue的`template`编译
 > 简而言之，就是先转化成`AST`树，再得到的`render`函数返回`VNode`（`Vue`的虚拟`DOM`节点），详细步骤如下：
 

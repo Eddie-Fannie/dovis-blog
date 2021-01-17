@@ -133,7 +133,7 @@ Vue.prototype.$off = function(event,fn) {
 > `vm.$once`只能被触发一次，所以实现这个功能的思路是：在`vm.$once`中调用`vm.$on`来监听自定义事件的功能，当自定义事件触发后执行拦截器，将监听器从事件列表中删除
 
 ```js
-Vue.prototype.$once = function(evnet,fn) {
+Vue.prototype.$once = function(event,fn) {
   const vm = this
   function on () {
     vm.$off(event,on)

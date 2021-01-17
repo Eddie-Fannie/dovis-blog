@@ -3,10 +3,10 @@
 `pop()/shift()`都是返回被删除的项。`push()/unshift()`返回操作后数组的长度。都会影响原数组。
 
 ::: tip
-`Shift()`    删除数组的第一个元素，返回被删除的元素，`arr.shift()`
-`Unshift() ` 向数组开头添加一个或多个元素，返回新的长度，`arr.unshift(e1,e2..)`
-`Pop()`     删除数组最后一个元素，返回被删除的元素，`arr.pop()`
-`Push()`    向数组尾部添加一个或多个元素，返回新的长度，`arr.push(e1,e2..)`
+`shift()`    删除数组的第一个元素，返回被删除的元素，`arr.shift()`
+`unshift() ` 向数组开头添加一个或多个元素，返回新的长度，`arr.unshift(e1,e2..)`
+`pop()`     删除数组最后一个元素，返回被删除的元素，`arr.pop()`
+`push()`    向数组尾部添加一个或多个元素，返回新的长度，`arr.push(e1,e2..)`
 
 ```js
 var datas=[10,20,30];
@@ -281,6 +281,21 @@ function arrayNonRepeatfy(arr) {
         }
       }   
     return array ;
+}
+```
+
+11. 利用双指针（先排序再双指针）。可以让空间复杂度为`O(1)`
+```js
+const removeDuplicates = array => {
+  const length = array.length
+  let slowPointer = 0
+  for(let fastPointer=0;fastPointer < length;fastPointer++) {
+      if(array[slowPointer] !== array[fastPointer]) {
+          slowPointer++
+          array[slowPointer] = array[fastPointer]
+      }
+  }
+  return array.splice(0,slowPointer+1)
 }
 ```
 

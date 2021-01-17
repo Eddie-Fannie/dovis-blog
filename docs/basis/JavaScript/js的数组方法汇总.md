@@ -7,10 +7,10 @@
 - 对于空数组是不会执行回调函数的
 
 ```js
-array.reduce(function(prev,current,currentIndex,arr), initialValue)
+array.reduce(function(total,current,currentIndex,arr), initialValue)
 ```
 **参数解析**
-1. `prev`: 函数传进来的初始值或上一次回调的返回值
+1. `total`: 函数传进来的初始值或上一次回调的返回值
 2. `current`：数组中当前处理的元素值
 3. `currentIndex`：当前元素索引
 4. `arr`: 当前元素所属的数组本身
@@ -60,6 +60,23 @@ array.reduce(function(prev,current,currentIndex,arr), initialValue)
 ::: tip
 - 如果没有提供 `initialValue`，那么第一次调用 `callback` 函数时，`accumulator` 使用原数组中的第一个元素，`currentValue` 即是数组中的第二个元素。 在没有初始值的空数组上调用 `reduce` 将报错。
 - 如果提供了 `initialValue`，那么将作为第一次调用 `callback` 函数时的第一个参数的值，即 `accumulator，currentValue` 使用原数组中的第一个元素。
+
+```js
+[1, 2, 3, 4].reduce((x, y) => console.log(x, y)); //1 2 undefined 3 undefined 4
+```
+`reducer` 函数接收4个参数:
+
+1. `Accumulator (acc)` (累计器)
+2. `Current Value (cur)` (当前值)
+3. `Current Index (idx)` (当前索引)
+4. `Source Array (src)` (源数组)
+
+`reducer` 函数的返回值将会分配给累计器，该返回值在数组的每个迭代中被记住，并最后成为最终的单个结果值。
+`reducer` 函数还有一个可选参数 `initialValue`, 该参数将作为第一次调用回调函数时的第一个参数的值。如果没有提供 `initialValue`，则将使用数组中的第一个元素。
+在上述例子， `reduce`方法接收的第一个参数(`Accumulator`)是 `x`, 第二个参数(`Current Value`)是 `y`。
+- 在第一次调用时，累加器 `x`为 `1`，当前值 `“y”`为 `2`，打印出累加器和当前值：`1`和 `2`。
+- 例子中我们的回调函数没有返回任何值，只是打印累加器的值和当前值。如果函数没有返回值，则默认返回 `undefined`。在下一次调用时，累加器为 `undefined`，当前值为`3`, 因此 `undefined`和 `3`被打印出。
+- 在第四次调用时，回调函数依然没有返回值。累加器再次为 `undefined` ，当前值为`4`。`undefined`和 `4`被打印出。
 :::
 
 ## `forEach`
