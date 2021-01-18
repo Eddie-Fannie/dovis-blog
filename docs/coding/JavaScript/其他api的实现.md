@@ -35,3 +35,27 @@ function indexOf(arr,target,start=0){
 }
 ```
 > 考察第二个参数从哪里开始查找的使用
+
+## 实现`reduce`
+```js
+Array.prototype.myReduce = function (callback,initvalue) {
+    let arr = this
+    let base = initvalue == null ? 0 : initvalue
+    let startPoint = initvalue == null ? 0 : 1
+    for(let i=0;i<arr.length;i++) {
+        base = callback(base,arr[i],i+startPoint,arr)
+    }
+    return base
+}
+```
+
+## 实现`map`
+```js
+Array.prototype.newMap = function(fn) {
+　　var newArr = [];
+　　for(var i = 0; i<this.length; i++){
+　　　　newArr.push(fn(this[i],i,this))
+　　}
+　　return newArr;
+}
+```

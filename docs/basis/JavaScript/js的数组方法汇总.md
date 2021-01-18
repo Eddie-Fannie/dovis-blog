@@ -271,7 +271,7 @@ for (const [prop, value] of Object.entries(person)) {
 > `map()`方法定义在JavaScript的`Array`中，它返回一个新的数组，数组中的元素为原始数组调用函数处理后的值。**不会改变原数组，不会对空数组进行检测**
 
 ```js
-array.map(function(currentValue, index, arr), thisIndex)
+array.map(function(currentValue, index, arr), thisIndex) // thisIndex: 可选。对象作为该执行回调时使用，传递给函数，用作"this"的值。
 
 let array = [1, 2, 3, 4, 5];
 let newArray = array.map((item) => {

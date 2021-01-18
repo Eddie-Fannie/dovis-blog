@@ -14,7 +14,7 @@
 4. 不断调用`next`方法，直到数据结构的结束位置。
 > 每次调用`next`方法都会返回数据结构的当前成员的信息。具体来说就是一个包含`value`和`done`两个属性的对象。`done`表示遍历是否结束。**对于遍历器对象来说，`done:false`和`value:undefined`属性是可以省略的。
 
-**当用`for...of`循环遍历某种数据结构时，该循环会自动去寻找`Iterator`接口。
+**当用`for...of`循环遍历某种数据结构时，该循环会自动去寻找`Iterator`接口。**
 :::
 
 ## 默认`Iterator`接口
@@ -32,5 +32,43 @@ const obj = {
             }
         }
     }
+}
+
+const text = {
+    a: 1,
+    b: 2,
+    c: 3
+}
+for(let item of text) {
+    console.log(item)
+}
+// 没有加入遍历器接口会报错： text is not iterable
+
+// 解决办法
+text[Symbol.iterator] = function() {
+    const _this = this
+    return {
+        index: -1,
+        next() {
+            console.log(this)
+            console.log(_this)
+            let arr = Object.keys(_this)
+            if(this.index < arr.length) {
+                this.index++
+                return {
+                    value: _this[arr[this.index]],
+                    done: false
+                }
+            } else {
+                return {
+                    value: undefined,
+                    done: true
+                }
+            }
+        }
+    }
+}
+for(let item of text) {
+    console.log(item) // 1 2 3 undefin
 }
 ```

@@ -43,7 +43,7 @@ Function.prototype.myCall = function(context) {
 ::: tip
 ```js
 Function.prototype.myCall = function(context) {
-    // step1: 把函数挂到目标对象上（这里的this就是我们要改造的那个函数）
+    // step1: 把函数挂到目标对象上（这里的this就是我们要改造的那个函数），挂载完才能起到修改this指向到作用
     context.func = this
     // step2:执行函数
     context.func()

@@ -49,6 +49,38 @@ function debounce(func, wait) {
     }
 }
 ```
+
+> 继续升级，可以立即执行版本
+```js
+function myDebounce(func,wait=100,immediate=true) {
+    let timer = null
+    return function() {
+        let args =Array.from(arguments)
+        let context = this
+        if(timer) {
+            clearTimeout(timer)
+        }
+        if(!immediate) {
+            // 不是立即执行
+            timer = setTimeout(() => {
+                // 保证this指向不变
+                func.apply(context,[...args])
+            },wait)
+        } else {
+            // 立即执行 n秒内不再触发
+            let callnew = !timer
+            timer = setTimeout(() => {
+                timer = null
+                console.log('哈哈哈哈哈哈')
+            },wait)
+            if(callnew) {
+                func.apply(context,[...args])
+            }
+        }
+    }
+}
+```
+
 ## 节流
 > 函数节流的基本思想是指：**如果你持续触发事件，每隔一段时间只执行一次事件**。即通过一段时间内无视后来产生的回调请求来实现。
 
