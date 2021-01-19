@@ -198,6 +198,21 @@ setTimeout(()=>{
 setTimeout(() => {
     console.log(2)
 },0)
+
+// 类似
+let dom = document.getElementsByClassName('test')[0]
+dom.addEventListener('click',function() {
+  Promise.resolve().then(() => {
+    console.log(222)
+  })
+  console.log(666)
+})
+dom.addEventListener('click',function() {
+  Promise.resolve().then(() => {
+    console.log(2322)
+  })
+  console.log(999)
+})
 ```
 上面代码共有两个`setTimeout`，也就是说除主代码外，共有两个宏任务，其中第一个宏任务执行中，输出`1`，并且创建微任务队列，**所以在下一个宏任务队列执行前，先执行微任务**，在微任务执行中输出`3`，微任务执行后，执行下次宏任务，执行中输出`2`.
 
