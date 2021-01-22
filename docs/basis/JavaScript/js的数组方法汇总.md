@@ -60,7 +60,7 @@ array.reduce(function(total,current,currentIndex,arr), initialValue)
 ::: tip
 - 如果没有提供 `initialValue`，那么第一次调用 `callback` 函数时，`accumulator` 使用原数组中的第一个元素，`currentValue` 即是数组中的第二个元素。 在没有初始值的空数组上调用 `reduce` 将报错。
 - 如果提供了 `initialValue`，那么将作为第一次调用 `callback` 函数时的第一个参数的值，即 `accumulator，currentValue` 使用原数组中的第一个元素。
-
+- 如果提供了`initialValue`则起始索引号为`0`，否则为`1`
 ```js
 [1, 2, 3, 4].reduce((x, y) => console.log(x, y)); //1 2 undefined 3 undefined 4
 ```

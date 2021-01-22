@@ -442,7 +442,11 @@ module.exports = {
                 '/algorithm/DataStructure/Array/种花问题',
                 '/algorithm/DataStructure/Array/比较字符串最小字母出现频次',
                 '/algorithm/DataStructure/Array/词典中最长的单词',
-                '/algorithm/DataStructure/Array/最大数'
+                '/algorithm/DataStructure/Array/最大数',
+                '/algorithm/DataStructure/Array/最小的K个数',
+                '/algorithm/DataStructure/Array/分糖果',
+                '/algorithm/DataStructure/Array/用两个栈实现队列',
+                '/algorithm/DataStructure/Array/数组中重复的数字'
             ]
         },
         {
@@ -500,7 +504,8 @@ module.exports = {
                 '/algorithm/DataStructure/LinkedList/反转链表',
                 '/algorithm/DataStructure/LinkedList/删除链表的结点',
                 '/algorithm/DataStructure/LinkedList/链表中倒数第k个节点',
-                '/algorithm/DataStructure/LinkedList/合并两个有序链表'
+                '/algorithm/DataStructure/LinkedList/合并两个有序链表',
+                '/algorithm/DataStructure/LinkedList/判断链表是否有环'
             ]
         },
         {

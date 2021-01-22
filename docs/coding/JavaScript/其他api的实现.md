@@ -40,13 +40,46 @@ function indexOf(arr,target,start=0){
 ```js
 Array.prototype.myReduce = function (callback,initvalue) {
     let arr = this
-    let base = initvalue == null ? 0 : initvalue
-    let startPoint = initvalue == null ? 0 : 1
-    for(let i=0;i<arr.length;i++) {
-        base = callback(base,arr[i],i+startPoint,arr)
+    let base = typeof initvalue === 'undefined' ? arr[0] : initvalue
+    let startPoint = typeof initvalue === 'undefined' ? 1 : 0
+    for(let i=startPoint;i<arr.length;i++) {
+        base = callback(base,arr[i],i,arr)
     }
     return base
 }
+```
+
+## `reduce`实现`runPromiseSequence
+```js
+const f1 = () => new Promise((resolve,reject) => {
+    setTimeout(() => {
+        console.log('p1 running')
+        resolve(1)
+    },1000)
+})
+const f2 = () => new Promise((resolve,rejct) => {
+    setTimeout(() => {
+        console.log('p2 running')
+        resolve(2)
+    },1000)
+})
+const array = [f1,f2]
+
+const runPromiseInSequence = (array, value) => array.reduce(
+    (promiseChain,currentFunction) => promiseChain.then(currentFunction),
+    Promise.resolve(value)
+)
+runPromiseInSequence(array,'init')
+```
+
+## `reduce`实现`pipe`
+`pipe(f,g,h)`是一个柯里化函数，它返回一个新的函数，这个新的函数会完成`(...args) => h(g(f(...args)))`的调用，即`pipe`方法返回的函数会接收一个参数，这个参数将会作为数组`functions`的`reduce`方法的初始值
+
+```js
+const pipe = (...functions) => input => function.reduce(
+    (acc,fn) => fn(acc),
+    input
+)
 ```
 
 ## 实现`map`

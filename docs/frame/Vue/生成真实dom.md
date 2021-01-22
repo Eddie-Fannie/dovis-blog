@@ -109,3 +109,6 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 
 当`newChildren`中的所有节点都循环了一遍后，也就是循环结束后，如果`oldChildren`中还有剩余的没有被处理的节点，那么这些节点就是被废弃，需要删除的节点。
 
+::: tip
+在更新子节点时，需要在`oldChildren`中循环去找一个节点。但是如果我们在模板中渲染列表时，为子节点设置了属性`key`，就会生成一个`key`对应着一个节点下标这样一个对象。也就是说，如果在节点上设置了属性`key`。那么在`oldChildren`中找相同节点时，可以直接通过`key`拿到下标，从而获取节点。这样，我们根本不需要通过循环来查找节点。
+:::
