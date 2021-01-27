@@ -395,14 +395,46 @@ MyPromise.all = function(promises) {
     });
 }
 
+/*
+* 侯策版的all
+*/
+MyPromise.all = function(promises) {
+    if(!Array.isArray(promises)) {
+        throw new TypeError('The arguments should be an array')
+    }
+    return new MyPromise((resolve,reject) => {
+        try{
+            let resultArray = []
+            const length = promises.length
+            for(let i=0;i<length;i++) {
+                promsieArray[i].then(data => {
+                    resultArray.push(data)
+                    if(resultArray.length === length){
+                        resolve(resultArray)
+                    }
+                },reject)
+            }
+        } catch(e) {
+            reject(e)
+        }
+    })
+}
+
 MyPromise.race = function(promises) {
+    if(!Array.isArray(promises)) {
+        throw new TypeError('The arguments should be an array')
+    }
     return new MyPromise(function(resolve, reject) {
-        for (let i = 0; i < promises.length; i++) {
-            promises[i].then(function(data) {
-                resolve(data);
-            }, function(error) {
-                reject(error);
-            });
+        try {
+            for (let i = 0; i < promises.length; i++) {
+                promises[i].then(function(data) {
+                    resolve(data);
+                }, function(error) {
+                    reject(error);
+                });
+            }
+        } catch(e) {
+            reject(e)
         }
     });
 }
@@ -705,4 +737,58 @@ CutePromise.prototype.then = function(onResolved,onReject) {
     }
     return this;
 }
+```
+
+## 侯策版本
+- 实现雏形和状态完善
+```js
+function MyPromise(executor) {
+    const self = this
+    this.status = 'pending'
+    this.value = null
+    this.reason = null
+    function resolve(value){
+        if(this.status === 'pending') {
+            this.value = value
+            this.status = 'fulfilled'
+        }
+        
+    }
+    function reject(reason) {
+        if(this.status === 'pending') {
+            this.reason = reason
+            this.status = 'rejected'
+        }
+    }
+    executor(resolve,reject)
+}
+MyPromise.prototype.then = function(onResolved,onRejected) {
+    onResolved = typeof onResolved === 'function' ? onResolved : value => value
+    onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason}
+    if(this.status === 'fulfilled') {
+        onResolved(this.value)
+    }
+    if(this.status === 'rejected') {
+        onRejected(this.reason)
+    }
+}
+```
+
+- 异步实现完善
+```js
+let promise = new MyPromise((resolve,reject) => {
+    setTimeout(() => {
+        resolve('data')
+    },2000)
+})
+promise.then(data => {
+    console.log(data)
+})
+
+// 上述例子没法输出data
+
+/*
+* 原因就是我们实现的逻辑全是同步的。then方法中的onResolved是同步执行的，它在执行时this.status仍然为pending。
+* 我们可以先在状态为pending时把开发者传进来的onResolved方法存起来，再在resolve方法中执行即可
+*/
 ```

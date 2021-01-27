@@ -66,7 +66,31 @@ console.log(typeof str1 === 'number') // true
 console.log(typeof Array) // 'function'
 console.log(typeof {}) // 'object'
 console.log(typeof function name(){console.log(222)}) // 'function'
+
+// function /object
+function fun1(){};
+const fun2 = function(){};
+const fun3 = new Function('name','console.log(name)');
+
+const obj1 = {};
+const obj2 = new Object();
+const obj3 = new fun1();
+const obj4 = new new Function();
+
+console.log(typeof Object);//function
+console.log(typeof Function);//function
+console.log(typeof fun1);//function
+console.log(typeof fun2);//function
+console.log(typeof fun3);//function
+console.log(typeof obj1);//object
+console.log(typeof obj2);//object
+console.log(typeof obj3);//object
+console.log(typeof obj4);//object
 ```
+![img](/dovis-blog/other/85.png)
+
+> 所有 `Function` 的实例都是函数对象，其他的均为普通对象，其中包括 `Function` 实例的实例。
+
 - `instanceof`：判断的原理是根据原型链
 ```js
 function Person() {

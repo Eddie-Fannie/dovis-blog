@@ -64,6 +64,25 @@ xhr.onreadystatechange = function() {
 xhr.open('get', 'example.txt', true)
 xhr.send(null)
 ```
+
+::: tip
+1. 使用`post`方式发送数据时，在调用`send`方法时，需要设置请求的`MIME`类型
+- `application/x-www-form-urlencoded`:提交的数据按照 `key1=val1&key2=val2` 的方式进行编码，`key` 和 `val` 会进行了 `URL` 转码
+```js
+xhr.setRequestHeader(
+    'Content-Type',
+    'application/x-www-form-urlencoded'
+)
+```
+- `multipart/form-data`表单上传文件
+- `application/json`
+- `text/xml`
+
+我们现在一般这样来使用：
+1. `XML` 存储数据，存储配置文件等需要结构化存储的地方使用；
+2. 数据传输、数据交互使用`JSON`；
+:::
+
 ## Ajax的优缺点
 ::: tip
 + 优点：

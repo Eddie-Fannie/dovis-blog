@@ -111,7 +111,6 @@ class Scheduler {
         }
         this.count++
         const result = await fn()
-        this.count--
         if (this.list.length > 0) {
           // 每执行完一个异步任务就会去数组中查看一下有没有还处于阻塞当中的异步任务,
           // 如果有的话就执行最前面的那个异步任务.

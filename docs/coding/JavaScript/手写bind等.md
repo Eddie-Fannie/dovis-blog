@@ -81,6 +81,24 @@ Function.prototype.myApply = function (context,arr) {
     // 注意：函数是可以有返回值的
     return result;
   }
+
+/*
+*侯策版本
+*/
+Function.prototype.applyFn = function(targetObject,argArray) {
+    if(typeof argArray === 'undefined' || argArray === null) {
+        argArray = []
+    }
+    if(typeof targetObject === 'undefined' || targetObject === null) {
+        targetObject = window
+    }
+    targetObject = new Object(targetObject)
+    const targetFnKey = 'targetFnKey'
+    targetObject[targetFnKey] = this
+    const result = targetObject[targetFnKey](...argArray)
+    delete targetObject[targetFnKey]
+    return result
+}
 ```
 ## 手写`bind`
 - 指定`this`
@@ -135,7 +153,9 @@ Function.prototype.bind = function (context) {
     
     // 创建一个空对象
     var fNOP = function () {};
-    
+    // 空对象的原型指向绑定函数的原型
+    fNOP.prototype = this.prototype;
+
     // 实现第3点,返回一个函数
     var fBound = function () {
         // 实现第4点，获取 bind 返回函数的参数
@@ -145,9 +165,6 @@ Function.prototype.bind = function (context) {
         // 注释1
     }
     
-    // 注释2
-    // 空对象的原型指向绑定函数的原型
-    fNOP.prototype = this.prototype;
     // 空对象的实例赋值给 fBound.prototype
     fBound.prototype = new fNOP();
     return fBound;
@@ -158,5 +175,5 @@ Function.prototype.bind = function (context) {
 - 当作为普通函数时，`this` 指向`window` ，此时结果为 `false` ，将绑定函数的 `this` 指向 `context`
 
 - 修改返回函数的 `prototype` 为绑定函数的 `prototype`，实例就可以继承绑定函数的原型中的值
-- 至于为什么使用一个空对象 `fNOP` 作为中介，把 `fBound.prototype` 赋值为空对象的实例（原型式继承），这是因为直接 `fBound.prototype = this.prototype` 有一个缺点，修改 `fBound.prototype` 的时候，也会直接修改 `this.prototype` ；其实也可以直接使用ES5的 `Object.create()` 方法生成一个新对象，但 `bind` 和 `Object.create()` 都是ES5方法，部分IE浏览器（IE < 9）并不支
+- 至于为什么使用一个空对象 `fNOP` 作为中介，把 `fBound.prototype` 赋值为空对象的实例（原型式继承），这是因为直接 `fBound.prototype = this.prototype` 有一个缺点，修改 `fBound.prototype` 的时候，也会直接修改 `this.prototype` ；其实也可以直接使用ES5的 `Object.create()` 方法生成一个新对象，但 `bind` 和 `Object.create()` 都是ES5方法，部分IE浏览器（IE < 9）并不支持
 :::

@@ -44,6 +44,9 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 - 删除已经废弃的节点；
 - 修改需要更新的节点；
 
+1. 比较只会在同层级进行, 不会跨层级比较
+2. 在`diff`比较的过程中，循环从两边向中间比较
+
 ### 新增节点
 > 只有那些因为状态的改变而新增的节点在DOM并不存在时，我们才需要创建一个节点并插入到`DOM`中。
 

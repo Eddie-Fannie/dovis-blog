@@ -282,6 +282,13 @@ module.exports = {
             children: [
                 '/coding/CSS/一些css场景实现'
             ]
+        },
+        {
+            title: 'Vue模块',
+            collapsable: false,
+            children: [
+                '/coding/Vue/手写vue相关'
+            ]
         }
     ],
     '/reading/': [
@@ -505,7 +512,8 @@ module.exports = {
                 '/algorithm/DataStructure/LinkedList/删除链表的结点',
                 '/algorithm/DataStructure/LinkedList/链表中倒数第k个节点',
                 '/algorithm/DataStructure/LinkedList/合并两个有序链表',
-                '/algorithm/DataStructure/LinkedList/判断链表是否有环'
+                '/algorithm/DataStructure/LinkedList/判断链表是否有环',
+                '/algorithm/DataStructure/LinkedList/链表的中间结点'
             ]
         },
         {
