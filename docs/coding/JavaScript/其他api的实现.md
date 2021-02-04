@@ -49,7 +49,7 @@ Array.prototype.myReduce = function (callback,initvalue) {
 }
 ```
 
-## `reduce`实现`runPromiseSequence
+## `reduce`实现`runPromiseSequence`
 ```js
 const f1 = () => new Promise((resolve,reject) => {
     setTimeout(() => {
@@ -138,4 +138,76 @@ console.dir(schedule, 3)
 // 800ms 时，3完成，输出3，任务4进队
 // 1000ms 时， 1完成
 // 1200ms 时，4完成
+```
+
+## 实现一个`findIndex`
+二分查找
+```js
+function findIndex(arr, target){
+        const len = arr.length;
+        let left = 0;
+        let right = len - 1;
+
+        let ret = -1;
+        while (left <= right) {
+            const middle = ((right - left) >> 1) + left;
+            const val = arr[middle];
+            if (val >= target) {
+                if (val === target) {
+                    ret = middle;
+                }
+                right = middle - 1;
+            } else {
+                left = middle + 1;
+            }
+        }
+
+        return ret;
+    }
+```
+
+## 拆解url参数中的queryString
+```js
+function getQuery (queryStr) {
+    const [, query] = queryStr.split('?')
+    if (query) {
+        return query.split('&').reduce((pre, cur) => {
+            const [key, val] = cur.split('=')
+            pre[key] = decodeURIComponent(val)
+            return pre
+        }, {})
+    }
+    return {}
+}
+
+// 或者正则表达式
+const queryString = (str)=>{
+    const obj = {}
+    str.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => (obj[k] = v))
+    return obj
+}
+
+console.log(getQuery('http://sample.com/?a=1&b=2&c=xx&d=2#hash'))
+```
+
+## 实现一个add方法
+> `add(1)(2,3)(4).value()`
+
+```js
+function add(...args) {
+  const nums = [...args];
+
+  function addFn(...args1) {
+    nums.push(...args1);
+    return addFn;
+  }
+
+  addFn.value = () => {
+    const sum = nums.reduce((s, n) => s + n, 0);
+    console.log(sum);
+    return sum;
+  };
+
+  return addFn;
+}
 ```

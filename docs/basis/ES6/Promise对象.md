@@ -281,6 +281,36 @@ Promise.all([p1,p2,p3]).then(values => {
 ```
 **如果作为参数的`Promise`实例本身定义了`catch`方法，那么它被`rejected`时并不会触发`Promise.all()`的`catch`方法**
 
+::: tip
+题目：
+- 第一题
+```js
+function runAsync (x) {
+  const p = new Promise(r => setTimeout(() => r(x, console.log(x)), 1000))
+  return p
+}
+function runReject (x) {
+  const p = new Promise((res, rej) => setTimeout(() => rej(`Error: ${x}`, console.log(x)), 1000 * x))
+  return p
+}
+Promise.all([runAsync(1), runReject(4), runAsync(3), runReject(2)])
+  .then(res => console.log(res))
+  .catch(err => console.log(err))
+
+/**
+ * 
+ * 
+1
+3
+// 2s后输出
+2
+Error: 2
+// 4s后输出
+4
+```
+> `.catch`是会捕获最先的那个异常，在这道题目中最先的异常就是`runReject(2)`的结果。另外，如果一组异步操作中有一个异常都不会进入`.then()`的第一个回调函数参数中。
+:::
+
 ### `Promise.race()`
 这个方法和`Promise.all()`传参类似，区别在于只要有一个实例率先改变状态，`p`的状态也跟着改变。那个率先改变的`Promise`实例的返回值就会传给`p`的回调函数
 
@@ -480,7 +510,7 @@ Promise.prototype.done = function(onFulfilled, onRejected) {
 用于指定不管`Promise`对象最后状态如何都会执行的操作。接收一个普通的回调函数作为参数，该参数不管如何都必须执行。
 ```js
 Promise.prototype.finally = function(callback) {
-    let p = this.constructor
+    let P = this.constructor
     return this.then(
         value => P.resolve(callback()).then(() => value)
         reason => P.resolve(callback()).then(() => { throw reason })
@@ -516,6 +546,56 @@ let p4 = p1.finally(() => {
 })
 setTimeout(console.log, 0, p4)  // Promise {<rejected>: Error: error}
 ```
+
+::: tip
+`Promise.finally`的题目：
+- 第一题
+```js
+Promise.resolve('1')
+  .then(res => {
+    console.log(res)
+  })
+  .finally(() => {
+    console.log('finally')
+  })
+Promise.resolve('2')
+  .finally(() => {
+    console.log('finally2')
+  	return '我是finally2返回的值'
+  })
+  .then(res => {
+    console.log('finally2后面的then函数', res)
+  })
+
+/*
+*
+'1'
+'finally2'
+'finally'
+'finally2后面的then函数' '2'
+*/
+```
+
+- 第二题
+```js
+Promise.resolve('1')
+  .finally(() => {
+    console.log('finally1')
+    throw new Error('我是finally中抛出的异常')
+  })
+  .then(res => {
+    console.log('finally后面的then函数', res)
+  })
+  .catch(err => {
+    console.log('捕获错误', err)
+  })
+
+/**
+ * 
+ * 'finally1'
+'捕获错误' Error: 我是finally中抛出的异常
+```
+:::
 
 ## Promise的应用
 1. 加载图片

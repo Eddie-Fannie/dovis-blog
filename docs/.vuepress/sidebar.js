@@ -332,6 +332,13 @@ module.exports = {
             ]
         },
         {
+          title: '构建工具模块',
+          collapsable: false,
+          children: [
+              '/interview/构建工具'
+          ]  
+        },
+        {
             title: '其他模块',
             collapsable: false,
             children: [
@@ -384,7 +391,8 @@ module.exports = {
             children: [
                 '/algorithm/AlgorithmicThinking/Recall/电话号码的字母组合',
                 '/algorithm/AlgorithmicThinking/Recall/括号生成',
-                '/algorithm/AlgorithmicThinking/Recall/组合总和'
+                '/algorithm/AlgorithmicThinking/Recall/组合总和',
+                '/algorithm/AlgorithmicThinking/Recall/面试题0808'
             ]
         },
         {
@@ -399,7 +407,8 @@ module.exports = {
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/连续数列',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/判断子序列',
                 '/algorithm/AlgorithmicThinking/DynamicProgramming/使用最小花费爬楼梯',
-                '/algorithm/AlgorithmicThinking/DynamicProgramming/除数博弈'
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/除数博弈',
+                '/algorithm/AlgorithmicThinking/DynamicProgramming/丑数'
             ]
         },
         {
@@ -460,7 +469,8 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/DataStructure/Array/求众数'
+                '/algorithm/DataStructure/Array/求众数',
+                '/algorithm/DataStructure/Array/有效三角形的个数'
             ]
         }
     ],
@@ -520,7 +530,8 @@ module.exports = {
             title: '中等题',
             collapsable: false,
             children: [
-                '/algorithm/DataStructure/LinkedList/删除链表的倒数第N个节点'
+                '/algorithm/DataStructure/LinkedList/删除链表的倒数第N个节点',
+                '/algorithm/DataStructure/LinkedList/两数相加'
             ]
         }
     ],

@@ -210,6 +210,7 @@ console.log(079) // 79
     1. `Number(['1'])`转为`1`。先调用`valueOf`转成`['1']`还不是原始值，则调用`toString`转成`'1'`。
     2. `'true' == true //false Number('true')->NaN  Number(true)->1`
     3. `toFixed(num)`:`toFixed()` 方法可把 `Number` 四舍五入为指定小数位数的数字; 参数`num`: 代表小数位数。**返回的是字符串格式了**
+    4. `'' == null`为`false`。`{}+10`返回`10`。`10+{}`返回`10[object Object]`
     :::
 
 + 2. `parseInt()`函数，解析字符串，并返回一个整数
@@ -338,6 +339,9 @@ console.log({}+true) // [object Object]true
 {}+true // 1 浏览器控制台
 
 " \t \n" - 2  // -2 
+
+'1'+1n // '11' 比较特殊字符串和BigInt相加，BigInt转换为字符串
+1+1n // 错误，不能把数值和BigInt相加
 ```
 
 > 字符串转换为数字时，会忽略字符串的开头和结尾处的空格字符。在这里，整个字符串由空格字符组成，包括 `\t、\n `以及它们之间的“常规”空格。因此，类似于空字符串，所以会变为 `0`。
@@ -356,11 +360,12 @@ console.log({}+true) // [object Object]true
 - 如果一个操作数为布尔值，则也转换为数值
 
 6. 相等操作符
-- **`null` == `undefined`**。这两个基本类型数据不能转换为其他值
+- **`null` == `undefined`**。这两个基本类型数据不能转换为其他值，即如果其中一个操作值是`null/undefined`，那么另一个操作符必须为`null/undefined`，才会返回`true`，否则都是`false`。
 - 两个操作数都为对象，就要看两个对象是否同一个。（地址是否指向同一个）
 - 判断两者类型是否为`string/number`，是的话就会将字符串转换为`number`
 - 判断其中一方是否为`boolean`，是的话就会把`boolean`转为`number`再进行判断。
 - 判断其中一方是否为`object`且另一方为`string/number/symbol`，是的话就会把`object`转为原始类型再进行判断。
+- 如果其中一个操作数为`Symbol`类，那么返回`false`
 ```js
 [] == ![] // true 都转为0。后者![]是先布尔类型转换，转换为false，然后数值转换为0
 '' == !'' // false 前者转为0后者为1

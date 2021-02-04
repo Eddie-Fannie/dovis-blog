@@ -218,6 +218,7 @@ const obj = Object.assign({}, v1, null, v2, undefined, v3, v4);
 console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 ```
 3. 拷贝异常会打断后面的拷贝任务
+4. 可以拷贝`Symbol`类型的属性
 
 ## `Object.getPrototypeOf()`
 > 返回指定对象的原型（内部`[[Prototype]]`属性的值）

@@ -787,6 +787,19 @@ console.log('end')
 
 > `end nextTick then setImmediate`
 
+16. 
+```js
+Promise.resolve().then(() => {
+  return new Error('error!!!')
+}).then(res => {
+  console.log("then: ", res)
+}).catch(err => {
+  console.log("catch: ", err)
+})
+```
+ 
+> `then: 'Error:error!!!`返回任意一个非 `promise` 的值都会被包裹成 `promise` 对象，因此这里的`return new Error('error!!!')`也被包裹成了`return Promise.resolve(new Error('error!!!'))`。
+
 ## Node中的Event Loop
 > `Node` 的 `Event Loop` 分为 `6` 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
 

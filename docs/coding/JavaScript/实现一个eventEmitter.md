@@ -1,4 +1,4 @@
-# 实现一个事件总线EventEmitter
+# 实现一个事件总线EventEmitter(发布订阅)
 [vue中事件相关的实例方法](/frame/Vue/vue的api原理.html#事件相关的实例方法)
 
 ```js

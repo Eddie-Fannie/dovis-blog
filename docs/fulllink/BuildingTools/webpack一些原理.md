@@ -1,4 +1,4 @@
-# webpack的一些构建原理
+# webpack的一些原理
 ## webpack将代码编译成什么
 
 - `CommonJS`规范下的打包结果
@@ -136,6 +136,12 @@ import('./hello').then(sayHello => {
 
 ::: tip
 在整个打包的过程中，`webpack`和插件都采用基于事件流的发布/订阅模式，监听某些关键过程，并在这些环节中执行插件任务。最后所有文件的编译和转化都已经完成，输出最终资源。
+
++ `webpack`的打包过程
+    - 从入口文件开始，分析整个应用的依赖树
+    - 将每个依赖模块包装起来，放到一个数组中等待调用
+    - 实现模块加载的方法，并把它放到模块执行的环境中，确保模块间可以互相调用。
+    - 把执行入口文件的逻辑放在一个函数表达式中，并立即执行这个函数。
 :::
 
 ## loader
@@ -201,4 +207,8 @@ module.exports = function(source) {
 }
 ```
 > 当使用`this.callback`返回内容时，该`loader`必须返回`undefined`，这样`webpack`就知道该`loader`返回的结果在`this.callback`中，而不在`return`中。这里的`this`指向的是一个叫`loaderContext`的`loader-runner`特有对象。
+
+## Tree Shaking原理
+- 编译阶段利用ES6 Module判断哪些模块已经加载
+- 判断哪些模块和变量未被使用或者引用，进而删除对应代码。
 

@@ -79,8 +79,17 @@ xhr.setRequestHeader(
 - `text/xml`
 
 我们现在一般这样来使用：
-1. `XML` 存储数据，存储配置文件等需要结构化存储的地方使用；
-2. 数据传输、数据交互使用`JSON`；
+- `XML` 存储数据，存储配置文件等需要结构化存储的地方使用；
+- 数据传输、数据交互使用`JSON`；
+
+2. `get/post`在ajax请求中传参的差异：
+- 我们要在发送`get`请求时携带数据，只需要在调用 `open()` 方法时，将数据写在第二个参数的`URL`的 `?` 后面即可
+- 发送`post`请求的过程几乎和`get`请求一样，唯一不一样的是数据的传递。大家都知道`post`请求的数据是放在请求体中的，因此我们需要调用`xhr`对象上的 `setRequestHeader()` 方法来模仿表单提交时的内容类型
+
+```bash
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+xhr.send('query=4&em=0') 
+```
 :::
 
 ## Ajax的优缺点
