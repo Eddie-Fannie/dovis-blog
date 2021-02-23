@@ -16,7 +16,7 @@ function create(Con, ...args){
     // 绑定 this 并执行构造函数(为对象设置属性)
     let result = Con.apply(obj,args)
     // 如果 result 没有其他选择的对象，就返回 obj 对象 
-    return (result instanceof Object) && result != null ? result : obj;
+    return (typeof result === 'object') && result != null ? result : obj;
 }
 
 // 构造函数
@@ -42,7 +42,7 @@ function create(Con, ...args){
     // 绑定 this 并执行构造函数(为对象设置属性)
     let result = Con.apply(obj,args)
     // 如果 result 没有其他选择的对象，就返回 obj 对象 
-    return (result instanceof Object ) && result != null ? result : obj;
+    return (typeof result === 'object') && result != null ? result : obj;
 }
 ```
 ::: tip

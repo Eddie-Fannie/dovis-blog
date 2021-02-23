@@ -152,7 +152,6 @@ module.exports = {
                 '/advanced/Browser/浏览器渲染',
                 '/advanced/Browser/浏览器跨域',
                 '/advanced/Browser/浏览器存储',
-                '/advanced/Browser/浏览器安全',
                 '/advanced/Browser/前端路由'
             ]
         }
@@ -169,6 +168,15 @@ module.exports = {
                 '/advanced/Performance/页面性能的方法',
                 '/advanced/Performance/使用ServiceWorker提升性能',
                 '/advanced/Performance/协同项目优化'
+            ]
+        }
+    ],
+    '/advanced/Safety/': [
+        {
+            title: '前端安全模块',
+            collapsable: false,
+            children: [
+                '/advanced/Safety/前端安全基础知识',
             ]
         }
     ],
