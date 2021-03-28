@@ -69,6 +69,14 @@ $ git config --global alias.l "log --oneline --graph"
 $ git config --global alias.ls 'log --graph --pretty=format:"%h <%an> %ar %s"'
 ```
 
+::: tip
+也可以直接到`~/gitconfig`中修改：
+```bash
+[alias]
+co = checkout br = branch
+```
+:::
+
 ## 新增/初始 仓库
 ```bash
 $ git init # 初始化目录让Git开始版控目录
