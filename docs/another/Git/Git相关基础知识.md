@@ -99,6 +99,10 @@ $ git commit -a -m "update content" # 这样可以先add，再commit
 ```
 > 缩短操作要注意一点：这个`-a`参数只对已经存在存储库区域的文件有效，对新加入（`Untracked files`）的文件无效。
 
+::: tip
+`Git`每次的`commit`都只会处理暂存区中的内容，也就是说在执行`git commit`命令时，那些还没有被加到暂存区的文件不会被`commit`到存储库中。
+:::
+
 ## 查看历史记录
 ```bash
 $ git log
