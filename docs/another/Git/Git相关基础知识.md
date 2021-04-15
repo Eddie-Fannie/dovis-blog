@@ -116,6 +116,9 @@ $ git log -S "Ruby" # 在所有提交的文件中进行指定搜索
 $ git log --oneline --since="9am" --until="12am" #查找某段时间内的提交信息
 $ git log --oneline --since="9am" --until="12am" --after="2020-11-20" #在某年之后
 ```
+::: tip
+`sourcetree`图形界面工具中空心的小圆圈表示`HEAD`的位置，`HEAD`通常指向现在这个分支最前端的位置。
+:::
 
 ## 删除文件/变更文件名
 对git来说都视为改动
@@ -124,8 +127,9 @@ $ git log --oneline --since="9am" --until="12am" --after="2020-11-20" #在某年
 $ git rm welcome --cached # 这个时候文件状态变为Untracked。使用SourceTree则点击文件Stop Tracking选项即可。
 
 # 重命名
-$ git mv htllo.html world.html # 状态变为renamed
+$ git mv hello.html world.html # 状态变为renamed
 ```
+> Git是根据文件的内容来计算`SHA-1`的值，所以文件的名称不重要，重要的是文件的内容。当更改文件名时，Git并不会为此作出一个新的`Blob`对象，而只是指向原来那个`Blob`对象。但因为文件名变了，所以`Git`会为此作出一个新的`Tree`对象。
 
 ## 修改commit记录
 - `git rebase`命令来修改
