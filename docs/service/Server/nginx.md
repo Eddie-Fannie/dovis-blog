@@ -17,10 +17,9 @@ ps -ef|grep nginx
 - 杀死进程
 ```bash
 sudo kill -QUIT 进程号
-
+```
 4. 配置`conf`文件
 sudo vim /usr/local/etc/nginx/nginx.conf
-```
 
 ## nginx解决跨域问题
 ::: tip
