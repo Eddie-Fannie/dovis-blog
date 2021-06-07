@@ -6,9 +6,9 @@
 ```bash
 mkdir webpack-demo
 cd webpack-demo
-npm inity -y
+npm init -y
 
-# 安装webapck
+# 安装webpack
 npm install --save-dev webpack
 npm install --save-dev webpack-cli
 ```
