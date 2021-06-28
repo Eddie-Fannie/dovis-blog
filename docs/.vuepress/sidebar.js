@@ -277,6 +277,15 @@ module.exports = {
             ]
         }
     ],
+    '/fulllink/LangAdvanced/': [
+        {
+            title: 'TypeScript部分',
+            collapsable: false,
+            children: [
+                '/fulllink/LangAdvanced/Typescript基础',
+            ]
+        }
+    ],
     '/coding/' : [
         {
             title: "JavaScript模块",
