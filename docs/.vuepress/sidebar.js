@@ -327,6 +327,7 @@ module.exports = {
                 '/reading/你不知道的js上卷',
                 '/reading/web性能实战',
                 '/reading/深入浅出Webpack',
+                '/reading/React实战',
             ]
         }
     ],
