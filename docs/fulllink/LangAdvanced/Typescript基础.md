@@ -4,7 +4,7 @@
 ## 基础
 ```js
 function sayHello(person: string) {
-    return 'Hello, ' + person;
+  return 'Hello, ' + person;
 }
 
 let user = [0, 1, 2];
@@ -12,7 +12,7 @@ console.log(sayHello(user));
 ```
 进行`tsc`编译时编辑器会提示错误，但是还是生成了`js`文件。**这是因为 `TypeScript` 编译的时候即使报错了，还是会生成编译结果，我们仍然可以使用这个编译之后的文件。如果要在报错的时候终止 `js` 文件的生成，可以在 `tsconfig.json` 中配置 `noEmitOnError` 即可。**
 
-### 原始数据类型
+## 原始数据类型
 - 空值
 JavaScript 没有空值（`Void`）的概念，在 `TypeScript` 中，可以用 `void` 表示没有任何返回值的函数。**声明一个 `void` 类型的变量没有什么用，因为你只能将它赋值为 `undefined` 和 `null`**
 
@@ -26,7 +26,7 @@ let u: void;
 let num: number = u; // Type 'void' is not assignable to type 'number'
 ```
 
-### 类型推论
+## 类型推论
 ```js
 let myFavoriteNumber = 'seven';
 myFavoriteNumber = 7;
@@ -48,7 +48,7 @@ console.log(myFavoriteNumber.length); // 编译时报错
 // basic.ts:12:30 - error TS2339: Property 'length' does not exist on type 'number'.
 ```
 
-### 接口
+## 接口
 ```js
 interface Person {
   name: string;
@@ -130,7 +130,7 @@ let tom: Person = {
 > 有时候我们希望对象中的一些字段只能在创建的时候被赋值，那么可以用 `readonly` 定义只读属性。
 :::
 
-### 数组
+## 数组
 ```js
 // 最简单的方式
 let array : number[] = [1,2,3,4];
@@ -242,3 +242,45 @@ function reverse(x: number | string): number | string | void {
 
 形如 `<Foo>` 的语法在 `tsx` 中表示的是一个 `ReactNode`，在 `ts` 中除了表示类型断言之外，也可能是表示一个泛型。
 :::
+
+## 声明文件
+将声明语句放到一个单独的以`（.d.ts)`后缀命名的文件中，就是声明文件。
+
+### declare var
+在所有的声明语句中，`declare var` 是最简单的，如之前所学，它能够用来定义一个全局变量的类型。与其类似的，还有 `declare let` 和 `declare const`，使用 `let` 与使用 `var` 没有什么区别：
+
+```js
+// src/jQuery.d.ts
+
+declare let jQuery: (selector: string) => any;
+```
+> 一般来说，全局变量都是禁止修改的常量，所以大部分情况都应该使用 `const` 而不是 `var` 或 `let`。**需要注意的是，声明语句中只能定义类型，切勿在声明语句中定义具体的实现**
+
+### declare function
+`declare function` 用来定义全局函数的类型。**在函数类型的声明语句中，函数重载也是支持的**
+
+## 内置对象
+`JavaScript` 中有很多内置对象，它们可以直接在 `TypeScript` 中当做定义好了的类型。内置对象是指根据标准在全局作用域`（Global）`上存在的对象。这里的标准是指 ECMAScript 和其他环境（比如 `DOM`）的标准。
+
+### ECMAScript的内置对象
+`Boolean/Error/Date/RegExp`等
+
+```js
+let b: Boolean = new Boolean(1);
+let e: Error = new Error('Error occurred');
+let d: Date = new Date();
+let r: RegExp = /[a-z]/;
+```
+### DOM和BOM内置对象
+`Document/HTMLElement/Event/NodeList`等
+
+::: tip
+[TypeScript核心库的定义文件](https://github.com/microsoft/TypeScript/blob/main/src/lib) 中定义了所有浏览器环境需要用到的类型，并且是预置在 `TypeScript` 中的。
+:::
+
+### 用Typescript写Node.js
+`Node.js` 不是内置对象的一部分，如果想用 `TypeScript` 写 `Node.js`，则需要引入第三方声明文件：
+
+```bash
+npm install @types/node --save-dev
+```
