@@ -70,6 +70,10 @@ data.shift();  // 首部删除  [50,10,20,60,70]
 - `map()`：与前一个方法区别在于，返回的是每次函数调用的结果组成数组。
 - `forEach()`：这个方法没有返回值。本质上和使用`for`循环数组一样。可以参考[具体讲解](/basis/JavaScript/js的数组方法汇总.html#foreach)
 
+::: tip
+1. `every`方法不会对空数组进行检测，换言之就是遇到空数组直接返回`true`
+:::
+
 ## 归并方法
 [`reduce()`](/basis/JavaScript/js的数组方法汇总.html#reduce)和`reduceRight()`（从数组最后一项开始）
 
