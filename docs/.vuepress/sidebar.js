@@ -249,6 +249,13 @@ module.exports = {
             children: [
                 '/another/Working/发布一个npm包'
             ]
+        },
+        {
+            title: '写过的文档（外部链接）',
+            collapsable: false,
+            children: [
+                '/another/Working/工作时的技术分享'
+            ]
         }
     ],
     '/fulllink/Modularity/': [
