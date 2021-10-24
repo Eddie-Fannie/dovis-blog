@@ -1,4 +1,40 @@
 # 4. 深入浅出Webpack
+## 第一章 入门
+### 1.1. 模块化
+1. `CommonJS`（http：//www.commonjs.org）是一种被广泛使用的 `JavaScript` 模块化规范，其核心思想是通过`require`方法来同步加载依赖的其他模块，通过`module.exports`导出需要暴露的接口。
+
+> `CommonJS`优点：
+> - 代码可复用于`Node.js`环境并运行
+> - 通过`NPM`发布很多第三方模块都采用`CommonJS`规范
+> `CommonJS` 的缺点在于，这样的代码无法直接运行在浏览器环境下，必须通过工具转换成标准的`ES5`
+
+2. `AMD`也是一种JavaScript模块化规范，与`CommonJS`最大的不同在于，它采用了异步的方式去加载依赖的模块。AMD规范主要用于解决针对浏览器环境的模块化问题，最具代表性的实现是 requirejs（http：//requirejs.org）。
+> `AMD`的优点在于：
+> - 可在不转换代码的情况下直接在浏览器中运行
+> - 可异步加载依赖;
+> - 可并行加载多个依赖；
+> - 代码可运行在浏览器环境和`Node.js`环境下。
+> `AMD`的缺点在于:
+> - JavaScript运行环境没有原生支持`AMD`，需要先导入实现了`AMD`的库后才能正常使用。
+
+### 1.3 安装Webpack
+1. `Webpack`是一个打包模块化`JavaScript`的工具，它会从入口文件`main.js`出发，识别出源码中的模块化导入语句，递归地找出入口文件的所有依赖，将入口和其所有依赖打包到一个单独的文件中。
+
+### 1.4 使用Loader
+1. 每个 `Loader` 都可以通过 `URL querystring` 的方式传入参数，例如 `css-loader？minimize`中的`minimize`告诉`css-loader`要开启`CSS`压缩。
+2. 向`Loader`传入属性的方式除了可以通过`querystring`实现，还可以通过`Object`实现，配置文件中的`options`属性
+
+### 1.6 使用DevServer
+1. 通过`DevServer`启动的`Webpack`会开启监听模式，当发生变化时重新执行构建，然后通知`DevServer`。`DevServer`会让`Webpack`在构建出的`JavaScript`代码里注入一个代理客户端用于控制网页，网页和`DevServer`之间通过`WebSocket`协议通信，以方便`DevServer`主动向客户端发送命令。`DevServer`在收到来自`Webpack`的文件变化通知时，通过注入的客户端控制网页刷新。
+2. 如果尝试修改`index.html`文件并保存，则我们会发现这并不会触发以上机制，导致这个问题的原因是`Webpack`在启动时会以配置里的`entry`为入口去递归解析出`entry`所依赖的文件，只有`entry`本身和依赖的文件才会被`Webpack`添加到监听列表里。而`index.html`文件是脱离了`JavaScript`模块化系统的，所以`Webpack`不知道它的存在。
+3. `Webpack`支持生成`Source Map`，只需在启动时带上`--devtool source-map`参数。重启 `DevServer`后刷新页面，再打开 `Chrome`浏览器的开发者工具，就可以在 `Sources`栏中看到可调试的源代码了。
+
+### 1.7 核心概念
+1. `Module`：模块，在`Webpack`里一切皆模块，一个模块对应一个文件。`Webpack`会从配置的`Entry`开始递归找出所有依赖的模块。
+2. `Chunk`：代码块，一个`Chunk`由多个模块组合而成，用于代码合并与分割。
+
+> `Webpack`在启动后会从`Entry`里配置的`Module`开始，递归解析`Entry`依赖的所有`Module`。每找到一个`Module`，就会根据配置的`Loader`去找出对应的转换规则，对`Module`进行转换后，再解析出当前`Module`依赖的`Module`。这些模块会以`Entry`为单位进行分组，一个`Entry`及其所有依赖的`Module`被分到一个组也就是一个`Chunk`。最后，`Webpack`会将所有`Chunk`转换成文件输出。在整个流程中，`Webpack`会在恰当的时机执行`Plugin`里定义的逻辑。
+
 ## 第五章 原理
 ### 5.4 plugin
 > `Webpack`通过`Plugin`机制让其更灵活，以适应各种应用场景。在`Webpack`运行的生命周期中会广播许多事件，`Plugin`可以监听这些事件，在合适的时机通过`Webpack`提供的`API`改变输出结果。
