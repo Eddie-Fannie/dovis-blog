@@ -215,7 +215,6 @@ module.exports = {
             children: [
                 '/another/Git/如何使用gitflow',
                 '/another/Git/工作中使用git',
-                '/another/Git/Git相关基础知识'
             ]
         }
     ],
@@ -344,6 +343,7 @@ module.exports = {
                 '/reading/web性能实战',
                 '/reading/深入浅出Webpack',
                 '/reading/React实战',
+                '/reading/Git从入门到精通'
             ]
         }
     ],

@@ -1,4 +1,4 @@
-# Git基础知识
+# 6. Git从入门到精通
 
 ## 终端机常用命令
 |Windows|macOS/Linux|说明|
@@ -100,16 +100,18 @@ $ git commit -a -m "update content" # 这样可以先add，再commit
 > 缩短操作要注意一点：这个`-a`参数只对已经存在存储库区域的文件有效，对新加入（`Untracked files`）的文件无效。
 
 ::: tip
-`Git`每次的`commit`都只会处理暂存区中的内容，也就是说在执行`git commit`命令时，那些还没有被加到暂存区的文件不会被`commit`到存储库中。
+1. `Git`每次的`commit`都只会处理暂存区中的内容，也就是说在执行`git commit`命令时，那些还没有被加到暂存区的文件不会被`commit`到存储库中。
+2. 只要加上`--allow-empty`参数，没有内容也可以`commit`
 :::
 
 ## 查看历史记录
 ```bash
 $ git log
 
+# 加上 --oneline --graph 参数输出的结果会更加精简(只有了commit的信息，没有作者/日期信息)
 # 加上额外参数
 $ git log --oneline --author="Sherly" # 查看指定作者的提交信息
-$ git lon --oneline --author="Sherly\|Eddie-Fannie" # 查看这两位的 | 表示或者
+$ git log --oneline --author="Sherly\|Eddie-Fannie" # 查看这两位的 | 表示或者
 
 $ git log --oneline --grep="LOL" #搜索符合的关键字内容 在commit信息中
 $ git log -S "Ruby" # 在所有提交的文件中进行指定搜索
@@ -135,3 +137,82 @@ $ git mv hello.html world.html # 状态变为renamed
 - `git rebase`命令来修改
 - 先把`Commit`用`git reset`命令删除，整理后重新`commit`
 - 使用`--amend`参数改动最后一次`commit`
+
+```bash
+# 使用 amend参数
+$ git commit --amend -m "xxx"
+```
+> 因为`commit`的内容改变了，所以Git会重新计算并产生一个新的`commit`对象，这其实是一个全新的`Commit`。`--amend`参数只能修改最后一次`Commit`
+
+::: tip
+追加文件到最后一次的`Commit`:
+1. 使用`git reset`命令把最后一次的`Commit`删除，加入新文件后再重新`Commit`
+2. 使用`--amend`参数进行提交
+
+```bash
+$ git add file
+$ git commit --amend --no-edit
+```
+:::
+
+## 忽略文件（.gitignore)
+1. 忽略该文件定义的忽略规则
+```bash
+$ git add -f 文件名称
+```
+2. 删除添加忽略文件就已经存在的文件
+```bash
+$ git rm --cached
+```
+3. 清除忽略的文件
+```bash
+$git clean -fX # -f 指强制删除
+```
+
+## 查看特定文件的Commit记录
+```bash
+$ git log file # 如果想查看这个文件每次commit具体做了什么，可以再加一个 -p 参数
+```
+
+## 查看代码是谁写的
+```bash
+$ git blame file-name # -L 5, 10 这样只显示指定5-10行的内容
+```
+
+## 挽救已经删除的文件
+```bash
+$ git checkout file-name # git checkout . 挽救所有删除文件
+```
+::: tip
+`git checkout`命令使用时，会切换分支。如果后面跟的是文件名就不会切换分支，而是把文件从.git目录中复制一份到当前工作目录。更精确地说，这个命令会把暂存区中的内容或文件拿来覆盖工作目录中的内容或者文件。
+因此执行该命令会把某个文件/当前目录下的所有文件恢复到上一次`commit`的状态。
+
+```bash
+$ git checkout HEAD~2 file-name # 距离现在两个版本以上。注意：会同时更新暂存区的状态
+```
+:::
+
+## 想要重新commit -- reset
+![img](/dovis-blog/git/git-log@2x.png)
+```bash
+$ git reset 173fbdd78a^ # 指这个commit的前一次。倒退多次，则 173fbdd78a~5，倒退五次
+
+# 刚好HEAD和main都指向该节点，所以上行命令可以改写成
+$ git reset HEAD^
+$ git reset main^
+
+# 上面的reset方式是相对的，如果清楚知道回退到哪个commit，可以直接：
+$ git reset e3c935d0d
+```
+
+::: tip
+`reset`命令常用的参数有三个：`--mixed` `--soft` `--hard`。
+- `--mixed`:
+默认参数，该模式会把暂存区的文件删掉，但不会影响工作目录的文件。也就是说`Commit`拆出来的文件会留在工作目录，但不会留在暂存区。
+
+- `soft`
+工作目录和暂存区的文件都不会被删除，所以看起来就只有`HEAD`的移动而已。这种`Commit`拆出来的文件会直接放在暂存区。
+
+- `hard`
+在这种模式下，无论是工作目录还是暂存区的文件，都会被删除
+:::
