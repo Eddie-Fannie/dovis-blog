@@ -215,4 +215,9 @@ $ git reset e3c935d0d
 
 - `hard`
 在这种模式下，无论是工作目录还是暂存区的文件，都会被删除
+
+```bash
+# 退回刚刚Reset的这个步骤，只要Reset回一开始那个Commit即可
+$ git reset *** --hard # 只用hard参数，可以强迫放弃Reset之后改动的文件
+```
 :::

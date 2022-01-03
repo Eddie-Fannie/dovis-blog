@@ -201,6 +201,13 @@ module.exports = {
     ],
     '/service/Node/': [
         {
+            title: 'Node基础相关',
+            collapsable: false,
+            children: [
+                '/service/Node/node文件的调试'
+            ]
+        },
+        {
             title: 'express框架学习',
             collapsable: false,
             children: [
@@ -215,6 +222,15 @@ module.exports = {
             children: [
                 '/another/Git/如何使用gitflow',
                 '/another/Git/工作中使用git',
+            ]
+        }
+    ],
+    '/another/PackageManager/': [
+        {
+            title: '你不知道的包管理工具',
+            collapsable: false,
+            children: [
+                '/another/PackageManager/yarn',
             ]
         }
     ],

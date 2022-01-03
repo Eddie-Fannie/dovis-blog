@@ -57,14 +57,15 @@ module.exports = [
             {text: 'web服务器', link: '/service/Server/'}
         ]
     },
-    { 
+    {
         text: '其他知识', items: [
             {text: 'Git版本工具', link: '/another/Git/'},
+            {text: '包管理工具', link: '/another/PackageManager/'},
             {text: '计算机网络', link: '/another/Net/'},
             {text: '工作遇到的知识', link: '/another/Working/'}
-        ] 
+        ]
     },
-    { 
+    {
         text: '趣识', items: [
             {text: 'Github', link: 'https://github.com/Eddie-Fannie'},
             {text: '阅享', link: '/reading/'},
