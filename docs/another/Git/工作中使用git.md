@@ -17,3 +17,11 @@
     git reset --hard
     git pull
     ```
+
+## 2. 合并代码到`fork`仓库，出现冲突
++ 解决办法：
+    - `fork`仓库新建一个临时分支
+    - 跟原本的仓库建立联系：`git remote add upstream xxxx` (xxxx指原本仓库地址)
+    - 拉取原本仓库`source branch`到`fork`仓库本地：`git fetch upstream test:upstream-test` (重命名成`upstream-test`，避免跟自身`test`分支冲突)
+    - 然后合入并解决冲突，合入：`git merge upstream-test`
+    - 把临时分支推到远程
