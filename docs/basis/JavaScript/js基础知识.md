@@ -165,7 +165,7 @@ console.log(o.constructor.name) // String
     - 转换为数字
     - 转换为字符串
 1. 转换为布尔值
-> 在条件判断时，除了`undefined`，`null`，`false`，`NaN`,`''`,`0`,`-0`，其他都转为`true`
+> 在条件判断时，除了`undefined`，`null`，`false`，`NaN`,`''`,`0`,`-0`，`0n`（`bigint`类型）其他都转为`true`
 > 在利用`Boolean()`方法强类型转换时，只有`false`,空字符串，`0/NaN`，`null`，`undefined`会转换为`false`。其余都转为`true`
 
 ```js

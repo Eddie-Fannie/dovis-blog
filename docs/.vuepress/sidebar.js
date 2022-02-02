@@ -314,6 +314,9 @@ module.exports = {
             collapsable: false,
             children: [
                 '/fulllink/LangAdvanced/Typescript基础',
+                '/fulllink/LangAdvanced/Typescript官方文档学习',
+                '/fulllink/LangAdvanced/Typescript配置项悉知',
+                '/fulllink/LangAdvanced/Typescript高阶',
             ]
         }
     ],
