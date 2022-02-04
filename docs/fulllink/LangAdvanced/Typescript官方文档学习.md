@@ -5,7 +5,7 @@
 1. `Non-null Assertion Operator (Postfix !)`
 > ! 操作符表示知道类型不会出现 `null|undefined`的一种类型断言。就像其他类型的断言一样，这不会改变代码的运行时行为，因此只有使用`!`，需要知道该值不能为`null`或`undefined`。
 
-```js
+```ts
 function liveDangerously(x?: number | null) {
   // No error
   console.log(x!.toFixed());
@@ -14,7 +14,7 @@ function liveDangerously(x?: number | null) {
 
 ## 使用 `is` 操作符来类型断言
 
-```js
+```ts
 type Fish = { swim: () => void };
 type Bird = { fly: () => void };
 
@@ -26,7 +26,7 @@ function isFish(pet: Fish | Bird): pet is Fish {
 ## Exhaustiveness checking (The Never Type)
 > `Never` 可分配给每种类型; 但是没有类型可分配给 `Never`（除非自身除外）。这意味着您可以使用`narrowing` 并依赖于 `switch` 语句中的穷举检查。
 
-```js
+```ts
 interface Foo {
   type: 'foo'
 }
@@ -91,7 +91,7 @@ function handleValue(val: All) {
 
 1. 函数类型表达式（`Function Type Expressions`）
 
-```js
+```ts
 function greeter(fn: (a: string) => void) {
   fn("Hello, World");
 }
@@ -107,7 +107,7 @@ greeter(printToConsole);
 
 > 如果我们希望用属性描述一个可调用的东西，我们可以在对象类型中编写 `call signatures`。**注意这个语法跟函数类型表达式稍有不同，在参数列表和返回的类型之间用的是 `:` 而不是 `=>`**
 
-```js
+```ts
 type DescribableFunction = {
   description: string;
   (someArg: number): boolean;
@@ -126,7 +126,7 @@ doSomething(test)
 
 3. `Construct Signatures` 构造签名
 
-```js
+```ts
 type SomeConstructor = {
   new (s: string): SomeObject;
 };
@@ -136,7 +136,7 @@ function fn(ctor: SomeConstructor) {
 ```
 > 一些对象，比如 `Date` 对象，可以直接调用，也可以使用 `new` 操作符调用，而你可以将调用签名和构造签名合并在一起：
 
-```js
+```ts
 interface CallOrConstruct {
   new (s: string): Date;
   (n?: number): number;
@@ -147,7 +147,7 @@ interface CallOrConstruct {
 
 > 函数的输出类型依赖函数的输入类型，或者两个输入的类型以某种形式相互关联。在 `TypeScript` 中，泛型就是被用来描述两个值之间的对应关系。我们需要在函数签名里声明一个类型参数 (`type parameter`)
 
-```js
+```ts
 function firstElement<Type>(arr: Type[]): Type | undefined {
   return arr[0];
 }
@@ -166,7 +166,7 @@ const u = firstElement([]);
 5. `Inference` 推断
 > 在上面的例子中，我们没有明确指定 `Type` 的类型，类型是被 `TypeScript` 自动推断出来的。我们也可以使用**多个类型参数**。
 
-```js
+```ts
 function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[] {
   return arr.map(func);
 }
@@ -179,7 +179,7 @@ const parsed = map(["1", "2", "3"], (n) => parseInt(n));
 6. `Constraints` （约束）
 > 有的时候，我们想关联两个值，但只能操作值的一些固定字段，这种情况，我们可以使用 **约束（`constraint`）**对类型参数进行限制。使用 `extends` 语法来约束函数参数。
 
-```js
+```ts
 function longest<Type extends { length: number }>(a: Type, b: Type) {
   if (a.length >= b.length) {
     return a;
@@ -204,7 +204,7 @@ const notOK = longest(10, 100);
 7. `Working with Constrained Values`(泛型约束实战)
 > 一个使用泛型约束经常出现的错误：
 
-```js
+```ts
 function minimumLength<Type extends { length: number }>(
   obj: Type,
   minimum: number
@@ -221,7 +221,7 @@ function minimumLength<Type extends { length: number }>(
 
 这个函数看起来像是没有问题，`Type` 被 `{ length: number}` 约束，函数返回 `Type` 或者一个符合约束的值。而这其中的问题就在于函数理应返回与传入参数相同类型的对象，而不仅仅是符合约束的对象。我们可以写出这样一段反例：
 
-```js
+```ts
 // 'arr' gets value { length: 6 }
 const arr = minimumLength([1, 2, 3], 6);
 // and crashes here because arrays have
@@ -232,7 +232,7 @@ console.log(arr.slice(0));
 8. `Specifying Type Arguments`（声明类型参数）
 > `TypeScript` 通常能自动推断泛型调用中传入的类型参数，但也并不能总是推断出。举个例子，有这样一个合并两个数组的函数：
 
-```js
+```ts
 function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
   return arr1.concat(arr2);
 }
@@ -256,7 +256,7 @@ const arr = combine<string | number>([1, 2, 3], ["hello"]);
 
 10. `Declaring this in a Function` (在函数中声明 `this`)
 
-```js
+```ts
 const user = {
   id: 123,
   admin: false,
@@ -267,7 +267,7 @@ const user = {
 ```
 > `TypeScript` 能够理解函数 `user.becomeAdmin` 中的 `this` 指向的是外层的对象 `user`，这已经可以应付很多情况了，但还是有一些情况需要你明确的告诉 `TypeScript this` 到底代表的是什么。在 `JavaScript` 中，`this` 是保留字，所以不能当做参数使用。但 `TypeScript` 可以允许你在函数体内声明 `this` 的类型。
 
-```js
+```ts
 interface DB {
   filterUsers(filter: (this: User) => boolean): User[];
 }
@@ -289,7 +289,7 @@ const admins = db.filterUsers(function (this: User) { // 此处不能使用箭�
 >
 > 你可以描述一个函数返回一个不知道什么类型的值
 
-```js
+```ts
 function f1(a: any) {
   a.b(); // OK
 }
@@ -308,7 +308,7 @@ function safeParse(s: string): unknown {
 
 > 一些函数从来不返回值。`never` 类型表示一个值不会再被观察到 `(observed)`。作为一个返回类型时，它表示这个函数会丢一个异常，或者会结束程序的执行。当 `TypeScript` 确定在联合类型中已经没有可能是其中的类型的时候，`never` 类型也会出现。
 
-```js
+```ts
 // 异常
 function fail(msg: string): never {
   throw new Error(msg);
@@ -329,7 +329,7 @@ function fn(x: string | number) {
 12. 剩余参数
 - 在 `TypeScript` 中，剩余参数的类型会被隐式设置为 `any[]` 而不是 `any`，如果你要设置具体的类型，必须是 `Array<T>` 或者 `T[]`的形式，再或者就是元祖类型`（tuple type）`。
 
-```js
+```ts
 // Rest Parameters 剩余形参
 function multiply(n: number, ...m: number[]) {
   return m.map((x) => n * x);
@@ -339,7 +339,7 @@ const a = multiply(10, 1, 2, 3, 4);
 ```
 - 我们可以借助一个使用 `...`语法的数组，为函数提供不定数量的实参。注意一般情况下，`TypeScript` 并不会假定数组是不变的(`immutable`) 如：
 
-```js
+```ts
 // Rest Parameters 剩余实参
 const args = [8, 5];
 const angle = Math.atan2(...args); // error: A spread argument must either have a tuple type or be passed to a rest parameter
@@ -352,7 +352,7 @@ const angle = Math.atan2(...args);
 
 13. 参数解构 `Parameter Destructuring`
 
-```js
+```ts
 function sum({ a, b, c }: { a: number; b: number; c: number }) {
   console.log(a + b + c);
 }
@@ -372,7 +372,7 @@ function sum({ a, b, c }: ABC) {
 - 当基于上下文的类型推导`（Contextual Typing）`推导出返回类型为 `void` 的时候，并不会强制函数一定不能返回内容。换句话说，如果这样一个返回 `void` 类型的函数类型 `(type vf = () => void)`， 当被应用的时候，也是可以返回任何值的，但返回的值会被忽略掉。
 - 因此，下面这些`() => void` 类型的实现都是有效的：
 
-```js
+```ts
 type voidFunc = () => void;
 
 const f1: voidFunc = () => {
@@ -393,7 +393,7 @@ const v3 = f3();
 
 ::: tip
 1. 正是因为有这个特效存在，下面的代码就不会编译报错：
-```js
+```ts
 const src = [1, 2, 3];
 const dst = [0];
 
@@ -404,7 +404,7 @@ src.forEach((el) => dst.push(el));
 
 2. 当一个函数字面量定义返回一个 `void` 类型，函数是一定不能返回任何东西的
 
-```js
+```ts
 function f2(): void {
   // @ts-expect-error
   return true;
@@ -420,7 +420,7 @@ const f3 = function (): void {
 ## Object Types
 1. 可选属性 `? 修饰符`
 
-```js
+```ts
 interface PaintOptions {
   shape: Shape;
   xPos?: number;
@@ -439,7 +439,7 @@ paintShape({ shape, xPos: 100, yPos: 100 });
 ```
 2. `readonly Properties` 只读属性
 
-```js
+```ts
 interface SomeType {
   readonly prop: string;
 }
@@ -500,9 +500,361 @@ console.log(readonlyPerson.age); // prints '43'
 
 3. 索引签名 `Index Signatures`
 > 有的时候，你不能提前知道一个类型里的所有属性的名字，但是你知道这些值的特征。
+>
+> 一个索引签名的属性类型必须是 `string` 或者是 `number`。虽然 `TypeScript` 可以同时支持 `string` 和 `number` 类型，但数字索引的返回类型一定要是字符索引返回类型的子类型。这是因为当使用一个数字进行索引的时候，`JavaScript` 实际上把它转成了一个字符串。
 
-```js
+```ts
 interface StringArray {
   [index: number]: string;
 }
+
+// 数字索引的返回类型一定要是字符索引返回类型的子类型
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+// Error: indexing with a numeric string might get you a completely separate type of Animal!
+interface NotOkay {
+  [x: number]: Animal;
+  // 'number' index type 'Animal' is not assignable to 'string' index type 'Dog'.
+  [x: string]: Dog;
+}
 ```
+
+4. 属性继承 (`Extending Types`)
+
+- `interface`继承多个类型
+
+```ts
+interface Colorful {
+  color: string;
+}
+
+interface Circle {
+  radius: number;
+}
+
+interface ColorfulCircle extends Colorful, Circle {}
+
+const cc: ColorfulCircle = {
+  color: "red",
+  radius: 42,
+};
+```
+
+5. 泛型对象类型 `Generic Object Types`
+
+- `Array`本身就是一个泛型：
+
+> 现代 `JavaScript` 也提供其他是泛型的数据结构，比如` Map<K, V>` ， `Set<T>` 和 `Promise<T>`。因为 `Map` 、`Set` 、`Promise`的行为表现，它们可以跟任何类型搭配使用。
+
+```ts
+interface Array<Type> {
+  /**
+   * Gets or sets the length of the array.
+   */
+  length: number;
+
+  /**
+   * Removes the last element from an array and returns it.
+   */
+  pop(): Type | undefined;
+
+  /**
+   * Appends new elements to an array, and returns the new length of the array.
+   */
+  push(...items: Type[]): number;
+
+  // ...
+}
+```
+
+- `ReadonlyArray` 类型（`The ReadonlyArray Type`）
+
+> `ReadonlyArray` 是一个特殊类型，它可以描述数组不能被改变。
+
+```ts
+const test : ReadonlyArray<number> = [1, 2, 3, 4]
+test.push(23); // // Property 'push' does not exist on type 'readonly number[]'.
+
+// 不像 Array，ReadonlyArray 并不是一个我们可以用的构造器函数。
+new ReadonlyArray("red", "green", "blue");
+
+// typescript 提供更简写的方法
+const test : readonly number[] = [1, 2, 3, 4]
+
+// 最后有一点要注意，就是 Arrays 和 ReadonlyArray 并不能双向的赋值：
+let x: readonly string[] = [];
+let y: string[] = [];
+
+x = y; // ok
+y = x; // The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+```
+
+- 元组类型（`Tuple Types`）
+
+> 元组类型是另外一种 `Array` 类型，当你明确知道数组包含多少个元素，并且每个位置元素的类型都明确知道的时候，就适合使用元组类型。
+>
+> 在大部分的代码中，元组只是被创建，使用完后也不会被修改，所以尽可能的将元组设置为 `readonly` 是一个好习惯。如果我们给一个数组字面量 `const` 断言，也会被推断为 `readonly` 元组类型。
+
+```ts
+type StringNumberPair = [string, number];
+
+// 如果我们给一个数组字面量 const 断言，也会被推断为 readonly 元组类型。
+
+let point = [3, 4] as const;
+
+function distanceFromOrigin([x, y]: [number, number]) {
+  return Math.sqrt(x ** 2 + y ** 2);
+}
+
+distanceFromOrigin(point);
+
+// Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]'.
+// The type 'readonly [3, 4]' is 'readonly' and cannot be assigned to the mutable type '[number, number]'.
+```
+
+## `Generics` 泛型
+1. `Generics Types` 泛型类型
+
+```ts
+// 泛型函数
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: <Type>(arg: Type) => Type = identity;
+
+// 可以以对象类型的调用签名的形式，书写这个泛型类型：
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: { <Type>(arg: Type): Type } = identity;
+
+// 这可以引导我们写出第一个泛型接口，让我们使用上个例子中的对象字面量，然后把它的代码移动到接口里
+interface GenericIdentityFn {
+  <Type>(arg: Type): Type;
+}
+
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn = identity;
+```
+
+2. `Generics Classes` 泛型类
+
+```ts
+class GenericNumber<NumType> {
+  zeroValue: NumType;
+  add: (x: NumType, y: NumType) => NumType;
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function (x, y) {
+  return x + y;
+};
+```
+
+::: tip
+**一个类它的类型有两部分：静态部分和实例部分。泛型类仅仅对实例部分生效，所以当我们使用类的时候，注意静态成员并不能使用类型参数**
+
+下面是一个更复杂的例子，使用原型属性推断和约束，构造函数和类实例的关系。
+
+```ts
+class BeeKeeper {
+  hasMask: boolean = true;
+}
+
+class ZooKeeper {
+  nametag: string = "Mikle";
+}
+
+class Animal {
+  numLegs: number = 4;
+}
+
+class Bee extends Animal {
+  keeper: BeeKeeper = new BeeKeeper();
+}
+
+class Lion extends Animal {
+  keeper: ZooKeeper = new ZooKeeper();
+}
+
+function createInstance<A extends Animal>(c: new () => A): A {
+  return new c();
+}
+
+createInstance(Lion).keeper.nametag;
+createInstance(Bee).keeper.hasMask;
+```
+:::
+
+## `keyof` 操作符
+> 对一个对象类型使用 `keyof` 操作符，会返回该对象属性名组成的一个字符串或者数字字面量的联合。
+
+```ts
+type Point = { x: number; y: number };
+type P = keyof Point; // x | y
+
+// 如果这个类型有一个 string 或者 number 类型的索引签名，keyof 则会直接返回这些类型
+type Arrayish = { [n: number]: unknown };
+type A = keyof Arrayish;
+
+type Mapish = { [k: string]: boolean };
+type M = keyof Mapish;
+```
+> 在上面代码第二个例子中，`M 是 string | number`，这是因为 `JavaScript` 对象的属性名会被强制转为一个字符串，所以 `obj[0]` 和 `obj["0"]` 是一样的。
+
+### 数字字面量联合类型
+
+> `keyof` 也可能返回一个数字字面量的联合类型，那什么时候会返回数字字面量联合类型呢，我们可以尝试构建这样一个对象。
+
+```ts
+const NumericObject = {
+  [1]: "vue",
+  [2]: "angular",
+  [3]: "react"
+};
+
+type result = keyof typeof NumericObject
+
+// typeof NumbericObject 的结果为：
+// {
+//   1: string;
+//   2: string;
+//   3: string;
+// }
+// 所以最终的结果为：
+// type result = 1 | 2 | 3
+```
+
+## `typeof` 操作符
+> `TypeScript` 添加的 `typeof` 方法可以在类型上下文（`type context`）中使用，用于获取一个变量或者属性的类型。在 `TypeScript` 中，只有对标识符（比如变量名）或者他们的属性使用 `typeof` 才是合法的。
+
+```ts
+// 对对象使用
+const person = { name: "kevin", age: "18" }
+type Kevin = typeof person;
+
+// type Kevin = {
+// 		name: string;
+// 		age: string;
+// }
+
+// 对函数使用
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+type result = typeof identity; // type result = <Type>(arg: Type) => Type
+```
+
+### 对 `enum`数据类型使用 `typeof`
+```ts
+enum UserResponse {
+  No = 0,
+  Yes = 1,
+}
+
+// 编译成Javascript：
+var UserResponse;
+(function (UserResponse) {
+  UserResponse[UserResponse["No"] = 0] = "No";
+  UserResponse[UserResponse["Yes"] = 1] = "Yes";
+})(UserResponse || (UserResponse = {}));
+
+console.log(UserResponse)
+// { '0': 'No', '1': 'Yes', No: 0, Yes: 1 }
+
+// 对enum使用typeof
+const a: result = {
+  "No": 2,
+  "Yes": 3
+}
+
+// result 类型类似于：
+// {
+//	"No": number,
+//  "YES": number
+// }
+```
+> 不过对一个 `enum` 类型只使用 `typeof` 一般没什么用，通常还会搭配 `keyof` 操作符用于获取属性名的联合字符串。
+
+```ts
+type result = keyof typeof UserResponse;
+// type result = "No" | "Yes"
+```
+
+## 索引访问类型 `Indexed Access Types`
+
+```ts
+// 我们可以使用 索引访问类型（indexed access type） 查找另外一个类型上的特定属性
+type Person = { age: number; name: string; alive: boolean };
+type Age = Person["age"]; // type Age = number
+
+//因为索引名本身就是一个类型，所以我们也可以使用联合、keyof 或者其他类型：
+type I1 = Person["age" | "name"];  // type I1 = string | number
+
+type I2 = Person[keyof Person]; // type I2 = string | number | boolean
+
+type AliveOrName = "alive" | "name";
+type I3 = Person[AliveOrName];  // type I3 = string | boolean
+
+// 我们使用 number 来获取数组元素的类型。结合 typeof 可以方便的捕获数组字面量的元素类型
+const MyArray = [
+  { name: "Alice", age: 15 },
+  { name: "Bob", age: 23 },
+  { name: "Eve", age: 38 },
+];
+
+type Person = typeof MyArray[number];
+
+// type Person = {
+//    name: string;
+//    age: number;
+// }
+
+type Age = typeof MyArray[number]["age"];  // type Age = number
+
+type Age2 = Person["age"];  // type Age2 = number
+
+// 作为索引的只能是类型，这意味着你不能使用 const 创建一个变量引用
+const key = "age";
+type Age = Person[key];
+
+// Type 'key' cannot be used as an index type.
+// 'key' refers to a value, but is being used as a type here. Did you mean 'typeof key'?
+
+
+// 我们怎么根据一个数组获取它的所有值的字符串联合类型呢？
+const APP = ['TaoBao', 'Tmall', 'Alipay'] as const;
+type app = typeof APP[number];
+// type app = "TaoBao" | "Tmall" | "Alipay"
+
+function getPhoto(app: app) {
+  // ...
+}
+
+getPhoto('TaoBao'); // ok
+getPhoto('whatever'); // not ok
+```
+::: tip
+1. 首先是使用 `as const` 将数组变为 `readonly` 的元组类型
+2. 但此时 `APP` 还是一个值，我们通过 `typeof` 获取 `APP` 的类型
+
+```ts
+type typeOfAPP = typeof APP;
+// type typeOfAPP = readonly ["TaoBao", "Tmall", "Alipay"]
+```
+
+3. 最后在通过索引访问类型，获取字符串联合类型
+:::

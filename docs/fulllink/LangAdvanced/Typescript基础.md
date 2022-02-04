@@ -2,7 +2,7 @@
 > 看`Typescript`入门教程的一些记录
 
 ## 基础
-```js
+```ts
 function sayHello(person: string) {
   return 'Hello, ' + person;
 }
@@ -19,7 +19,7 @@ JavaScript 没有空值（`Void`）的概念，在 `TypeScript` 中，可以用 
 - `Null`和`Undefined`
 与 `void` 的区别是，`undefined` 和 `null` 是所有类型的子类型。也就是说 `undefined` 类型的变量，可以赋值给 `number` 类型的变量。**而 `void` 类型的变量不能赋值给 `number` 类型的变量：**
 
-```js
+```ts
 let u: number = undefined; // 不会报错
 
 let u: void;
@@ -27,7 +27,7 @@ let num: number = u; // Type 'void' is not assignable to type 'number'
 ```
 
 ## 类型推论
-```js
+```ts
 let myFavoriteNumber = 'seven';
 myFavoriteNumber = 7;
 
@@ -38,7 +38,7 @@ myFavoriteNumber = 7;
 ### 联合类型（Union Types)
 > 表示取值可以为多种类型的一种。使用`|`进行分隔。联合类型的变量在被赋值的时候，会根据类型推论的规则推断出一个类型：
 
-```js
+```ts
 let myFavoriteNumber: string | number;
 myFavoriteNumber = 'seven';
 console.log(myFavoriteNumber.length); // 5
@@ -49,7 +49,7 @@ console.log(myFavoriteNumber.length); // 编译时报错
 ```
 
 ## 接口
-```js
+```ts
 interface Person {
   name: string;
   age: number;
@@ -64,7 +64,7 @@ let tom: Person = {
 1. 接口一般首字母为大写。
 2. 赋值的时候，变量的形状必须和接口的形状保持一致。多属性、少属性都是不允许的。这个时候可以用可选属性来不完全匹配一个形状。
 
-```js
+```ts
 interface Person {
   name: string;
   age?: number;
@@ -78,7 +78,7 @@ let tom: Person = {
 ```
 
 3. 任意属性
-```js
+```ts
 interface Person {
   name: string;
   age?: number;
@@ -92,7 +92,7 @@ let tom: Person = {
 ```
 > 使用 `[propName: string]` 定义了任意属性取 `string` 类型的值。需要注意的是，一旦定义了任意属性，那么确定属性和可选属性的类型都必须是它的类型的子集。**这里是任意属性取`string`，才会有这种说法**
 
-```js
+```ts
 interface Person {
   name: string;
   age?: number;
@@ -113,7 +113,7 @@ let tom: Person = {
 
 > 一个接口中只能定义一个任意属性。如果接口中有多个类型的属性，则可以在任意属性中使用联合类型：
 
-```js
+```ts
 interface Person {
   name: string;
   age?: number;
@@ -131,7 +131,7 @@ let tom: Person = {
 :::
 
 ## 数组
-```js
+```ts
 // 最简单的方式
 let array : number[] = [1,2,3,4];
 
@@ -142,7 +142,7 @@ let arr: Array<number> = [1,2,3];
 ::: tip
 - 用接口表示数组
 
-```js
+```ts
 interface NumberArray {
   [index: number]: number;
 }
@@ -153,7 +153,7 @@ let fibonacci: NumberArray = [1, 1, 2, 3, 5];
 虽然接口也可以用来描述数组，但是我们一般不会这么做，因为这种方式比前两种方式复杂多了。**不过有一种情况例外，那就是它常用来表示类数组**。
 
 - 类数组
-```js
+```ts
 function sum() {
   let args: number[] = arguments;
 }
@@ -162,7 +162,7 @@ function sum() {
 
 > `arguments` 实际上是一个类数组，不能用普通的数组的方式来描述，而应该用接口。事实上常用的类数组都有自己的接口定义（内置对象），如 `IArguments`, `NodeList`, `HTMLCollection` 等
 
-```js
+```ts
 // IArguments 接口实际
 function sum() {
   let args: {
@@ -180,13 +180,13 @@ function sum() {
 
 > 在 `ES6` 中，我们允许给函数的参数添加默认值，`TypeScript` 会将添加了默认值的参数识别为可选参数。此时就不受「可选参数必须接在必需参数后面」的限制了！
 
-```js
+```ts
 function sum(x: number, y: number): number {
   return x + y;
 }
 ```
 ### 函数表达式
-```js
+```ts
 let mySum = function (x: number, y: number): number {
   return x + y;
 };
@@ -194,7 +194,7 @@ let mySum = function (x: number, y: number): number {
 ```
 > 这是可以通过编译的，不过事实上，上面的代码只对等号右侧的匿名函数进行了类型定义，而等号左边的 `mySum`，是通过赋值操作进行类型推论而推断出来的。如果需要我们手动给 `mySum` 添加类型，则应该是这样：
 
-```js
+```ts
 let mySum: (x: number, y: number) => number = function (x: number, y: number): number {
   return x + y;
 };
@@ -207,7 +207,7 @@ let mySum: (x: number, y: number) => number = function (x: number, y: number): n
 ### 用接口定义函数的形状
 > 采用函数表达式|接口定义函数的方式时，对等号左侧进行类型限制，可以保证以后对函数名赋值时保证参数个数、参数类型、返回值类型不变。
 
-```js
+```ts
 interface SearchFunc {
   (source: string, subString: string): boolean;
 }
@@ -219,7 +219,7 @@ mySearch = function(source: string, subString: string) {
 ```
 
 ### 函数重载
-```js
+```ts
 function reverse(x: number): number;
 function reverse(x: string): string;
 function reverse(x: number | string): number | string | void {
@@ -249,7 +249,7 @@ function reverse(x: number | string): number | string | void {
 ### declare var
 在所有的声明语句中，`declare var` 是最简单的，如之前所学，它能够用来定义一个全局变量的类型。与其类似的，还有 `declare let` 和 `declare const`，使用 `let` 与使用 `var` 没有什么区别：
 
-```js
+```ts
 // src/jQuery.d.ts
 
 declare let jQuery: (selector: string) => any;
@@ -265,7 +265,7 @@ declare let jQuery: (selector: string) => any;
 ### ECMAScript的内置对象
 `Boolean/Error/Date/RegExp`等
 
-```js
+```ts
 let b: Boolean = new Boolean(1);
 let e: Error = new Error('Error occurred');
 let d: Date = new Date();
