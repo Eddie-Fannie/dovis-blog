@@ -31,7 +31,7 @@ const bear = getBear();
 bear.name;
 bear.honey;
 ```
-> `interface` 可以 `extends`， 但 `type` 是不允许 `extends` 和 `implement` 的，但是 `type` 却可以通过交叉类型实现 `interface` 的 `extend` 行为，并且两者并不是相互独立的，也就是说 `interface` 可以 `extends type`, `type` 也可以 与 `interface` 类型交叉 。
+> `interface` 可以 `extends`， 但 `type` 是不允许 `extends` 和 `implement` 的，但是 `type` 却可以通过交叉类型实现 `interface` 的 `extend` 行为，并且两者并不是相互独立的，也就是说 `interface` 可以 `extends type`, `type` 也可以与 `interface` 类型交叉 。
 
 ::: tip
 > 这两种方式在合并类型上看起来很相似，但实际上还是有很大的不同。最原则性的不同就是在于冲突怎么处理，这也是你决定选择那种方式的主要原因。

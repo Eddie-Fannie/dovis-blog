@@ -336,7 +336,7 @@ var arr2 = Array.from(arrayLike)
 Array.from({length: 3}) // [undefined, undefined, undefined]
 ```
 
-`Array.from()`还能接收第二个参数，实现类似`map`的功能。
+`Array.from()`还能接受第二个可选参数，实现类似`map`的功能。
 ```js
 Array.from([1,2,3], (x) => x*x) // [1,4,9]
 
@@ -344,6 +344,8 @@ Array.from({length: 2}, () => 'jack') // ['jack','jack']
 
 // 第一个参数指定了第二个参数运行的次数，可以更灵活。
 ```
+
+`Array.from()`还能接受第三个可选参数，执行第二个参数--回调函数 `mapFn` 时 `this` 对象。
 
 2. `Array.of()`
 > 弥补构造函数`Array()`的不足，因为参数个数不同导致的行为差异，基本可以用来替代`new Array()/Array()`
