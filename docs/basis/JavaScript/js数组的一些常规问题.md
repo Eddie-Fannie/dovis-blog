@@ -421,12 +421,14 @@ console.log(entries.next().value) // [2, 'c']
 
 ## 数组的空位
 ```js
-[, , ,] // 空位[empty,empty,empty]
-``` 
+[, , ,] // 空位[empty,empty,empty] 稀疏数组 我们也可以通过类似 new Array(个数) 的方式创建稀疏数组
+```
 > 空位不是`undefined`，一个位置的值等于`undefined`依然有值。空位是没有任何值，`in`运算符可以说明
 ```js
- 0 in [undefined,undefined] // true
- 0 in [, ,] // false
+0 in [undefined,undefined] // true
+0 in [, ,] // false
+
+[,,,].length // 3，为什么不是4而是3，跟尾后逗号有关
 ```
 
 + ES5处理空位的情况：

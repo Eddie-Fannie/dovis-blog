@@ -28,4 +28,4 @@ require.context(
     filter: RegExp, /* 可选的，默认值是/^\.\/.*$/,所有文件 */
     mode: String /* 可选的， 'sync' | 'eager' | 'weak' | 'lazy' | 'lazy-once' 默认值sync*/
 )
-``` 
+```

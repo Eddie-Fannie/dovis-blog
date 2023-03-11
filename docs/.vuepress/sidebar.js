@@ -204,7 +204,8 @@ module.exports = {
             title: 'Node基础相关',
             collapsable: false,
             children: [
-                '/service/Node/node文件的调试'
+                '/service/Node/node文件的调试',
+                '/service/Node/node基础知识',
             ]
         },
         {
@@ -304,7 +305,17 @@ module.exports = {
                 '/fulllink/BuildingTools/初识webpack',
                 '/fulllink/BuildingTools/webpack技巧',
                 '/fulllink/BuildingTools/webpack热更新',
-                '/fulllink/BuildingTools/webpack一些原理'
+                '/fulllink/BuildingTools/webpack一些原理',
+                '/fulllink/BuildingTools/webpack一些loader原理',
+                '/fulllink/BuildingTools/webpack新技术点',
+                '/fulllink/BuildingTools/webpack模块联邦'
+            ]
+        },
+        {
+            title: 'Vite部分',
+            collapsable: false,
+            children: [
+                '/fulllink/BuildingTools/vite掘金小册子学习',
             ]
         }
     ],
@@ -413,7 +424,8 @@ module.exports = {
             title: '项目模块',
             collapsable: false,
             children: [
-                '/interview/项目考点'
+                '/interview/项目考点',
+                '/interview/🦐项目总结'
             ]
         },
         {

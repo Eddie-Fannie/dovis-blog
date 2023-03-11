@@ -100,3 +100,7 @@ type Animal = {
 let div = document.createElement('div');
 type B = typeof div
 ```
+
+## 编写类型安全的代码
+基础：[<<Effective Typescript: N个使用技巧>>](https://zhuanlan.zhihu.com/p/104311029)
+高级：[<<Typescript 类型系统与函数式编程>>](https://blog.rexskz.info/typescript-type-system-and-functional-programming.html)

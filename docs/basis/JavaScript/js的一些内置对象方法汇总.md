@@ -62,16 +62,16 @@ console.log(d)
 ![img](/dovis-blog/js/3.png)
 
 ## `Object.keys()`
->要取得对象上所有可枚举的实例属性，可以使用该方法。这个方法接受一个对象作为参数，返回一个包含所有**可枚举**属性的字符串数组。不含`Symbol`
+> 要取得对象上所有可枚举的实例属性，可以使用该方法。这个方法接受一个对象作为参数，返回一个包含所有**可枚举**属性的字符串数组。**不含`Symbol`**
 ```javascript
 function Person() {
-    
+
 }
 Person.prototype.name = "Nicholas"
 Person.prototype.age = 29;
 Person.prototype.job = "Software Engineer"
 Person.prototype.sayName = function() {
-    console.log(this.name)
+  console.log(this.name)
 }
 var person1 = new Person()
 person1.name = 'john'
@@ -81,11 +81,53 @@ console.log(Object.keys(person1)) // []
 console.log(Object.keys(person1)) // ["name]
 
 ```
-如果想要得到所有实例属性，无论是否可以枚举，可以使用`Object.getOwnPropertyNames()`方法。
+如果想要得到所有实例属性，**无论是否可以枚举**，可以使用`Object.getOwnPropertyNames()`方法，也不包含`Symbol`。
+
 ```javascript
 console.log(Object.getOwnPropertyNames(Person.prototype)) // ["constructor", "name", "age", "job", "sayName"]
 ```
 **这两个方法都可以用来代替`for-in`循环**
+
+:::tip
+`Object.keys`不保证对象属性的输出顺序，迭代的顺序依赖于浏览器实现。而JS内部的`ownPropertyKeys`方法可以规定对象属性遍历顺序：
+- 数字或者字符串类型的数字当作key时，输出是按照升序排序的
+- 普通的字符串类型的key，就按照定义的顺序输出
+- Symbols也是和字符串类型的规则一样
+- 如果是三种类型的key都有，那么顺序是 1 -> 2 -> 3
+
+基于内部`ownPropertyKeys`方法实现的方法有`Object.getOwnPropertyNames`和`Reflect.ownKeys`，这两种方法保证对象属性的顺序。
+`Reflect.ownKeys()`返回的结果等价于O`bject.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))`，包括直接挂在目标对象上的**可枚举、不可枚举、Symbols**的属性组成的数组。
+
+根据 ECMA-262（ECMAScript）第三版中描述，`for-in` 语句的属性遍历的顺序是由**对象定义时属性的书写顺序**决定的。
+在现有最新的 ECMA-262（ECMAScript）第五版规范中，对 `for-in` 语句的遍历机制又做了调整，**属性遍历的顺序是没有被规定的**。
+经过上面问题重现的代码复现以及查阅网上的信息，`Chrome` `Opera` 的 `JavaScript` 解析引擎遵循的是新版 `ECMA-262 `第五版规范。因此，使用 `for-in` 语句遍历对象属性时遍历顺序并非属性构建顺序。而 `IE6 IE7 IE8 Firefox Safari` 的 `JavaScript` 解析引擎遵循的是较老的 `ECMA-262` 第三版规范，属性遍历顺序由属性构建的顺序决定。
+
+`Object.keys`内部不是使用`ownPropertyKeys`实现，针对`Chrome`的输出顺序规则：
+> 它们会先提取所有 `key` 的 `parseFloat` 值为非负整数的属性，然后根据数字顺序对属性排序首先遍历出来，然后按照对象定义的顺序遍历余下的所有属性。**`Chrome`有这样的表现是因为`V8`引擎为了提高对象的访问速度，`V8` 里的对象就维护两个属性，会把数字放入线性的 `elements` 属性中，并按照顺序存放。会把非数字的属性放入 `properties` 中，不会排序。寻找属性时先 `elements` 而后在 `properties`**
+
+```js
+const obj = {
+  '2': 'integer: 2',
+  'foo': 'string: foo',
+  '01': 'string: 01',
+  1: 'integer: 1',
+  [Symbol('first')]: 'symbol: first',
+  '-1': 'jiaheng'
+};
+
+obj['0'] = '0';
+obj[Symbol('last')] = 'symbol: last';
+obj['veryLast'] = 'string: very last';
+
+console.log('内部ownPropertyKeys', Reflect.ownKeys(obj));
+console.log('Object.keys', Object.keys(obj));
+
+// 内部ownPropertyKeys (9) ['0', '1', '2', 'foo', '01', '-1', 'veryLast', Symbol(first), Symbol(last)]
+// 对象遍历.js:15 Object.keys (7) ['0', '1', '2', 'foo', '01', '-1', 'veryLast']
+```
+
+**chrome下 `Object.keys`，`for...in`跟`Reflect.ownKeys`输出顺序保持一致了**
+:::
 
 ## `Object.defineProperty()`
 >`Object.defineProperty()`方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回此对象。
