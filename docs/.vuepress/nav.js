@@ -48,7 +48,8 @@ module.exports = [
         text: '前端领域分支', items: [
             {text: '移动端', link: '/area/Mobile/'},
             {text: '可视化', link: '/area/Visualization/'},
-            {text: 'SSR', link: '/area/SSR/'}
+            {text: 'SSR', link: '/area/SSR/'},
+            {text: '前端监控', link: '/area/Monitor/'}
         ]
     },
     {

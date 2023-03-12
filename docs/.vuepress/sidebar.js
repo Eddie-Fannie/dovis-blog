@@ -141,6 +141,13 @@ module.exports = {
                 '/frame/Vue/vue的api原理',
                 '/frame/Vue/vue的异步更新原理'
             ]
+        },
+        {
+            title: 'Vue相关生态插件原理',
+            collapsable: false,
+            children: [
+                '/frame/Vue/vue-router',
+            ]
         }
     ],
     '/frame/React/': [
