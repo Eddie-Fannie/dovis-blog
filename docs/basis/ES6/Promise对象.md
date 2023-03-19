@@ -228,16 +228,48 @@ new Promise((resolve, reject) => {
 > `.then` 或者 `.catch` 的参数期望是函数，传入非函数则会发生值穿透。值传透可以理解为，当传入`then`的不是函数的时候，这个`then`是无效的。而实际原理上其实是当`then`中传入的不算函数，则这个`then`返回的`promise`的`data`，将会保存上一个的`promise.data`。这就是发生值穿透的原因。而且每一个无效的`then`所返回的`promise`的状态都为`resolved`。
 
 ```js
-let promsie = new Promise((resolve,reject)=>{
+let promise = new Promise((resolve,reject)=>{
     resolve(1)
 })
-promsie
+promise
   .then(2)
   .then(3)
   .then(value =>console.log(value))
 
 // 输出1
 ```
+
+:::tip
+- **promise chain 中如何传递参数**
+
+只需要在TaskA中 `return` 的返回值，会在 `TaskB`执行时传给它
+
+```js
+function doubleUp(value) {
+  return value * 2;
+}
+function increment(value) {
+  return value + 1;
+}
+function output(value) {
+  console.log(value);// => (1 + 1) * 2
+}
+
+var promise = Promise.resolve(1);
+promise
+  .then(increment)
+  .then(doubleUp)
+  .then(output)
+  .catch(function(error){
+    // promise chain中出现异常的时候会被调用
+    console.error(error);
+});
+```
+
+- `.then`里同时指定处理对错误进行处理对函数相比，和使用 `.catch`又有什么异同？
+1. 我们在 `.then` 的第二个参数中指定了用来错误处理的函数，但实际上它却不能捕获第一个参数 `onFulfilled` 指定的函数里面出现的错误。
+2. `.then` 方法中的`onRejected`参数所指定的回调函数，实际上针对的是其`promise`对象或者之前的`promise`对象，而不是针对 .`then` 方法里面指定的第一个参数，即`onFulfilled`所指向的对象，这也是 `then` 和 `catch` 表现不同的原因。
+:::
 
 ## Promise实例对象上的方法
 ### `Promise.all()`
@@ -298,8 +330,8 @@ Promise.all([runAsync(1), runReject(4), runAsync(3), runReject(2)])
   .catch(err => console.log(err))
 
 /**
- * 
- * 
+ *
+ *
 1
 3
 // 2s后输出
@@ -309,10 +341,14 @@ Error: 2
 4
 ```
 > `.catch`是会捕获最先的那个异常，在这道题目中最先的异常就是`runReject(2)`的结果。另外，如果一组异步操作中有一个异常都不会进入`.then()`的第一个回调函数参数中。
+
+> 每个`promise`的结果（`resolve`或`reject`时传递的参数值），和传递给 `Promise.all` 的`promise`数组的顺序是一致的。也就是说，这时候 `.then` 得到的`promise`数组的执行结果的顺序是固定的
 :::
 
 ### `Promise.race()`
 这个方法和`Promise.all()`传参类似，区别在于只要有一个实例率先改变状态，`p`的状态也跟着改变。那个率先改变的`Promise`实例的返回值就会传给`p`的回调函数
+
+- **`Promise.race` 在第一个`promise`对象变为`Fulfilled`之后，并不会取消其他`promise`对象的执行。**
 
 ```js
 let p1 = Promise.race([
@@ -504,7 +540,46 @@ Promise.prototype.done = function(onFulfilled, onRejected) {
             setTimeout(() => { throw reason}, 0)
         })
 }
+
+try{
+    setTimeout(function callback() {
+        throw new Error("error");
+    }, 0);
+}catch(error){
+    console.error(error); // 不会捕获到错误
+}
 ```
+:::tip
+从上面我们可以看出，`done`和`then`之间有以下不同点：
+- `done` 并不返回 `promise` 对象。也就是说，在`done`之后不能使用 `catch` 等方法组成方法链
+- `done` 中发生的异常会被直接抛给外面。也就是说，不会进行`Promise`的错误处理`（Error Handling）`
+
+为什么异步的`callback`中抛出的异常不会被捕获的原因：
+- 这跟浏览器的执行机制有关。异步任务由 `eventloop` 加入任务队列，并取出入栈(`js` 主进程)执行，而当 `task` 取出执行的时候， 上下文环境已经改变，所以无法捕获 `task` 的错误。
+- 所以 `promise` 的任务，也就是 `then` 里面的回调函数，抛出错误同样也无法 `catch`。
+
+```js
+function main1() {
+  try {
+    new Promise(() => {
+      throw new Error('promise1 error')
+    })
+  } catch(e) {
+    console.log(e.message);
+  }
+}
+
+function main2() {
+  try {
+    Promise.reject('promise2 error');
+  } catch(e) {
+    console.log(e.message);
+  }
+}
+
+```
+- 这样 `try catch` 不能捕获到 `error`，因为 `promise` 内部的错误不会冒泡出来，而是被 `promise` 吃掉了，只有通过 `promise.catch` 才可以捕获，所以用 `Promise` 一定要写 `catch` 啊!
+:::
 
 ### `finally()`
 用于指定不管`Promise`对象最后状态如何都会执行的操作。接收一个普通的回调函数作为参数，该参数不管如何都必须执行。
@@ -614,7 +689,7 @@ const preloadImage = function(path) {
 
 
 ## 题目
-1. 
+1.
 ```js
 new Promise((resolve, reject) => {
     resolve()
@@ -662,7 +737,7 @@ function onResolvedD() {
 - 至此全部代码执行完成，最终的打印结果为：`A B D C`。
 :::
 
-2. 
+2.
 ```js
 new Promise((resolve, reject) => {
     resolve(1)
