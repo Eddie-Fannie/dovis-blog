@@ -684,6 +684,98 @@ const preloadImage = function(path) {
     })
 }
 ```
+2. 使用`Promise` 进行顺序 `sequence`处理
+`Promise.all` 方法会同时运行多个`promise`对象，如果想进行在`A`处理完成之后再开始B的处理，对于这种顺序执行的话 `Promise.all` 就无能为力了。
+
+:::tip
+### 循环和顺序处理
+```js
+function getURL(URL) {
+    return new Promise(function (resolve, reject) {
+        var req = new XMLHttpRequest();
+        req.open('GET', URL, true);
+        req.onload = function () {
+            if (req.status === 200) {
+                resolve(req.responseText);
+            } else {
+                reject(new Error(req.statusText));
+            }
+        };
+        req.onerror = function () {
+            reject(new Error(req.statusText));
+        };
+        req.send();
+    });
+}
+var request = {
+        comment: function getComment() {
+            return getURL('http://azu.github.io/promises-book/json/comment.json').then(JSON.parse);
+        },
+        people: function getPeople() {
+            return getURL('http://azu.github.io/promises-book/json/people.json').then(JSON.parse);
+        }
+    };
+function main() {
+    function recordValue(results, value) {
+        results.push(value);
+        return results;
+    }
+    // [] 用来保存初始化的值
+    var pushValue = recordValue.bind(null, []);
+    return request.comment().then(pushValue).then(request.people).then(pushValue);
+}
+// 运行示例
+main().then(function (value) {
+    console.log(value);
+}).catch(function(error){
+    console.error(error);
+});
+```
+
+> 使用这种写法的话那么随着 `request` 中元素数量的增加，我们也需要不断增加对 `then` 方法的调用。因此，如果我们将处理内容统一放到数组里，再配合`for` 循环进行处理的话，那么处理内容的增加将不会再带来什么问题。
+
+```js
+function main() {
+    function recordValue(results, value) {
+        results.push(value);
+        return results;
+    }
+    // [] 用来保存初始化值
+    var pushValue = recordValue.bind(null, []);
+    // 返回promise对象的函数的数组
+    var tasks = [request.comment, request.people];
+    var promise = Promise.resolve();
+    // 开始的地方
+    for (var i = 0; i < tasks.length; i++) {
+        var task = tasks[i];
+        promise = promise.then(task).then(pushValue);
+    }
+    return promise;
+}
+```
+
+> 因此类似 `promise = promise.then(task).then(pushValue)`; 的代码就是通过不断对 `promise` 进行处理，不断的覆盖 `promise` 变量的值，以达到对 `promise` 对象的累积处理效果。但是这种方法需要 `promise` 这个临时变量，从代码质量上来说显得不那么简洁。如果将这种循环写法改用 `Array.prototype.reduce` 的话，那么代码就会变得聪明多了。
+
+### `Promise.chain`和 `reduce`
+```js
+function main() {
+    function recordValue(results, value) {
+        results.push(value);
+        return results;
+    }
+    var pushValue = recordValue.bind(null, []);
+    var tasks = [request.comment, request.people];
+    return tasks.reduce(function (promise, task) {
+        return promise.then(task).then(pushValue);
+    }, Promise.resolve());
+}
+```
+
+> `Array.prototype.reduce` 的第二个参数用来设置盛放计算结果的初始值。在这个例子中， `Promise.resolve()` 会赋值给 `promise` ，此时的 `task` 为 `request.comment` 。在 `reduce` 中第一个参数中被 `return` 的值，则会被赋值为下次循环时的 `promise` 。也就是说，通过返回由 `then` 创建的新的 `promise` 对象，就实现了和`for`循环类似的 `Promise chain` 了。
+
+> 使用`reduce`和`for`循环不同的地方是`reduce`不再需要临时变量 `promise` 了，因此也不用编写 `promise = promise.then(task).then(pushValue)`; 这样冗长的代码了，这是非常大的进步。虽然 `Array.prototype.reduce` 非常适合用来在`Promise`中进行顺序处理，但是上面的代码有可能让人难以理解它是如何工作的。
+:::
+
 ## 使用Promise对象原因
 1. 为了代码更加具有可读性和可维护性，我们需要将数据请求与数据处理明确的区分开来。
 

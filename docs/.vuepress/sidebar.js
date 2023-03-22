@@ -101,7 +101,6 @@ module.exports = {
                 '/basis/ES6/Symbol',
                 '/basis/ES6/Map数据结构',
                 '/basis/ES6/Set数据结构',
-                '/basis/ES6/Iterator和for...of循环'
             ]
         },
         {
@@ -148,6 +147,13 @@ module.exports = {
             children: [
                 '/frame/Vue/vue-router',
             ]
+        },
+        {
+            title: 'Vue3相关原理',
+            collapsable: false,
+            children: [
+                '/frame/Vue/vue3相关',
+            ]
         }
     ],
     '/frame/React/': [
@@ -156,6 +162,15 @@ module.exports = {
             collapsable: false,
             children: [
                 '/frame/React/React入门',
+            ]
+        }
+    ],
+    '/frame/AnotherPackage/': [
+        {
+            title: '一些知名库原理学习',
+            collapsable: false,
+            children: [
+                '/frame/AnotherPackage/bluebird',
             ]
         }
     ],
@@ -315,7 +330,8 @@ module.exports = {
                 '/fulllink/BuildingTools/webpack一些原理',
                 '/fulllink/BuildingTools/webpack一些loader原理',
                 '/fulllink/BuildingTools/webpack新技术点',
-                '/fulllink/BuildingTools/webpack模块联邦'
+                '/fulllink/BuildingTools/webpack模块联邦',
+                '/fulllink/BuildingTools/webpack热更新原理',
             ]
         },
         {

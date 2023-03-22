@@ -12,7 +12,7 @@ module.exports = [
         text: '框架/库', items: [
             { text: 'Vue', link: '/frame/Vue/' },
             { text: 'React', link: '/frame/React/' },
-            { text: 'Element-ui', link: '/frame/Element/' },
+            { text: '其他库原理解析', link: '/frame/AnotherPackage/' },
         ]
     },
     {
