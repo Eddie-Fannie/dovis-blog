@@ -133,10 +133,9 @@ module.exports = {
                 '/frame/Vue/响应式原理',
                 '/frame/Vue/虚拟dom',
                 '/frame/Vue/生成真实dom',
+                '/frame/Vue/模板编译',
                 '/frame/Vue/vue生命周期',
                 '/frame/Vue/初始化状态',
-                '/frame/Vue/模板编译',
-                '/frame/Vue/Vuex原理',
                 '/frame/Vue/vue的api原理',
                 '/frame/Vue/vue的异步更新原理'
             ]
@@ -146,6 +145,7 @@ module.exports = {
             collapsable: false,
             children: [
                 '/frame/Vue/vue-router',
+                '/frame/Vue/Vuex原理',
             ]
         },
         {

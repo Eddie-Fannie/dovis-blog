@@ -48,7 +48,7 @@ console.log('hi')
 // Promise hi Resolved
 ```
 1. `Promise`对象新建完立即执行
-2. `then`方法指定的回调函数将在当前脚本所有同步任务执行完成后才执行。
+2. `then`方法指定的回调函数将在当前脚本所有同步任务执行完成后才执行。**尽管调用 `then` 方法时，`Promise` 已经处于 `fulfilled` 状态，但 `then` 方法的 `onFulfilled` 回调函数不会立即执行，而是进入 `microtask` 队列等待执行。**
 > 传递给 `new Promise` 的是 `executor` 执行器。当 `Promise` 被创建的时候，`executor` 会立即同步执行。`executor` 函数里通常做了 `2` 件事情：初始化一个异步行为和控制状态的最终转换。
 
 **调用`resolve`或者`reject`并不会终结`Promise`的参数函数的执行**
@@ -85,9 +85,10 @@ Promise.resolve(1)
 `Promise.prototype.then()` 将用于为 `Promise` 实例添加处理程序的函数。它接受 `2` 个可选的参数：
 - `onResolved`：状态由`pending`转换成`fulfilled`时执行。
 - `onRejected`：状态由`pending`转换成`rejected`时执行。
+
 ```js
 function onResolved(res) {
-    console.log('resolved' + res) 
+    console.log('resolved' + res)
 }
 function onRejected(err) {
     console.log('reject'+err)
@@ -97,6 +98,7 @@ new Promise((resolve,reject) => {
 }).then(onResolved,onRejected)
 ```
 `then`返回的新实例`Promise`会基于`onResolved`的返回值进行构建，构建的时候其实是把返回值传递给`Promise.resolve()`生成的新实例。如果`.then()`没有提供`onResolved`这个处理程序，则`Promise.resolve()`会基于上一个实例`resolve`后的值来初始化一个新的实例。
+
 ```js
 let p1 = new Promise((resolve, reject) => {
     resolve(3)
@@ -146,7 +148,7 @@ var p1 = new Promise((resolve, reject) => {
  throw new Error('test')
 })
 p1.catch(error => {
-    console.log(error) 
+    console.log(error)
 })
 // Error: test
 
@@ -159,7 +161,7 @@ var p1 = new Promise((resolve, reject) => {
  }
 })
 p1.catch(error => {
-    console.log(error) 
+    console.log(error)
 })
 
 // 等同于2
@@ -167,7 +169,7 @@ var p1 = new Promise((resolve, reject) => {
     reject(new Error('test'))
 })
 p1.catch(error => {
-    console.log(error) 
+    console.log(error)
 })
 ```
 ::: tip
@@ -187,26 +189,26 @@ let p2 = p1.then(() => {})  s
 setTimeout(console.log, 0, p2)  // Promise {<rejected>: 3}
 
 // 返回值为undefined时
-let p3 = p1.then(null, () => {}) 
-setTimeout(console.log, 0, p3)  // Promise {<fulfilled>: undefined} 
+let p3 = p1.then(null, () => {})
+setTimeout(console.log, 0, p3)  // Promise {<fulfilled>: undefined}
 
 // 返回值有实际值的时候
-let p4 = p1.then(null, () => 6) 
+let p4 = p1.then(null, () => 6)
 setTimeout(console.log, 0, p4)  // Promise {<fulfilled>: 6} 保证后续链式调用时可以继续下去，状态就为fulfilled
 
 // 当返回值是Promise时，会保留当前Promise
-let p5 = p1.then(null, () => Promise.reject()) 
-setTimeout(console.log, 0, p5)  // Promise {<rejected>: undefined} 
+let p5 = p1.then(null, () => Promise.reject())
+setTimeout(console.log, 0, p5)  // Promise {<rejected>: undefined}
 
 // 当遇到一个错误的时候
 let p6 = p1.then(null, () => {
     throw new Error('error')
-}) 
-setTimeout(console.log, 0, p6)  // Promise {<rejected>: error} 
+})
+setTimeout(console.log, 0, p6)  // Promise {<rejected>: error}
 
 // 当返回值是一个错误时
-let p7 = p1.then(null, () => new Error('error')) 
-setTimeout(console.log, 0, p7)  // Promise {<fulfilled>: Error: error} 
+let p7 = p1.then(null, () => new Error('error'))
+setTimeout(console.log, 0, p7)  // Promise {<fulfilled>: Error: error}
 ```
 :::
 
@@ -419,6 +421,35 @@ Promise.race([p1,p2]).then((res) => {
 - 所有微任务执行完成，开始执行 `setTimeout` 里的宏任务，打印 `p1`，至此全部代码执行完成。
 :::
 
+**还能利用`Promise.race`设置超时函数**
+```js
+ //请求某个图片资源
+function requestImg(){
+    var p = new Promise((resolve, reject) => {
+        var img = new Image();
+        img.onload = function(){
+            resolve(img);
+        }
+        img.src = '图片的路径';
+    });
+    return p;
+}
+//延时函数，用于给请求计时
+function timeout(){
+    var p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject('图片请求超时');
+        }, 5000);
+    });
+    return p;
+}
+Promise.race([requestImg(), timeout()]).then((data) =>{
+    console.log(data);
+}).catch((err) => {
+    console.log(err);
+});
+```
+
 ### `Promise.resolve()`
 将对象转为`Promise`对象。
 ```js
@@ -508,8 +539,8 @@ let p2 = p1.then(res => {
     console.log(err)
 })
 // [
-//      {status: "fulfilled", value: undefined}, 
-//      {status: "rejected", reason: 6}, 
+//      {status: "fulfilled", value: undefined},
+//      {status: "rejected", reason: 6},
 //      {status: "fulfilled", value: 3}
 // ]
 ```
@@ -530,7 +561,7 @@ if(!Promise.allSettled) {
 }
 ```
 
-## 部署两个不在ES6中但有用的方法
+## 两个不在ES6中但有用的方法
 ### `done()`
 处于回调链尾端，保证抛出任何可能的错误。（可以不提供参数）
 ```js
@@ -666,7 +697,7 @@ Promise.resolve('1')
   })
 
 /**
- * 
+ *
  * 'finally1'
 '捕获错误' Error: 我是finally中抛出的异常
 ```
@@ -780,7 +811,7 @@ function main() {
 1. 为了代码更加具有可读性和可维护性，我们需要将数据请求与数据处理明确的区分开来。
 
 
-## 题目
+## 一些题目🌰
 1.
 ```js
 new Promise((resolve, reject) => {
@@ -894,6 +925,205 @@ function onFinally() {
 
 一个函数如果加上`async`，那么该函数就会返回一个`Promise`。`await`表示紧跟在后面的表达式需要等待结果。进一步说，`async`函数完全可以看作由多个异步操作包装成的一个`Promise`对象，而`await`命令就是内部`then`命令的语法糖。
 
+:::tip
+在讨论 `await` 之前，先聊一下 `async` 函数处理返回值的问题，它会像 `Promise.prototype.then` 一样，会对返回值的类型进行辨识。
+
+`async` 函数在抛出返回值时，会根据返回值类型开启不同数目的微任务：
+- `return` 结果值：非 `thenable`、非 `promise`（不等待）
+- `return` 结果值：`thenable`（等待 1个 `then` 的时间）
+- `return` 结果值：`promise`（等待 2个 `then` 的时间）
+
+```js
+async function testA () {
+    return 1;
+}
+
+testA().then(() => console.log(1));
+Promise.resolve()
+    .then(() => console.log(2))
+    .then(() => console.log(3));
+
+// (不等待)最终结果👉: 1 2 3
+
+async function testB () {
+    return {
+        then (cb) {
+            cb();
+        }
+    };
+}
+
+testB().then(() => console.log(1));
+Promise.resolve()
+    .then(() => console.log(2))
+    .then(() => console.log(3));
+
+// (等待一个then)最终结果👉: 2 1 3
+
+async function testC () {
+    return new Promise((resolve, reject) => {
+        resolve()
+    })
+}
+
+testC().then(() => console.log(1));
+Promise.resolve()
+    .then(() => console.log(2))
+    .then(() => console.log(3));
+
+// (等待两个then)最终结果👉: 2 3 1
+
+
+// 🌰
+async function async1 () {
+    console.log('1')
+    await async2()
+    console.log('AAA')
+}
+
+async function async2 () {
+    console.log('3')
+    return new Promise((resolve, reject) => {
+        resolve()
+        console.log('4')
+    })
+}
+
+console.log('5')
+
+setTimeout(() => {
+    console.log('6')
+}, 0);
+
+async1()
+
+new Promise((resolve) => {
+    console.log('7')
+    resolve()
+}).then(() => {
+    console.log('8')
+}).then(() => {
+    console.log('9')
+}).then(() => {
+    console.log('10')
+})
+console.log('11')
+
+// 最终结果👉: 5 1 3 4 7 11 8 9 AAA 10 6
+```
+最后一个🌰分析：
+- 先执行同步代码，输出 `5`
+- 执行 `setTimeout`，是放入宏任务异步队列中
+- 接着执行 `async1` 函数，输出 `1`
+- 执行 `async2` 函数，输出 `3`
+- `Promise` 构造器中代码属于同步代码，输出 `4`
+- `async2` 函数的返回值是 `Promise` ，等待 `2` 个 `then` 后放行，所以 `AAA` 暂时无法输出
+- `async1` 函数暂时结束，继续往下走，输出 `7`
+- 同步代码，输出 `11`
+- 执行第一个 `then`，输出 `8`
+- 执行第二个 `then`，输出 `9`
+- 终于等到了两个 `then` 执行完毕，执行 `async1` 函数里面剩下的，输出 `AAA`
+- 再执行最后一个微任务 `then`，输出 `10`
+- 执行最后的宏任务 `setTimeout`，输出 `6`
+:::
+
+### `await` 右值类型区别
+- 非`thenable`：**`await` 后面接非 `thenable` 类型，会立即向微任务队列添加一个微任务 `then`，但不需等待**
+
+```js
+// 🌰1
+async function test () {
+    console.log(1);
+    await 1;
+    console.log(2);
+}
+
+test();
+console.log(3);
+// 最终结果👉: 1 3 2
+
+// 🌰2
+function func () {
+    console.log(2);
+}
+
+async function test () {
+    console.log(1);
+    await func();
+    console.log(3);
+}
+
+test();
+console.log(4);
+
+// 最终结果👉: 1 2 4 3
+
+// 🌰3
+async function test () {
+    console.log(1);
+    await 123
+    console.log(2);
+}
+
+test();
+console.log(3);
+
+Promise.resolve()
+    .then(() => console.log(4))
+    .then(() => console.log(5))
+    .then(() => console.log(6))
+    .then(() => console.log(7));
+
+// 最终结果👉: 1 3 2 4 5 6 7
+```
+
+- `thenable`类型：**`await` 后面接 `thenable` 类型，需要等待一个 `then` 的时间之后执行**
+```js
+async function test () {
+    console.log(1);
+    await {
+        then (cb) {
+            cb();
+        },
+    };
+    console.log(2);
+}
+
+test();
+console.log(3);
+
+Promise.resolve()
+    .then(() => console.log(4))
+    .then(() => console.log(5))
+    .then(() => console.log(6))
+    .then(() => console.log(7));
+
+// 最终结果👉: 1 3 4 2 5 6 7
+```
+
+- `Promise类型`: **表现的跟非`thenable`一样，TC 39(ECMAScript标准制定者) 对 `await` 后面是 `promise` 的情况如何处理进行了一次修改，移除了额外的两个微任务，在早期版本，依然会等待两个 `then` 的时间**
+
+```js
+async function test () {
+    console.log(1);
+    await new Promise((resolve, reject) => {
+        resolve()
+    })
+    console.log(2);
+}
+
+test();
+console.log(3);
+
+Promise.resolve()
+    .then(() => console.log(4))
+    .then(() => console.log(5))
+    .then(() => console.log(6))
+    .then(() => console.log(7));
+
+// 最终结果👉: 1 3 2 4 5 6 7
+```
+
 ### 用法
 1. `async`函数返回一个`Promise`对象，可以使用`then`方法添加回调函数。`async` 直接将返回值使用`Promise.resolve()` 进行包裹（与 `then` 处理效果相同）。当函数执行时，一旦遇到`await`就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
 
@@ -903,6 +1133,7 @@ function onFinally() {
 
 ### 语法
 1. `async`函数内部抛出的错误会导致返回的`Promise`对象变为`reject`状态。抛出的错误对象会被`catch`方法回调函数接收到。
+
 ```js
 async function f() {
     throw new Error('出错了')
@@ -914,7 +1145,7 @@ f().then(
 // Error: 出错了
 ```
 
-2. `async`函数返回的`Promise`对象必须等到内部所有`await`命令后面的`Promise`对象执行完才会发生状态改变，除非遇到`return`语句或者抛出错误。也就是说，只有`async`函数内部的异步操作执行完，才会执行`then`方法指定的回调函数。
+2. **`async`函数返回的`Promise`对象必须等到内部所有`await`命令后面的`Promise`对象执行完才会发生状态改变，除非遇到`return`语句或者抛出错误。也就是说，只有`async`函数内部的异步操作执行完，才会执行`then`方法指定的回调函数。**
 
 3. 正常情况下，`await`命令后面是一个`Promise`对象，如果不是，会被转成一个立即`resolve`的`Promise`对象。
 ```js

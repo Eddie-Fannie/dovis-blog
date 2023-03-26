@@ -1,6 +1,6 @@
-# vue的虚拟dom和虚拟节点VNode
+# 虚拟`dom`和虚拟节点`VNode`
 
-## 什么是虚拟dom
+## 什么是虚拟`dom`
 > 通过js对象模拟出一个我们需要渲染到页面上的`dom`树的结构，实现了一个修改js对象即可修改页面`dom`的快捷途径，避免了我们手动再去一次次操作`dom-api`的繁琐，而且其提供了`diff`算法可以使得用最少的`dom`操作进行修改。（虚拟`DOM`最终也要挂到浏览器上成为真实`DOM`节点的，因此使用虚拟`DOM`并不能使操作`DOM`次数减少，但能够精确地获取最小的，最必要的操作`DOM`的集合）
 
 1. 虚拟`DOM`解决方式就是通过状态生成一个虚拟节点树，然后使用虚拟节点树进行渲染。在渲染之前，会使用新生成的虚拟节点树和上一次生成的虚拟节点树进行对比，只渲染不同的部分。
@@ -9,10 +9,12 @@
 
 3. 虚拟`DOM`除了它的数据结构定义，映射到真实的`DOM`实际上要经历`VNode`的`create`,`diff`,`patch`等过程。`VNode`的`create`是通过`createElement`方法创建的。
 
-## vue.js中的虚拟dom
+## vue.js中的虚拟 `dom`
 > 在vue.js中，我们使用模板来描述状态与`DOM`之间的映射关系。Vue.js通过编译将模板转换成渲染函数`createElement`，执行渲染函数就可以得到一个虚拟节点树，使用这个虚拟节点树就可以渲染页面。（通过`patch`把虚拟节点渲染成视图）
 
 > 为了避免不必要的`DOM`操作，虚拟`DOM`在虚拟节点映射到视图的过程中，将虚拟节点与上一次渲染视图所使用的旧虚拟节点（`oldVnode`）做对比，找出真正需要更新的节点来进行`DOM`操作，从而避免操作不用修改的`DOM`。
+
+> 虚拟`DOM`在 vue.js 中所做的事情其实并没有想象中那么复杂，主要做两件事：1. 提供与真实`DOM`节点所对应的虚拟节点 `vnode`。2. 将虚拟节点 `vnode` 和旧虚拟节点 `oldVnode` 进行对比，然后更新视图。
 
 ## `createElement`方法
 Vue.js利用`createElement`方法创建VNode
@@ -106,24 +108,89 @@ function normalizeArrayChildren (children: any, nestedIndex?: string): Array<VNo
 ```
 > `normalizeArrayChildren`接收2个参数，`children`表⽰要规范的⼦节点，`nestedIndex`表⽰嵌套的索引，因为单个`child`可能是⼀个数组类型。 `normalizeArrayChildren`主要的逻辑就是遍历`children`，获得单个节点c，然后对c的类型判断，如果是⼀个数组类型，则递归调⽤`normalizeArrayChildren`; 如果是基础类型，则通过`createTextVNode`⽅法转换成`VNode`类型； 否则就已经是`VNode`类型了，如果`children`是⼀个列表并且列表还存在嵌套的情况，则根据 `nestedIndex`去更新它的`key`。这⾥需要注意⼀点，在遍历的过程中，对这3种情况都做了如下处理：如果存在两个连续的`text`节点，会把它们合并成⼀个`text`节点。经过对`children`的规范化，`children`变成了⼀个类型为`VNode`的`Array`。
 
-## 什么是VNode
-> 在Vue.js中存在一个VNode类，使用它可以实例化不同类型的`vnode`实例，而不同类型的`vnode`实例各自表示不同类型的`DOM`元素。
+## VNode
+> 在Vue.js中存在一个 `VNode` 类，使用它可以实例化不同类型的`vnode`实例，而不同类型的`vnode`实例各自表示不同类型的`DOM`元素。
 
-![img](/dovis-blog/vue/4.png)
+```js
+export default class VNode {
+  tag: string | void;
+  data: VNodeData | void;
+  children: ?Array<VNode>;
+  text: string | void;
+  elm: Node | void;
+  ns: string | void;
+  context: Component | void; // rendered in this component's scope
+  key: string | number | void;
+  componentOptions: VNodeComponentOptions | void;
+  componentInstance: Component | void; // component instance
+  parent: VNode | void; // component placeholder node
+
+  // strictly internal
+  raw: boolean; // contains raw HTML? (server only)
+  isStatic: boolean; // hoisted static node
+  isRootInsert: boolean; // necessary for enter transition check
+  isComment: boolean; // empty comment placeholder?
+  isCloned: boolean; // is a cloned node?
+  isOnce: boolean; // is a v-once node?
+  asyncFactory: Function | void; // async component factory function
+  asyncMeta: Object | void;
+  isAsyncPlaceholder: boolean;
+  ssrContext: Object | void;
+  fnContext: Component | void; // real context vm for functional nodes
+  fnOptions: ?ComponentOptions; // for SSR caching
+  devtoolsMeta: ?Object; // used to store functional render context for devtools
+  fnScopeId: ?string; // functional scope id support
+}
+```
 
 **Vue.js对状态采取中等粒度的侦测策略。当状态发生变化，只通知到组件级别，然后组件内使用虚拟`DOM`来渲染视图。`Vue1`采取细粒度，这样一个细小的状态发生变化，都会利用`watcher`侦测，大大消耗了内存。但如果一个组件只有一个状态发生变化，整个组件就要重新渲染，这样也会造成很大的性能损耗，所以对`vnode`进行缓存就尤为重要了。**
 
-## VNode类型
+### VNode类型
 + vnode类型
-    - 注释节点
-    - 文本节点
-    - 元素节点
-    - 组件节点
-    - 函数式组件
-    - 克隆节点
-> 因为通过VNode类实例的vnode实例对象，只是有效属性不同罢了。因为通过参数为实例设置属性时，无效的属性默认被赋值为`undefined`和`false`，无效属性直接忽略就好。
+  - 注释节点
+  - 文本节点
+  - 元素节点
+  - 组件节点
+  - 函数式组件
+  - 克隆节点
+> 因为通过`VNode`类实例的`vnode`实例对象，只是有效属性不同罢了。因为通过参数为实例设置属性时，无效的属性默认被赋值为`undefined`和`false`，无效属性直接忽略就好。
 
-![img](/dovis-blog/vue/5.png)
+```js
+constructor (
+  tag?: string,
+  data?: VNodeData,
+  children?: ?Array<VNode>,
+  text?: string,
+  elm?: Node,
+  context?: Component,
+  componentOptions?: VNodeComponentOptions,
+  asyncFactory?: Function
+) {
+  this.tag = tag
+  this.data = data
+  this.children = children
+  this.text = text
+  this.elm = elm
+  this.ns = undefined
+  this.context = context
+  this.fnContext = undefined
+  this.fnOptions = undefined
+  this.fnScopeId = undefined
+  this.key = data && data.key
+  this.componentOptions = componentOptions
+  this.componentInstance = undefined
+  this.parent = undefined
+  this.raw = false
+  this.isStatic = false
+  this.isRootInsert = true
+  this.isComment = false
+  this.isCloned = false
+  this.isOnce = false
+  this.asyncFactory = asyncFactory
+  this.asyncMeta = undefined
+  this.isAsyncPlaceholder = false
+}
+```
 
 ### 注释节点
 ```js
@@ -142,8 +209,8 @@ export const createEmptyVNode = (text: string = '') => {
 所以vnode对应
 ```js
 {
-    text: '注释节点',
-    isComment: true
+  text: '注释节点',
+  isComment: true
 }
 ```
 ### 文本节点
@@ -155,7 +222,7 @@ export function createTextVNode (val: string | number) {
 **可以看出文本节点只有`text`属性**
 
 ### 克隆节点
-> 克隆节点是将现有节点的属性复制到新节点，让新创建的节点和被克隆节点的属性保持一致，从而实现克隆效果。它的作用是优化静态节点和插槽节点。
+> 克隆节点是将现有节点的属性复制到新节点，让新创建的节点和被克隆节点的属性保持一致，从而实现克隆效果。**它的作用是优化静态节点和插槽节点**。
 
 ```js
 export function cloneVNode (vnode: VNode): VNode {
@@ -184,7 +251,7 @@ export function cloneVNode (vnode: VNode): VNode {
   return cloned
 }
 ```
-> 以静态节点为例子，当组件内的某个状态发生改变后，当前组件会通过虚拟DOM重新渲染视图，静态节点因为内容没有改变所以就没必要执行渲染函数重新生成vnode。因此这个时候就可以使用克隆节点将vnode克隆一份，使用克隆节点进行渲染。**这样就不用重新执行渲染函数生成新的静态节点vnode，从而提升一定性能**
+> 以静态节点为例子，当组件内的某个状态发生改变后，当前组件会通过虚拟`DOM`重新渲染视图，静态节点因为内容没有改变所以就没必要执行渲染函数重新生成`vnode`。因此这个时候就可以使用克隆节点将`vnode`克隆一份，使用克隆节点进行渲染。**这样就不用重新执行渲染函数生成新的静态节点`vnode`，从而提升一定性能**
 
 **克隆节点和被克隆节点唯一区别就是`isCloned`属性，前者为`true`，后者为`false`**
 
@@ -200,7 +267,7 @@ export function cloneVNode (vnode: VNode): VNode {
 `componentInstance`：组件的实例，也就是vue.js的实例。事实上，在vue.js中，每个组件都是一个vue.js实例。
 
 ### 函数式组件
-函数式组件和组件节点类似，它有两个独有的属性`functionalContext`和`functionalOptions`
+函数式组件和组件节点类似，它有两个独有的属性`fnContext`和`fnOptions`
 
 ## 创建VNode
 回到`createElement`函数，规范化`children`之后，接下来就会创建一个VNode实例
@@ -239,8 +306,9 @@ if (typeof tag === 'string') {
 ```
 > 这⾥先对`tag`做判断，如果是`string`类型，则接着判断如果是内置的⼀些节点，则直接创建⼀个普通`VNode`，如果是为已注册的组件名，则通过`createComponent`创建⼀个组件类型的`VNode`，否则创建⼀个未知的标签的`VNode`。如果是`tag`⼀个`Component`类型，则直接调⽤`createComponent`创建⼀个组件类型的`VNode`节点。
 
-## 为什么使用虚拟DOM
-之所以需要使用状态生成`VNode`，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实`DOM`节点，从而避免不必要的`DOM`操作，节省一定的性能开销。
+:::tip
+之所以需要使用状态生成VNode，是因为如果直接用状态生成真实`DOM`，会有一定程度的性能浪费。而先创建虚拟节点再渲染视图，就可以将虚拟节点缓存，然后使用新创建的虚拟节点和上一次渲染时缓存的虚拟节点进行对比，然后根据对比结果只更新需要更新的真实DOM节点，从而避免不必要的`DOM`操作，节省一定的性能开销。
+:::
 
 ## 虚拟`DOM`到真实`DOM`的一个伪代码过程
 > 学习《前端开发核心进阶》积累
