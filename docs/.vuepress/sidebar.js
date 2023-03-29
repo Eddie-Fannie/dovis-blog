@@ -324,14 +324,15 @@ module.exports = {
             title: 'Webpack部分',
             collapsable: false,
             children: [
-                '/fulllink/BuildingTools/初识webpack',
-                '/fulllink/BuildingTools/webpack技巧',
-                '/fulllink/BuildingTools/webpack热更新',
+                '/fulllink/BuildingTools/webpack基础知识',
+                '/fulllink/BuildingTools/webpack构建产物分析',
+                '/fulllink/BuildingTools/webpack-dev-server原理',
+                '/fulllink/BuildingTools/webpack模块联邦',
+                '/fulllink/BuildingTools/webpack热更新原理',
                 '/fulllink/BuildingTools/webpack一些原理',
                 '/fulllink/BuildingTools/webpack一些loader原理',
                 '/fulllink/BuildingTools/webpack新技术点',
-                '/fulllink/BuildingTools/webpack模块联邦',
-                '/fulllink/BuildingTools/webpack热更新原理',
+                '/fulllink/BuildingTools/webpack技巧',
             ]
         },
         {

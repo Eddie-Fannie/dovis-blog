@@ -1,6 +1,12 @@
 # Webpack的webpack-dev-server运行原理分析
 [文章来源WecTeam](https://mp.weixin.qq.com/s/p1RJDpoKdTYph_IKvbL43A)
 
+`webpack-dev-server` 可以看作一个服务者，它的主要工作就是接收浏览器的请求，然后将资源返回。当服务启动时，它会先让 `Webpack` 进行模块打包并将资源准备好。当 `webpack-dev-server` 接收到浏览器的资源请求时，它会首先进行 `URL` 地址校验。如果该地址是资源服务地址，`webpack-dev-server` 就会从 `Webpack` 的打包结果中寻找该资源并返回给浏览器。反之，如果请求地址不属于资源服务地址，则直接读取硬盘中的源文件并将其返回。
+
+综上我们可以总结出 `webpack-dev-server` 的两大职能。
+- 令 `Webpack` 进行模块打包，并处理打包结果的资源请求。
+- 作为普通的 `Web Server`，处理静态资源文件请求。
+
 > `webpack` 将我们的项目源代码进行编译打包成可分发上线的静态资源，在开发阶段我们想要预览页面效果的话就需要启动一个服务器伺服 `webpack` 编译出来的静态资源。`webpack-dev-server `就是用来启动 `webpack` 编译、伺服这些静态资源。除此之外，它还默认提供了`liveReload`的功能，就是在一次 `webpack` 编译完成后浏览器端就能自动刷新页面读取最新的编译后资源。为了提升开发体验和效率，它还提供了 `hot` 选项开启 `hotReload`，相对于 `liveReload`, `hotReload` 不刷新整个页面，只更新被更改过的模块。
 
 ## 入口
