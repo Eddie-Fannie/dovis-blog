@@ -68,7 +68,7 @@ push(element) {
 ## 移除元素
 ```js
 removeAt(index) {
-    
+
 }
 ```
 
@@ -147,3 +147,128 @@ class LinkList {
 ::: tip
 由于不必须按顺序存储，链表在插入的时候可以达到 `O(1)` 的复杂度，比另一种线性表 —— 顺序表快得多，但是查找一个节点或者访问特定编号的节点则需要 `O(n)` 的时间，而顺序表相应的时间复杂度分别是 `O(log n)` 和 `O(1)`。
 :::
+
+## 链表做题思维
+1. 虚拟头结点，也就是`dummy`结点，如果不使用 `dummy` 虚拟节点，代码会复杂一些，需要额外处理指针 `p` 为空的情况。**而有了 `dummy` 节点这个占位符，可以避免处理空指针的情况，降低代码的复杂性**。
+2. 同时需要新建一个变量把虚拟头结点赋值过去，用来返回结果链表
+3. 同样需要把 `head` 原链表头结点赋值给一个新的变量，用来遍历循环链表节点
+4. **`dummy`节点不参与赋值/遍历操作，只在最后需要读取值是使用`dummy.next`**
+
+5. 链表倒数第`k`个节点。先让一个指针 `p1` 指向链表的头节点 `head`，然后走 `k` 步；现在的 `p1`，只要再走 `n - k` 步，就能走到链表末尾的空指针；趁这个时候，再用一个指针 `p2` 指向链表头节点 `head`；接下来就很显然了，让 `p1` 和 `p2` 同时向前走，`p1` 走到链表末尾的空指针时前进了 `n - k` 步，`p2` 也从 `head` 开始前进了 `n - k` 步，停留在第 `n - k + 1` 个节点上，即恰好停链表的倒数第 `k` 个节点上；**这样仅一次遍历链表**
+
+```js
+// 返回链表的倒数第 k 个节点
+var findFromEnd = function(head, k) {
+  var p1 = head;
+  // p1 先走 k 步
+  for (var i = 0; i < k; i++) {
+    p1 = p1.next;
+  }
+  var p2 = head;
+  // p1 和 p2 同时走 n - k 步
+  while (p1 != null) {
+    p2 = p2.next;
+    p1 = p1.next;
+  }
+  // p2 现在指向第 n - k + 1 个节点，即倒数第 k 个节点
+  return p2;
+};
+```
+
+6. 如果想一次遍历就得到中间节点，也需要耍点小聪明，使用「快慢指针」的技巧：我们让两个指针 `slow` 和 `fast` 分别指向链表头结点 `head`。每当慢指针 `slow` 前进一步，快指针 `fast` 就前进两步，这样，当 `fast` 走到链表末尾时，`slow` 就指向了链表中点。**需要注意的是，如果链表长度为偶数，也就是说中点有两个的时候，我们这个解法返回的节点是靠后的那个节点。**
+
+```js
+/**
+ * 快慢指针初始化指向 head
+ * 快指针走到末尾时停止
+ * 慢指针走一步，快指针走两步
+ * 慢指针指向中点
+ */
+var middleNode = function(head) {
+  var slow = head, fast = head;
+  while (fast != null && fast.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  return slow;
+}
+```
+
+7. 每当慢指针 `slow` 前进一步，快指针 `fast` 就前进两步。如果 `fast` 最终遇到空指针，说明链表中没有环；如果 `fast` 最终和 `slow` 相遇，那肯定是 `fast` 超过了 `slow` 一圈，说明链表中含有环。
+
+```js
+function hasCycle(head) {
+  // 快慢指针初始化指向 head
+  var slow = head, fast = head;
+  // 快指针走到末尾时停止
+  while (fast != null && fast.next != null) {
+    // 慢指针走一步，快指针走两步
+    slow = slow.next;
+    fast = fast.next.next;
+    // 快慢指针相遇，说明含有环
+    if (slow == fast) {
+      return true;
+    }
+  }
+  // 不包含环
+  return false;
+}
+
+// 如何找出环起点
+var detectCycle = function(head) {
+  var fast, slow;
+  fast = slow = head;
+  while (fast != null && fast.next != null) {
+    fast = fast.next.next;
+    slow = slow.next;
+    if (fast == slow) break;
+  }
+  // 上面的代码类似 hasCycle 函数
+  if (fast == null || fast.next == null) {
+    // fast 遇到空指针说明没有环
+    return null;
+  }
+
+  // 重新指向头结点
+  slow = head;
+  // 快慢指针同步前进，相交点就是环起点
+  while (slow != fast) {
+    fast = fast.next;
+    slow = slow.next;
+  }
+  return slow;
+};
+```
+
+8. 两个链表是否相交：我们可以让 `p1` 遍历完链表 `A` 之后开始遍历链表 `B`，让 `p2` 遍历完链表 `B` 之后开始遍历链表 `A`，这样相当于「逻辑上」两条链表接在了一起。如果这样进行拼接，就可以让 `p1` 和 `p2` 同时进入公共部分，也就是同时到达相交节点 `c1`
+
+```js
+/**
+ * p1 points to the head node of A linked list, p2 points to the head node of B linked list.
+ * p1 走一步，如果走到 A 链表末尾，转到 B 链表
+ * p2 走一步，如果走到 B 链表末尾，转到 A 链表
+ */
+function getIntersectionNode(headA, headB) {
+  var p1 = headA, p2 = headB;
+  while (p1 != p2) {
+    if (p1 == null) p1 = headB;
+    else            p1 = p1.next;
+    if (p2 == null) p2 = headA;
+    else            p2 = p2.next;
+  }
+  return p1;
+}
+```
+
+## 总结
+遍历链表：链表的遍历操作可以通过一个指针从头节点开始遍历，一直到尾节点。在遍历的过程中，可以对节点进行增删改查等操作。
+
+快慢指针：快慢指针是解决链表中许多问题的有效方法。它的思想是使用两个指针，一个指针每次移动一步，另一个指针每次移动两步。通过这种方法，可以找到链表的中间节点、判断链表是否有环等问题。
+
+反转链表：它的思想是使用三个指针，分别指向当前节点、上一个节点和下一个节点。通过不断移动这三个指针，可以实现链表的反转操作。
+
+合并链表：它的思想是使用一个新的链表，依次比较两个链表的节点值，将小的节点添加到新链表中。当其中一个链表为空时，将另一个链表的剩余节点添加到新链表中。
+
+判断链表是否有环：可以使用快慢指针的方法，一个指针每次移动一步，另一个指针每次移动两步。如果存在环，则两个指针一定会相遇。
+
+删除链表倒数第 `n` 个节点：可以使用快慢指针的方法，先让快指针移动 `n` 个节点，然后让慢指针和快指针同时移动，当快指针到达尾节点时，慢指针指向的就是倒数第 `n` 个节点。

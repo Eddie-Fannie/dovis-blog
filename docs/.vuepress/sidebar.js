@@ -146,6 +146,7 @@ module.exports = {
             children: [
                 '/frame/Vue/vue-router',
                 '/frame/Vue/Vuex原理',
+                '/frame/Vue/vue-loader原理',
             ]
         },
         {
@@ -326,6 +327,7 @@ module.exports = {
             children: [
                 '/fulllink/BuildingTools/webpack基础知识',
                 '/fulllink/BuildingTools/webpack构建产物分析',
+                '/fulllink/BuildingTools/webpack中loader原理',
                 '/fulllink/BuildingTools/webpack-dev-server原理',
                 '/fulllink/BuildingTools/webpack模块联邦',
                 '/fulllink/BuildingTools/webpack热更新原理',
