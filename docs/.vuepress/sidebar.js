@@ -671,5 +671,14 @@ module.exports = {
                '/algorithm/Company/Shopee'
             ]
         }
+    ],
+    '/area/Monitor/': [
+        {
+            title: '前端监控',
+            collapsable: false,
+            children: [
+                '/area/Monitor/前端监控数据采集'
+            ]
+        }
     ]
 }
