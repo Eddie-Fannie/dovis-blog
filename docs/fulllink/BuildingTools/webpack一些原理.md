@@ -1,4 +1,126 @@
 # webpack的一些原理
+## webpack 按需加载的模块怎么在浏览器中运行
+
+源码：
+```js
+// index.js
+import("./hello").then((result) => {
+    console.log(result.default);
+});
+
+// hello.js
+export default 'hello';
+```
+
+产物代码：
+```js
+// PS: 对代码做了部分简化及优化， 否则太难读了～～～
+// 定一个模块对象
+var modules = ({});
+// webpack在浏览器里实现require方法
+function require(moduleId) {xxx}
+
+/**
+ * chunkIds 代码块的ID数组
+ * moreModules 代码块的模块定义
+*/
+function webpackJsonpCallback([chunkIds, moreModules]) {
+  const result = [];
+  for(let i = 0 ; i < chunkIds.length ; i++){
+    const chunkId = chunkIds[i];
+    result.push(installedChunks[chunkId][0]);
+    installedChunks[chunkId] = 0; // 0 表示此代码块已经下载完毕
+  }
+
+  // 将代码块合并到 modules 对象中去
+  for(const moduleId in moreModules){
+    modules[moduleId] = moreModules[moduleId];
+  }
+  //依次将require.e方法中的promise变为成功态
+  while(result.length){
+    result.shift()();
+  }
+}
+
+// 用来存放代码块的加载状态， key是代码块的名字
+// 每次打包至少产生main的代码块
+// 0 表示已经加载就绪
+var installedChunks = {
+  "main": 0
+}
+
+require.d = (exports, definition) => {
+  for (var key in definition) {
+    Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+  }
+};
+require.r = (exports) => {
+  Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+  Object.defineProperty(exports, '__esModule', { value: true });
+};
+
+// 给require方法定义一个m属性， 指向模块定义对象
+require.m = modules;
+
+require.f = {};
+
+// 利用JSONP加载一个按需引入的模块
+require.l = function (url) {
+  let script = document.createElement("script");
+  script.src = url;
+  document.head.appendChild(script);
+}
+
+// 用于通过JSONP异步加载一个chunkId对应的代码块文件， 其实就是hello.main.js
+require.f.j = function(chunkId, promises){
+  let installedChunkData;
+  // 当前代码块的数据
+  const promise = new Promise((resolve, reject) => {
+    installedChunkData = installedChunks[chunkId] = [resolve, reject];
+  });
+  promises.push(installedChunkData[2] = promise);
+  // 获取模块的访问路径
+  const url = chunkId + '.main.js';
+
+  require.l(url);
+}
+
+require.e = function(chunkId) {
+  let promises = [];
+  require.f.j(chunkId, promises);
+  console.log(promises);
+  return Promise.all(promises);
+}
+
+var chunkLoadingGlobal = window['webpack'] = [];
+// 由于按需加载的模块， 会在加载成功后调用此模块，所以这是JSONP的成功后的回掉
+chunkLoadingGlobal.push = webpackJsonpCallback;
+
+/**
+ * require.e异步加载hello代码块文件 hello.main.js
+ * promise成功后会把 hello.main.js里面的代码定义合并到require.m对象上，也就是modules上
+ * 调用require方法加载./src/hello.js模块，获取 模块的导出对象，进行打印
+ */
+require.e('hello').then(require.bind(require, './src/hello.js')).then(result => console.log(result));
+
+
+
+// hello.main.js
+"use strict";
+(self["webpack"] = self["webpack"] || []).push([
+  ["hello"], {
+    "./src/hello.js": ((module, exports, require) => {
+      require.r(exports);
+      require.d(exports, {
+        "default": () => (_DEFAULT_EXPORT__)
+      });
+      const _DEFAULT_EXPORT__ = ("hello");
+    })
+  }
+]);
+```
+> `webpack` 在产物代码中声明了一个全局变量 `webpack` 并赋值为一个数组，然后改写了这个数组的 `push` 方法。在异步代码加载完成后执行时，会调用这个 `push` 方法，在重写的方法内会将异步模块放到全局模块中然后等待使用。
+
 ## webpack将代码编译成什么
 
 - `CommonJS`规范下的打包结果
@@ -143,8 +265,4 @@ import('./hello').then(sayHello => {
     - 实现模块加载的方法，并把它放到模块执行的环境中，确保模块间可以互相调用。
     - 把执行入口文件的逻辑放在一个函数表达式中，并立即执行这个函数。
 :::
-
-## Tree Shaking原理
-- 编译阶段利用ES6 Module判断哪些模块已经加载
-- 判断哪些模块和变量未被使用或者引用，进而删除对应代码。
 

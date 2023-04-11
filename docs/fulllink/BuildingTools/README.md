@@ -50,4 +50,63 @@ module.exports = {
 2. `loader`的return语句不一定有返回
 :::
 
-# vite学习
+# vite 学习
+> `vite` 在开发环境和生产环境分别做了不同的处理，在开发环境中底层基于 `esBuild` 进行提速，在生产环境中使用 `rollup` 进行打包。
+
+:::tip
+- `esBuild` 是选择 `Go` 语言编写的，而在 `esBuild` 之前，前端构建工具都是基于 `Node`，使用 `JS` 进行编写。`JavaScript` 是一门解释性脚本语言，即使 `V8` 引擎做了大量优化（`JWT` 及时编译），本质上还是无法打破性能的瓶颈。而 `Go` 是一种编译型语言，在编译阶段就已经将源码转译为机器码，启动时只需要直接执行这些机器码即可。
+- `Go` 天生具有多线程运行能力，而 `JavaScript` 本质上是一门单线程语言。`esBuild` 经过精心的设计，将代码 `parse`、代码生成等过程实现完全并行处理。
+:::
+
+## 为什么 vite 开发服务这么快
+传统 `bundle based` 服务：
+- 无论是 `webpack` 还是 `rollup` 提供给开发者使用的服务，都是基于构建结果的。
+- 基于构建结果提供服务，意味着提供服务前一定要构建结束，随着项目膨胀，等待时间也会逐渐变长。
+
+`noBundle` 服务：
+- 对于 `vite`、`snowpack` 这类工具，提供的都是 `noBundle` 服务，无需等待构建，直接提供服务。
+- 对于项目中的第三方依赖，仅在初次启动和依赖变化时重构建，会执行一个依赖预构建的过程。由于是基于 `esBuild` 做的构建所以非常快。**在启动服务器之前会先读取你的 `package.json` 文件，识别出需要进行预编译的包，先进行预编译之后，再去启动服务器。`Vite` 在预构建阶段，将构建后的依赖缓存到 `node_modules/.vite`，相关配置更改时，或手动控制时才会重新构建，以提升预构建速度。**
+- 对于项目代码，则会依赖于浏览器的 `ESM` 的支持，直接按需访问，不必全量构建。**服务器只在接受到 `import` 请求的时候，才会编译对应的文件，将 `ESM` 源码返回给浏览器，实现真正的按需加载。**
+- 充分利用 `http` 缓存做优化，依赖（不会变动的代码）部分用 `max-age,immutable` 强缓存，源码部分用 `304` 协商缓存，提升页面打开速度。
+
+## 为什么生产环境要用 rollup
+- 由于浏览器的兼容性问题以及实际网络中使用 `ESM` 可能会造成 `RTT` 时间过长，所以仍然需要打包构建。
+- `esbuild` 虽然快，但是它还没有发布 1.0 稳定版本，另外 `esbuild` 对代码分割和 `css` 处理等支持较弱，所以生产环境仍然使用 `rollup` 。
+
+## 为什么代码可以直接在浏览器上运行
+> 在开发环境时，我们使用 `vite` 开发，是无需打包的，直接利用浏览器对 `ESM` 的支持，就可以访问我们写的组件代码，但是一些组件代码文件往往不是 `JS` 文件，而是 `.ts、.tsx、.vue` 等类型的文件。这些文件浏览器肯定直接是识别不了的。
+
+![img](/dovis-blog/other/94.png)
+
+> 我们可以观察到 `vue` 这个第三方包的访问路径改变了，变成了 `node_modules/.vite` 下的一个 `vue` 文件，这里真正访问的文件就是前面我们提到的，`vite` 会对第三方依赖进行依赖预构建所生成的缓存文件。**`ESM` 不支持裸模块，`ESM` 只能接受 `Content-Type` 为 `application/javascript` 类型**
+
+> `npm` 包中大量的 `ESM` 代码，大量的 `import` 请求，会造成网络拥塞。`Vite` 使用 `esbuild`，将有大量内部模块的 `ESM` 关系转换成单个模块，以减少 `import` 模块请求次数。
+
+浏览器也对 `App.vue` 发起了访问，简化后的代码：
+
+```js
+const _sfc_main = {
+  name: 'App'
+}
+// vue 提供的一些API，用于生成block、虚拟DOM
+import { openBlock as _openBlock, createElementBlock as _createElementBlock } from "/node_modules/.vite/vue.js?v=b618a526"
+
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (_openBlock(), _createElementBlock("h1", null, "App"))
+}
+// 组件的render方法
+_sfc_main.render = _sfc_render;
+export default _sfc_main;
+```
+> **当用户访问 `vite` 提供的开发服务器时，对于浏览器不能直接识别的文件，服务器的一些中间件会将此类文件转换成浏览器认识的文件，从而保证正常访问。**
+
+:::tip
+其他文件转换：
+- 将图片转为 `base64` 格式，在 `Vite` 当中，只有图片足够小才会使用 `base64` 的格式
+:::
+
+# Rollup 学习
+## 为什么 Rollup 产物那么干净
+- `rollup` 只对 `ESM` 模块进行打包，对于 `cjs` 模块也会通过插件将其转化为 `ESM` 模块进行打包。所以不会像 `webpack` 有很多的代码注入。
+- `rollup` 对打包结果也支持多种 `format` 的输出，比如：`esm、cjs、am` 等等，但是 `rollup` 并不保证代码可靠运行，需要运行环境可靠支持。比如我们输出 `esm` 规范代码，代码运行时完全依赖高版本浏览器原生去支持 `esm`，`rollup` 不会像 `webpack` 一样注入一系列兼容代码。
+- `rollup` 实现了强大的 `tree-shaking` 能力。

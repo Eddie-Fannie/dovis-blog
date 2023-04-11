@@ -332,6 +332,7 @@ module.exports = {
                 '/fulllink/BuildingTools/webpack模块联邦',
                 '/fulllink/BuildingTools/webpack热更新原理',
                 '/fulllink/BuildingTools/webpack一些原理',
+                '/fulllink/BuildingTools/简单实现webpack',
                 '/fulllink/BuildingTools/webpack一些loader原理',
                 '/fulllink/BuildingTools/webpack新技术点',
                 '/fulllink/BuildingTools/webpack技巧',
@@ -342,6 +343,7 @@ module.exports = {
             collapsable: false,
             children: [
                 '/fulllink/BuildingTools/vite掘金小册子学习',
+                '/fulllink/BuildingTools/vite原理',
             ]
         }
     ],
