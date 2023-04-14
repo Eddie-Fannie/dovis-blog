@@ -126,25 +126,6 @@ console.log(a.length) // 4
 this.$emit('update:foo', newValue)
 ```
 
-## 如何优化单页应用首屏加载速度慢的问题？
-- 将公用的`JS`库通过`script`标签外部引入，减小 `app.bundel` 的大小，让浏览器并行下载资源文件，提高下载速度；
-- 在配置路由时，页面和组件使用懒加载的方式引入，进一步缩小 `app.bundel` 的体积，在调用某个组件时再加载对应的`js`文件；
-- 加一个首屏`loading`图，提升用户体验；
-
-## axios的特点
-- 从浏览器中创建`XMLHttpRequests`；
-- `node.js`创建`http`请求；
-> `axios`可以用在浏览器和 `node.js` 中是因为，它会自动判断当前环境是什么，如果是浏览器，就会基于`XMLHttpRequests`实现`axios`。如果是`node.js`环境，就会基于`node`内置核心模块`http`实现`axios`
-
-- 支持`Promise API`；
-- 拦截请求和响应；
-- 转换请求数据和响应数据；
-- 取消请求；
-- 自动换成`json`。
-- `axios`中的发送字段的参数是`data`跟`params`两个，两者的区别在于`params`是跟请求地址一起发送的，`data`的作为一个请求体进行发送
-- `params`一般适用于`get`请求，`data`一般适用于`post put` 请求。
-- 客户端支持防御`CSRF`
-
 ## vue-router实现路由懒加载（动态加载路由）
 ::: tip
 - `vue`异步组件技术 ==== 异步加载，`vue-router`配置路由 , 使用`vue`的异步组件技术 , 可以实现按需加载 .但是,这种情况下一个组件生成一个js文件。
@@ -195,3 +176,18 @@ methods: {
 - 一般结合路由和动态组件一起使用，用于缓存组件；
 - 提供 `include` 和 `exclude` 属性，两者都支持字符串或正则表达式， `include` 表示只有名称匹配的组件会被缓存，`exclude` 表示任何名称匹配的组件都不会被缓存 ，其中 `exclude` 的优先级比 `include` 高；
 - 对应两个钩子函数 `activated` 和 `deactivated` ，当组件被激活时，触发钩子函数 `activated`，当组件被移除时，触发钩子函数 `deactivated`
+
+## vue 路由中 hash 模式和 history 模式区别
+`hash` 模式：
+- `hash` 出现在 `URL` 中，但不会被包含在 `http` 请求中，对后端完全没有影响，因此改变`hash` 不会重新加载页面。
+
+`history`模式：
+- `history` 利用了 `html5 history` 中新增的 `pushState()`和`replaceState()` 方法。这两个方法应用于浏览器记录栈，在当前已有的`back、forward、go`基础之上，它们提供了对历史记录修改的功能。只是当它们执行修改时，虽然改变了当前的`URL`，但浏览器不会立即向后端发送请求。
+
+## vue2 和 vue3 区别
+1. 响应式
+- 2.x 的响应式是基于`Object.defineProperty`实现的代理，能够监听数据对象的变化，但是监听不到对象属性的增删，数组元素和长度变化，同时`Vue`初始化的时候会把所有`Observer`建立，实现数据视图与数据的响应式更新，底层需要`Observer`的支持，所以需要`Observer`都建立好，才能观察到数据对象的变化。
+- 3.0 中使用 `es6` 的`Proxy`来代替`Object.defineProperty`，在目标对象之上架一层拦截，代理的是对象而不是对象的属性。这样可以将原本对象属性的操作变为对整个对象的操作，可以监听到对象的属性的增删和数组长度的变化，还可以监听`Map,Set,WeakMap,WeakSet`等，同时实现了惰性监听，即不会再初始化的时候创建所有`observer`，而是会在用到的时候再监听。
+
+2. 模板
+2.x的机制导致作用域插槽变了，父组件会重新渲染，而3.0把作用域插槽改成了函数的方式，这样只会影响子组件的重新渲染，提升渲染性能。

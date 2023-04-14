@@ -328,6 +328,7 @@ module.exports = {
                 '/fulllink/BuildingTools/webpack基础知识',
                 '/fulllink/BuildingTools/webpack构建产物分析',
                 '/fulllink/BuildingTools/webpack中loader原理',
+                '/fulllink/BuildingTools/webpack中plugin原理',
                 '/fulllink/BuildingTools/webpack-dev-server原理',
                 '/fulllink/BuildingTools/webpack模块联邦',
                 '/fulllink/BuildingTools/webpack热更新原理',
@@ -433,13 +434,6 @@ module.exports = {
             children: [
                 '/interview/vue相关问题'
             ]
-        },
-        {
-          title: '构建工具模块',
-          collapsable: false,
-          children: [
-              '/interview/构建工具'
-          ]  
         },
         {
             title: '其他模块',
