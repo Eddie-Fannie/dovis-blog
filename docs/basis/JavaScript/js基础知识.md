@@ -17,6 +17,18 @@ const b = []
   - 调用函数时，应该提供的参数没有提供，该参数等于`undefined`。
   - 对象没有赋值的属性，该属性的值为 `undefined`。
   - 函数没有返回值时，默认返回 `undefined`。
+
+`undefined`和`null`的区别：
+在 `JavaScript` 中，`null` 和 `undefined` 都表示没有值的情况，但它们具有不同的含义。
+
+- `undefined` 表示声明了一个变量，但没有给它赋值。未初始化的变量默认值为 `undefined`。当函数没有返回值时，返回值为 `undefined`。在访问对象上不存在的属性时，返回值也是 `undefined`。
+- `null` 表示一个值被明确地定义为空值。可以将其赋给任何类型的变量，如对象、数组等，表示这个变量不引用任何对象或数组元素。
+
+在使用时，通常情况下：
+- 如果想要表示一个变量没有被赋值，就可以将其初始化为 `undefined`；
+- 如果想要表示一个变量明确地为空，就可以将其赋值为 `null`。
+
+需要注意的是，在比较时，`null` 和 `undefined` 的比较需要使用严格相等运算符（===），因为它们有不同的数据类型。例如，`undefined == null` 返回 `true`，但是 `undefined === null` 返回 `false`。
 :::
 
 > 所以把一个对象赋值给一个变量的时候，这个时候赋值的其实是地址，所以当我们进行数据修改的时候，就会修改存放在地址上的值，也就导致两个变量的值都发生改变
@@ -130,33 +142,50 @@ console.log('hello world' instanceof PrimitiveString) // true
 - `toString`:最完美的方案
 ```js
 function checkType(payload) {
-    switch(Object.prototype.toString.call(payload)) {
-        case '[object Null]': console.log('null')
-        break;
-        case '[object Number]': console.log('number')
-        break;
-        case '[object String]': console.log('string')
-        break;
-        case '[object Undefined]': console.log('undefined')
-        break;
-        case '[object Boolean]': console.log('boolean')
-        break;
-        case '[object Array]': console.log('Array')
-        break;
-        case '[object Object]': console.log('Object')
-        break;
-        case '[object Number]': console.log('NaN')
-        break;
-        // 还有其他类型Map Symbol等不一一列举
-    }
+  switch(Object.prototype.toString.call(payload)) {
+    case '[object Null]': console.log('null')
+      break;
+    case '[object Number]': console.log('number')
+      break;
+    case '[object String]': console.log('string')
+      break;
+    case '[object Undefined]': console.log('undefined')
+      break;
+    case '[object Boolean]': console.log('boolean')
+      break;
+    case '[object Array]': console.log('Array')
+      break;
+    case '[object Object]': console.log('Object')
+      break;
+    case '[object Number]': console.log('NaN')
+      break;
+    // 还有其他类型Map Symbol等不一一列举
+  }
 }
 checkType({a:2}) // Object
 ```
+:::tip
+同样是检测对象 `obj` 调用 `toString` 方法，`obj.toString()` 的结果和 `Object.prototype.toString.call(obj)` 的结果不一样，这是为什么？
+
+这是因为 `toString` 是 `Object` 的原型方法，而 `Array` 、`function` 等类型作为 `Object` 的实例，都重写了 `toString` `方法。。不同的对象类型调用toString` 方法时，根据原型链的知识，调用的是对应的重写之后的 `toString` 方法（ `function` 类型返回内容为函数体的字符串，`Array` 类型返回元素组成的字符串…），而不会去调用 `Object` 上原型 `toString` 方法（返回对象的具体类型），所以采用 `obj.toString()` 不能得到其对象类型，只能将 `obj` 转换为字符串类型；因此，在想要得到对象的具体类型时，应该调用 `Object` 原型上的 `toString` 方法。
+:::
+
 - `constructor`：原型`prototype`的一个属性，`null`和`undefined`没有这个属性所以无法判断类型。
+> 有两个作用，一是判断数据的类型，二是对象实例通过对象访问它的构造函数。需要注意，如果创建一个对象来改变它的原型，就不能判断数据类型了。
+
 ```js
 var o = ''
 console.log(o.constructor === String) // true
 console.log(o.constructor.name) // String
+
+// 改变constructor
+function Fn(){};
+
+Fn.prototype = new Array();
+
+var f = new Fn();
+console.log(f.constructor === Fn); // false
+console.log(f.constructor === Array); // true;
 ```
 
 ## 类型转换

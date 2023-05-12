@@ -96,7 +96,7 @@ console.log(Object.getOwnPropertyNames(Person.prototype)) // ["constructor", "na
 - 如果是三种类型的key都有，那么顺序是 1 -> 2 -> 3
 
 基于内部`ownPropertyKeys`方法实现的方法有`Object.getOwnPropertyNames`和`Reflect.ownKeys`，这两种方法保证对象属性的顺序。
-`Reflect.ownKeys()`返回的结果等价于O`bject.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))`，包括直接挂在目标对象上的**可枚举、不可枚举、Symbols**的属性组成的数组。
+`Reflect.ownKeys()`返回的结果等价于`Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))`，包括直接挂在目标对象上的**可枚举、不可枚举、Symbols**的属性组成的数组。
 
 根据 ECMA-262（ECMAScript）第三版中描述，`for-in` 语句的属性遍历的顺序是由**对象定义时属性的书写顺序**决定的。
 在现有最新的 ECMA-262（ECMAScript）第五版规范中，对 `for-in` 语句的遍历机制又做了调整，**属性遍历的顺序是没有被规定的**。

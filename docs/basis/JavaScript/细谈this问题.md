@@ -45,7 +45,7 @@ object.getNameFunc()
         getNameFunc: function () {
             let that = this // 改变this指向
             return function () {
-                return that.name; //匿名函数的执行环境具有全局性，所以this指向window
+                return that.name;
             }
         }
     }
@@ -73,7 +73,7 @@ func() //undefined
 
 这就验证了第一个例子中为什么特意表明在非严格模式下才成立了。
 
-3. 
+3.
 ```js
 var me = {
     name: 'xiuyan',
@@ -83,7 +83,7 @@ var me = {
 }
 
 var you = {
-    name: 'xiaoming'，
+    name: 'xiaoming',
     hello: function() {
         var targetFunc = me.hello
         targetFunc()

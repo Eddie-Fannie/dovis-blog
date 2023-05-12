@@ -46,4 +46,20 @@ export function nextTick(cb,ctx) {
 - `flushCallbacks`，就是我们所说的被注册的那个任务。当这个函数被触发时，会将`callbacks`中的所有函数依次执行。然后清空`callbacks`，并将`pending`设置为`false`。也就是说，一轮事件循环中`flushCallbacks`只会执行一次。
 
 - 优先检测是否原生⽀持`Promise`，不⽀持的话再去检测是否⽀持`MutationObserver`，如果都不行就只能尝试宏任务实现，vue宏任务优先使用`setImmediate`（只兼容IE）。如果都不支持就使用`setTimeout`来将回调添加到宏任务队列中。
+
+```js
+// 使用 mutationObserver
+let counter = 1
+const observer = new MutationObserver(flushCallbacks)
+const textNode = document.createTextNode(String(counter))
+observer.observe(textNode, {
+    characterData: true
+})
+timerFunc = () => {
+    counter = (counter + 1) % 2
+    textNode.data = String(counter)
+}
+isUsingMicroTask = true
+```
+> 这段代码的作用是创建一个 `MutationObserver` 对象，通过观察一个文本节点的变化来触发回调函数 `flushCallbacks` 。具体来说，它会创建一个文本节点，并将其添加到 `DOM` 中。然后，`MutationObserver` 对象会监听这个文本节点的变化，一旦发生变化就会触发 `flushCallbacks` 回调函数。在 `timerFunc` `函数中，它会修改counter` 变量的值，并将新的值设置为文本节点的 `data` 属性，从而触发 `MutationObserver` 对象的回调函数。这样就实现了一个异步更新的效果。
 :::

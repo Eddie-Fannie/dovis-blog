@@ -191,8 +191,8 @@ export function initUse (Vue: GlobalAPI) {
     if (installedPlugins.indexOf(plugin) > -1) {
       return this
     }
-
-    const args = toArray(arguments, 1)
+    console.log(arguments)
+    const args = toArray(arguments, 1) // 把类数组转为数组 arguments是Vue.use这个方法的
     args.unshift(this) // 将vue插入到参数第一位置
     if (typeof plugin.install === 'function') {
       plugin.install.apply(plugin, args)
